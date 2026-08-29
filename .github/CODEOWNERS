@@ -1,10 +1,10 @@
-# レビュー必須の所有者（運用ルール §3.3）。GitHub 上の承認はオーナーアカウントが Claude のゲート判定を代行する
-*                              @RetryYN
-docs/要件定義書*                @RetryYN
-docs/design/rfc/               @RetryYN
-docs/contracts/golden/         @RetryYN
-docs/contracts/                @RetryYN
-docs/design/basic/             @RetryYN
-.github/                       @RetryYN
-.githooks/                     @RetryYN
-scripts/                       @RetryYN
+# レビュー必須の所有者（運用ルール §3.3/§3.5）。GitHub 上の承認はオーナーアカウントのみ。AI の票は §3.8 review-gate が検査する
+*                                  @RetryYN
+docs/10_requirements/              @RetryYN
+docs/20_design/rfc/                @RetryYN
+docs/20_design/basic/              @RetryYN
+docs/30_contracts/                 @RetryYN
+docs/40_process/                   @RetryYN
+.github/                           @RetryYN
+.githooks/                         @RetryYN
+scripts/                           @RetryYN
