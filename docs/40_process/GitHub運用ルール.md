@@ -46,13 +46,13 @@
 | 変更の種類 | 必須レビュアー | マージ責任者 |
 |---|---|---|
 | `crates/**`（実装） | kimi（契約逸脱・保存則・hash） | kimi（§3.5） |
-| `crates/**/tests/**`, `docs/20_design/basic/08_*`（受入テスト） | writer 以外の 1 名 ＋ grok（抜け穴） | kimi（§3.5） |
+| `crates/**/tests/**`, `docs/20_design/basic/08_*`（受入テスト） | writer 以外の 1 名 ＋ 抜け穴審査（writer が grok なら kimi または Claude） | kimi（§3.5） |
 | `docs/20_design/basic/**`, `docs/30_contracts/**`（基本設計・契約） | README の審査列に従う ＋ grok | Claude（§3.5） |
 | `docs/20_design/detail/**`（詳細設計） | kimi | kimi（§3.5） |
 | `docs/10_requirements/要件定義書*`, `docs/20_design/rfc/**` | kimi ＋ 影響先の担当全員 | **オーナー** |
 | `docs/30_contracts/golden/**` | — | Claude（§3.5、golden 更新権限） |
 | `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | grok（抜け穴） | Codex（§3.5） |
-| `app/**`（Flutter） | grok または composer（writer 以外） | grok（§3.5） |
+| `app/**`（Flutter） | kimi（契約面）＋ Claude（チェックリスト）。writer は常に grok | kimi（§3.5、代理） |
 
 - レビューは **GitHub の Review 機能**で行い、コメントは `file:line` に付ける。helix-bus は通知用、判断の記録は PR に残す
 - 単一アカウントのため GitHub の Approve / Request changes は使えない（自分の PR 扱いで 422）。レビュー結果は **本文に `verdict: approve | request-changes` を書いた COMMENT ＋ §3.8 の署名票**が正規手順。verdict の無いコメントはレビューとして数えない
@@ -69,8 +69,8 @@
 ### 3.5 マージ責任者（領域ごとに 1 名。「誰が merge ボタンを押すか」を固定）
 | 領域 | マージ責任者 | 条件（すべて満たしたら責任者が squash merge） | エスカレーション |
 |---|---|---|---|
-| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | **契約本文（05_contract / docs/30_contracts）・golden・hash 正規化順** を変える PR のみ Claude |
-| `app/**`（Flutter） | **grok** | CI green ＋ composer または kimi の approve | FFI 契約に触れる → Claude |
+| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（writer=kimi のときだけ grok の approve で代替） ＋ writer が全指摘に返信 | **契約本文（05_contract / docs/30_contracts）・golden・hash 正規化順** を変える PR のみ Claude |
+| `app/**`（Flutter） | **kimi**（writer が常に grok のため代理固定） | CI green ＋ kimi の approve ＋ Claude チェックリスト | FFI 契約に触れる → Claude |
 | `docs/20_design/basic/**`, `docs/30_contracts/**`（基本設計・契約。`02_glossary.md` も含む: writer=kimi、審査=grok） | **Claude** | README の審査列の approve ＋ grok の抜け穴審査 | 要件に矛盾 → RFC → オーナー |
 | `docs/20_design/detail/**`（詳細設計） | **kimi** | Claude のチェックリスト審査（§設計工程）approve | — |
 | `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | **Codex** | grok の抜け穴審査 approve ＋ 自己試験 green | required checks の変更 → Claude |
@@ -82,8 +82,8 @@
 | `docs/30_contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
 
 複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex で最上位の責任者がマージする（2026-08-30: 実装は grok。crates のマージ責任者 kimi、app は grok が writer のためマージは kimi 代理）（分割できるなら分割を求める）。
-- 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）。app で grok が writer の場合のレビュアーは composer、マージは kimi
-- identity 注: composer（Composer 2.5）は helix-bus 上では `cursor-glm` の identity を使う（改名事故の回避のため据え置き）
+- 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）。app は writer=grok 固定、レビュアー kimi ＋ Claude、マージ kimi
+- identity 注: 実装者 grok は `cursor-grok`、kimi は `cursor-kimi`（旧 `cursor-fast` はバス側でエイリアス吸収）。composer（`cursor-glm`）は 2026-08-30 停止
 - `gh pr merge --admin` 等の保護バイパスは禁止（条件がそろわないなら merge しない。設定不備は Codex に `[ENV]`）
 - 責任者はマージ後、関係者へ `[ID][merged] sha=… pr=#n` を直接 post する（開発ログは §4 のとおりマージ責任者が記録）
 
@@ -98,7 +98,7 @@
 | 条件がそろった | マージ責任者 | （自分で merge）→ writer ＋ reviewer（記録はマージ責任者） | `[ID][merged] sha=… pr=#n` |
 | 判断に迷う・契約や要件に触れる | 誰でも | Claude | `[ID][escalate] pr=#n 論点=…` |
 | 設計章が完成した | 起草者 | README の審査者 ＋ Claude（BD の責任者） | `[BD-xx][review-request]` |
-| brief を出す | 領域のマージ責任者（コア: kimi、UI: grok、ハーネス: Codex） | writer | `[ID][brief]`（Claude は BD/契約の brief のみ） |
+| brief を出す | 領域のマージ責任者（コア: kimi、UI: kimi ＋ grok 起草、ハーネス: Codex） | writer | `[ID][brief]`（Claude は BD/契約の brief のみ） |
 | 環境・CI が壊れた | 気づいた人 | Codex | `[ENV][request]` |
 | 用語が無い・文言が要る | 誰でも | kimi | `[TERM][request]` |
 - Codex（ルーター）は 10 分ごとに `gh pr list --json number,isDraft,reviewRequests,reviews,updatedAt,labels` を見る。観測対象は **GitHub の Ready 時刻（`ready_for_review` イベント）とラベル**: writer は Ready にする時に `needs-review:<name>` ラベルを付け、reviewer は本文投稿後に外す。ラベルが 30 分以上残っていれば該当レビュアーへ催促 post、`ready-to-merge` ラベル（必須レビュアー全員の `verdict: approve` COMMENT／署名票がそろった時点で **最後の reviewer が付ける**。§3.8 の review-gate が green ならラベルは自動付与）が 30 分残っていれば責任者へ催促
