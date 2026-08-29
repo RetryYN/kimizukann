@@ -280,127 +280,131 @@ impl SimCore {
     fn intake(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
-        for lineage in &lineages {
-            let id = lineage.id as usize;
-            if !lineage.tags.use_nutrient || cell.nutrient <= 0 {
-                continue;
+            for lineage in &lineages {
+                let id = lineage.id as usize;
+                if !lineage.tags.use_nutrient || cell.nutrient <= 0 {
+                    continue;
+                }
+                let amount = cell.nutrient.min(
+                    fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
+                        .map_err(|e| format!("intake: {e:?}"))?,
+                );
+                let rule = ConversionRule {
+                    from: Pool::Nutrient,
+                    to: Pool::Biomass,
+                    coefficient: 700_000,
+                    remainder_to: Pool::Biomass,
+                };
+                let (to_biomass, to_waste) = fixed::split_output_with_rule(amount, &rule, 300_000)
+                    .map_err(|e| format!("intake: {e:?}"))?;
+                cell.nutrient -= amount;
+                cell.biomass[id] = fixed::add(cell.biomass[id], to_biomass)
+                    .map_err(|e| format!("biomass: {e:?}"))?;
+                cell.waste =
+                    fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
+                cell.energy[id] = cell.energy[id].saturating_add(to_biomass).min(FIXED_SCALE);
             }
-            let amount = cell.nutrient.min(
-                fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
-                    .map_err(|e| format!("intake: {e:?}"))?,
-            );
-            let rule = ConversionRule {
-                from: Pool::Nutrient,
-                to: Pool::Biomass,
-                coefficient: 700_000,
-                remainder_to: Pool::Biomass,
-            };
-            let (to_biomass, to_waste) = fixed::split_output_with_rule(amount, &rule, 300_000)
-                .map_err(|e| format!("intake: {e:?}"))?;
-            cell.nutrient -= amount;
-            cell.biomass[id] =
-                fixed::add(cell.biomass[id], to_biomass).map_err(|e| format!("biomass: {e:?}"))?;
-            cell.waste = fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
-            cell.energy[id] = cell.energy[id].saturating_add(to_biomass).min(FIXED_SCALE);
-        }
         }
         Ok(())
     }
     fn maintenance(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
-        for lineage in &lineages {
-            let id = lineage.id as usize;
-            let mut cost = fixed::mul(
-                self.thresholds.base_maintenance,
-                lineage.traits.maintenance_cost,
-            )
-            .map_err(|e| format!("cost: {e:?}"))?;
-            if lineage.tags.toxin_sensitive && cell.waste > self.thresholds.waste_toxic_threshold {
-                cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
-                    .map_err(|e| format!("toxin: {e:?}"))?;
+            for lineage in &lineages {
+                let id = lineage.id as usize;
+                let mut cost = fixed::mul(
+                    self.thresholds.base_maintenance,
+                    lineage.traits.maintenance_cost,
+                )
+                .map_err(|e| format!("cost: {e:?}"))?;
+                if lineage.tags.toxin_sensitive
+                    && cell.waste > self.thresholds.waste_toxic_threshold
+                {
+                    cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
+                        .map_err(|e| format!("toxin: {e:?}"))?;
+                }
+                let cost = cost.max(1);
+                if cell.energy[id] >= cost {
+                    cell.energy[id] -= cost;
+                } else {
+                    cell.energy[id] = 0;
+                }
             }
-            let cost = cost.max(1);
-            if cell.energy[id] >= cost {
-                cell.energy[id] -= cost;
-            } else {
-                cell.energy[id] = 0;
-            }
-        }
         }
         Ok(())
     }
     fn starvation_and_death(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
-        for lineage in &lineages {
-            let id = lineage.id as usize;
-            let cost = fixed::mul(
-                self.thresholds.base_maintenance,
-                lineage.traits.maintenance_cost,
-            )
-            .map_err(|e| format!("cost: {e:?}"))?;
-            if cell.energy[id] < cost && cell.biomass[id] > 0 {
-                let loss = cell.biomass[id].min(cost - cell.energy[id]);
-                cell.biomass[id] -= loss;
-                cell.carcass =
-                    fixed::add(cell.carcass, loss).map_err(|e| format!("carcass: {e:?}"))?;
+            for lineage in &lineages {
+                let id = lineage.id as usize;
+                let cost = fixed::mul(
+                    self.thresholds.base_maintenance,
+                    lineage.traits.maintenance_cost,
+                )
+                .map_err(|e| format!("cost: {e:?}"))?;
+                if cell.energy[id] < cost && cell.biomass[id] > 0 {
+                    let loss = cell.biomass[id].min(cost - cell.energy[id]);
+                    cell.biomass[id] -= loss;
+                    cell.carcass =
+                        fixed::add(cell.carcass, loss).map_err(|e| format!("carcass: {e:?}"))?;
+                }
+                if cell.biomass[id] > 0 && cell.biomass[id] < lineage.mortality_threshold {
+                    let loss = cell.biomass[id];
+                    cell.biomass[id] = 0;
+                    cell.carcass =
+                        fixed::add(cell.carcass, loss).map_err(|e| format!("death: {e:?}"))?;
+                }
             }
-            if cell.biomass[id] > 0 && cell.biomass[id] < lineage.mortality_threshold {
-                let loss = cell.biomass[id];
-                cell.biomass[id] = 0;
-                cell.carcass =
-                    fixed::add(cell.carcass, loss).map_err(|e| format!("death: {e:?}"))?;
-            }
-        }
         }
         Ok(())
     }
     fn reproduction(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
-        for lineage in &lineages {
-            let id = lineage.id as usize;
-            let cost = fixed::mul(
-                self.thresholds.base_maintenance,
-                lineage.traits.maintenance_cost,
-            )
-            .map_err(|e| format!("cost: {e:?}"))?;
-            let threshold = fixed::mul(cost * 2, lineage.traits.reproduction)
-                .map_err(|e| format!("reproduction: {e:?}"))?;
-            if cell.energy[id] > threshold && cell.nutrient > 0 {
-                let gain = ((cell.energy[id] - threshold) / 2).min(cell.nutrient);
-                cell.energy[id] -= gain;
-                cell.nutrient -= gain;
-                cell.biomass[id] = fixed::add(cell.biomass[id], gain)
+            for lineage in &lineages {
+                let id = lineage.id as usize;
+                let cost = fixed::mul(
+                    self.thresholds.base_maintenance,
+                    lineage.traits.maintenance_cost,
+                )
+                .map_err(|e| format!("cost: {e:?}"))?;
+                let threshold = fixed::mul(cost * 2, lineage.traits.reproduction)
                     .map_err(|e| format!("reproduction: {e:?}"))?;
+                if cell.energy[id] > threshold && cell.nutrient > 0 {
+                    let gain = ((cell.energy[id] - threshold) / 2).min(cell.nutrient);
+                    cell.energy[id] -= gain;
+                    cell.nutrient -= gain;
+                    cell.biomass[id] = fixed::add(cell.biomass[id], gain)
+                        .map_err(|e| format!("reproduction: {e:?}"))?;
+                }
             }
-        }
         }
         Ok(())
     }
     fn emission(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
-        for lineage in &lineages {
-            let id = lineage.id as usize;
-            let amount = cell.biomass[id].min(lineage.waste_emission.max(0));
-            cell.biomass[id] -= amount;
-            cell.waste = fixed::add(cell.waste, amount).map_err(|e| format!("emission: {e:?}"))?;
-        }
+            for lineage in &lineages {
+                let id = lineage.id as usize;
+                let amount = cell.biomass[id].min(lineage.waste_emission.max(0));
+                cell.biomass[id] -= amount;
+                cell.waste =
+                    fixed::add(cell.waste, amount).map_err(|e| format!("emission: {e:?}"))?;
+            }
         }
         Ok(())
     }
     fn occupancy(&mut self) -> Result<(), String> {
         let threshold = self.thresholds.occupancy_threshold;
         for cell in &mut self.state.grid.cells {
-        let biomass: Fixed = cell.biomass.iter().sum();
-        if biomass >= threshold {
-            cell.occupancy_peak = FIXED_SCALE;
-        } else {
-            cell.occupancy_peak = fixed::mul(cell.occupancy_peak, 995_000)
-                .map_err(|e| format!("occupancy: {e:?}"))?;
-        }
+            let biomass: Fixed = cell.biomass.iter().sum();
+            if biomass >= threshold {
+                cell.occupancy_peak = FIXED_SCALE;
+            } else {
+                cell.occupancy_peak = fixed::mul(cell.occupancy_peak, 995_000)
+                    .map_err(|e| format!("occupancy: {e:?}"))?;
+            }
         }
         Ok(())
     }
