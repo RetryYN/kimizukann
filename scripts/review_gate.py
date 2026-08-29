@@ -88,9 +88,6 @@ def canonical_identity(value: str) -> str:
     aliases = {
         "cursor-kimi": "kimi",
         "cursor-grok": "grok",
-        "cursor-glm": "composer",
-        "cursor-composer": "composer",
-        "cursor-gemini": "gemini",
         "retryyn": "owner",
         "owner": "owner",
     }

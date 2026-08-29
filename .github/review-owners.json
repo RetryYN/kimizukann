@@ -3,8 +3,7 @@
   "rules": [
     {
       "paths": ["crates/**/tests/**", "docs/20_design/basic/08_*.md"],
-      "allOf": ["grok"],
-      "oneNonWriter": true
+      "allOf": ["kimi", "claude"]
     },
     {
       "paths": ["crates/**"],
@@ -27,8 +26,9 @@
     {"paths": ["docs/20_design/detail/**"], "allOf": ["kimi"]},
     {
       "paths": ["app/**"],
-      "allOf": ["kimi"],
-      "writers": ["grok"]
+      "allOf": ["kimi", "claude"],
+      "writers": ["grok"],
+      "merge": "kimi"
     },
     {"paths": [".github/**", ".githooks/**", "scripts/**"], "allOf": ["grok"]},
     {"paths": ["docs/10_requirements/**", "docs/20_design/rfc/**"], "allOf": ["owner"]},
