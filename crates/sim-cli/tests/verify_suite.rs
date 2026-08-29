@@ -19,6 +19,9 @@ fn quick_and_all_are_supported_and_emit_state_hash() {
         let report = run(suite);
         assert_eq!(report["suite"], suite);
         assert_eq!(report["status"], "pass");
+        if suite == "all" {
+            assert_eq!(report["golden"], true);
+        }
         assert!(report["state_hash"]
             .as_str()
             .is_some_and(|value| value.len() == 64));

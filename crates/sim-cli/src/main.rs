@@ -2,6 +2,11 @@ use kimizukann_sim_core::{fixed, SimCore};
 use kimizukann_sim_types::{LineageParams, MechanismTags, StateHash, TraitVector, FIXED_SCALE};
 use sha2::{Digest, Sha256};
 
+const WEEK1_GOLDEN: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../../docs/30_contracts/golden/d1-week1.json"
+));
+
 fn lineage(id: u8) -> LineageParams {
     LineageParams {
         id,
@@ -68,11 +73,33 @@ fn one_tick_reference() -> bool {
         && cell.energy[0] == 290_000
 }
 
-fn verify_suite(suite: &str) -> (bool, bool, bool, bool, bool, String) {
+fn week1_golden_matches(suite: &str, state_hash: &str) -> bool {
+    if !matches!(suite, "week1" | "all") {
+        return true;
+    }
+    let golden: serde_json::Value = match serde_json::from_str(WEEK1_GOLDEN) {
+        Ok(value) => value,
+        Err(_) => return false,
+    };
+    golden["schema_version"] == "golden-v1"
+        && golden["case"] == "d1-one-cell-week1"
+        && golden["model_version"] == "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1"
+        && golden["config"]["seed"] == 7
+        && golden["config"]["grid"] == "one-cell"
+        && golden["config"]["nutrient"] == 10_000_000
+        && golden["config"]["biomass"] == 2_000_000
+        && golden["config"]["lineage_preset"] == "d1-lineage-0"
+        && golden["config"]["ticks"] == 2_000
+        && golden["seed"] == 7
+        && golden["ticks"] == 2_000
+        && golden["state_hash"].as_str() == Some(state_hash)
+}
+
+fn verify_suite(suite: &str) -> (bool, bool, bool, bool, bool, bool, String) {
     let ticks = match suite {
         "quick" => 20,
         "week1" | "all" => 2_000,
-        _ => return (false, false, false, false, false, String::new()),
+        _ => return (false, false, false, false, false, false, String::new()),
     };
     let mut a = SimCore::one_cell(7, 10 * FIXED_SCALE, 2 * FIXED_SCALE, vec![lineage(0)]);
     let mut b = SimCore::one_cell(7, 10 * FIXED_SCALE, 2 * FIXED_SCALE, vec![lineage(0)]);
@@ -83,13 +110,16 @@ fn verify_suite(suite: &str) -> (bool, bool, bool, bool, bool, String) {
     let nonneg = a.invariant_report().non_negative;
     let transition = one_tick_reference();
     let hash_normalization = a.state_hash() == reference_hash(&a);
+    let state_hash = hex_hash(a.state_hash());
+    let golden = week1_golden_matches(suite, &state_hash);
     (
         conservation,
         determinism,
         nonneg,
         transition,
         hash_normalization,
-        hex_hash(a.state_hash()),
+        golden,
+        state_hash,
     )
 }
 
@@ -106,11 +136,11 @@ fn main() {
         eprintln!("usage: sim-cli verify --suite quick|week1|all");
         std::process::exit(2);
     }
-    let (conservation, determinism, nonneg, transition, hash_normalization, state_hash) =
+    let (conservation, determinism, nonneg, transition, hash_normalization, golden, state_hash) =
         verify_suite(suite);
-    let ok = conservation && determinism && nonneg && transition && hash_normalization;
+    let ok = conservation && determinism && nonneg && transition && hash_normalization && golden;
     println!(
-        "{{\"suite\":\"{suite}\",\"conservation_1cell\":{conservation},\"determinism\":{determinism},\"nonneg\":{nonneg},\"transition_reference\":{transition},\"hash_normalization\":{hash_normalization},\"state_hash\":\"{state_hash}\",\"state_hashes\":[\"{state_hash}\"],\"status\":\"{}\"}}",
+        "{{\"suite\":\"{suite}\",\"conservation_1cell\":{conservation},\"determinism\":{determinism},\"nonneg\":{nonneg},\"transition_reference\":{transition},\"hash_normalization\":{hash_normalization},\"golden\":{golden},\"state_hash\":\"{state_hash}\",\"state_hashes\":[\"{state_hash}\"],\"status\":\"{}\"}}",
         if ok { "pass" } else { "fail" }
     );
     if !ok {

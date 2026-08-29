@@ -9,14 +9,17 @@ from pathlib import Path
 
 SOURCE = Path(__file__).resolve().parents[1] / "crates" / "sim-core" / "src" / "lib.rs"
 MUTATIONS = {
-    "coefficient": ("coefficient: 700_000", "coefficient: 710_000"),
+    "coefficient": (
+        "fixed::split_output_with_rule(amount, &rule, 300_000)",
+        "fixed::split_output_with_rule(amount, &rule, 310_000)",
+    ),
     "remainder": (
         "let remainder = input - primary - secondary;",
         "let remainder = 0;",
     ),
     "phase-order": (
-        "        self.intake()?;\n        self.maintenance()?;",
-        "        self.maintenance()?;\n        self.intake()?;",
+        "        self.intake()?;\n        self.maintenance()?;\n        self.starvation_and_death()?;\n        self.reproduction()?;",
+        "        self.reproduction()?;\n        self.maintenance()?;\n        self.starvation_and_death()?;\n        self.intake()?;",
     ),
     "hash": (
         "        for stream in &self.rng {",

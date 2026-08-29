@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -18,9 +19,22 @@ def run_verify() -> subprocess.CompletedProcess[str]:
     return subprocess.run(CLI, cwd=ROOT, text=True, capture_output=True, check=False)
 
 
+def report(result: subprocess.CompletedProcess[str]) -> dict[str, object] | None:
+    """Extract the CLI JSON even when cargo writes build logs around it."""
+    for line in reversed(result.stdout.splitlines()):
+        try:
+            value = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, dict) and "status" in value:
+            return value
+    return None
+
+
 def main() -> int:
     baseline = run_verify()
-    if baseline.returncode != 0:
+    baseline_report = report(baseline)
+    if baseline.returncode != 0 or baseline_report is None or baseline_report.get("status") != "pass":
         print("gate-selftest: baseline verify failed", file=sys.stderr)
         print(baseline.stdout, baseline.stderr, file=sys.stderr)
         return 1
@@ -33,8 +47,13 @@ def main() -> int:
         try:
             SOURCE.write_text(pristine.replace(before, after), encoding="utf-8")
             result = run_verify()
+            mutation_report = report(result)
             if result.returncode == 0:
                 failures.append(f"{name}: verify unexpectedly passed")
+            elif mutation_report is None:
+                failures.append(f"{name}: verify emitted no failure JSON (likely compile failure)")
+            elif mutation_report.get("status") != "fail":
+                failures.append(f"{name}: verify JSON status is not fail")
         finally:
             SOURCE.write_text(pristine, encoding="utf-8")
     if failures:
