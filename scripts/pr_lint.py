@@ -12,9 +12,16 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from review_gate import canonical_identity, parse_tickets, verify_ticket
+
 
 class LintError(RuntimeError):
     pass
+
+
+LINE_LIMIT = 300
+LINE_LIMIT_EXCEPTION_PRS = {7, 11}
+OWNER_LINE_LIMIT_MARKER = re.compile(r"(?im)^\s*helix-line-limit:\s*approve\s*$")
 
 
 def _decode_many(raw: str) -> list[Any]:
@@ -118,7 +125,9 @@ def added_forbidden(files: list[dict[str, Any]]) -> list[str]:
     return found
 
 
-def fetch_data(args: argparse.Namespace) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+def fetch_data(
+    args: argparse.Namespace,
+) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     metadata = read_json(args.pr_file) or gh_api(f"repos/{args.repo}/pulls/{args.pr}")
     # GitHub's pull-request files endpoint is the canonical merge-base
     # (three-dot) diff.  Comparing the body stat with this response keeps
@@ -130,13 +139,54 @@ def fetch_data(args: argparse.Namespace) -> tuple[dict[str, Any], list[dict[str,
     commits = read_json(args.commits_file)
     if commits is None:
         commits = gh_api(f"repos/{args.repo}/pulls/{args.pr}/commits?per_page=100", paginate=True)
-    return metadata, files or [], commits or []
+    comments = read_json(args.comments_file)
+    if comments is None:
+        issue_comments = gh_api(f"repos/{args.repo}/issues/{args.pr}/comments?per_page=100", paginate=True)
+        review_comments = gh_api(f"repos/{args.repo}/pulls/{args.pr}/comments?per_page=100", paginate=True)
+        comments = list(issue_comments or []) + list(review_comments or [])
+    return metadata, files or [], commits or [], comments or []
+
+
+def has_line_limit_exception(
+    pr: int,
+    metadata: dict[str, Any],
+    comments: list[dict[str, Any]],
+) -> bool:
+    """Return whether the narrowly-scoped H0/H2 line-limit waiver is approved.
+
+    The waiver is intentionally independent of the PR body: either the owner
+    posts the exact marker, or Claude posts a current-head, HMAC-signed
+    ``helix-review: v1`` approval.  This mirrors review-gate's attestation
+    validation and prevents a body-only self-approval from bypassing 300 lines.
+    """
+    if pr not in LINE_LIMIT_EXCEPTION_PRS:
+        return False
+    head_sha = str(metadata.get("head", {}).get("sha", ""))
+    for comment in comments:
+        if not isinstance(comment, dict):
+            continue
+        user = comment.get("user")
+        login = user.get("login", "") if isinstance(user, dict) else ""
+        if canonical_identity(str(login)) == "owner" and OWNER_LINE_LIMIT_MARKER.search(str(comment.get("body", ""))):
+            return True
+    secret_text = os.environ.get("HELIX_ATTEST_SECRET", "").strip()
+    if not secret_text or not re.fullmatch(r"[0-9a-fA-F]{40}", head_sha):
+        return False
+    for ticket in parse_tickets(comments):
+        if canonical_identity(ticket.get("reviewer", "")) != "claude":
+            continue
+        if ticket.get("verdict", "").lower() != "approve":
+            continue
+        valid, _ = verify_ticket(ticket, pr, head_sha, secret_text.encode("utf-8"))
+        if valid:
+            return True
+    return False
 
 
 def run(args: argparse.Namespace) -> int:
     errors: list[str] = []
     try:
-        metadata, files, commits = fetch_data(args)
+        metadata, files, commits, comments = fetch_data(args)
         body = str(metadata.get("body") or "")
         ref = str(metadata.get("head", {}).get("ref", ""))
         draft = bool(metadata.get("draft", False))
@@ -182,8 +232,11 @@ def run(args: argparse.Namespace) -> int:
                 errors.append("PR diff --stat does not match GitHub file statistics")
             if actual_names - listed:
                 errors.append("触ったファイル stat omits: " + ", ".join(sorted(actual_names - listed)))
-        if additions + deletions > 300 and "分割理由" not in body and "split reason" not in body.lower():
-            errors.append("changed lines exceed 300 without a split reason")
+        if additions + deletions > LINE_LIMIT:
+            if "分割理由" not in body and "split reason" not in body.lower():
+                errors.append("changed lines exceed 300 without a split reason")
+            if not has_line_limit_exception(args.pr, metadata, comments):
+                errors.append("changed lines exceed 300 without an approved H0/H2 line-limit exception")
         errors.extend("forbidden addition: " + item for item in added_forbidden(files))
 
         implementation_index: int | None = None
@@ -232,6 +285,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--pr-file")
     result.add_argument("--files-file")
     result.add_argument("--commits-file")
+    result.add_argument("--comments-file")
     return result
 
 
