@@ -56,25 +56,31 @@
 - reviewer は PR 本文の「検証手順」を **自分で実行**してから approve する（CI の URL を見るだけは不可）。実行できない場合はその旨を書き、Claude が代行
 - 指摘は `severity: blocker | major | minor | nit` を付ける。blocker/major が 1 つでもあれば Request changes
 - writer は指摘ごとに「修正 commit hash」または「反論」を返信。全部解決したら re-request review
-- **Claude のゲート承認は最後**。CI green ＋ 必須レビュー approve ＋ trace 更新を確認してから approve → squash merge → ブランチ削除 → 開発ログに 1 行
+- merge ボタンの所有者は §3.5 のマージ責任者だけ（Claude は自分が責任者の領域のみ）。責任者は CI green ＋ 必須レビュー approve ＋ trace 更新を確認してから squash merge → ブランチ削除 → `[merged]` を post
 
 ### 3.4 AI レビュアーの登録
 - 各 AI は GitHub 上では「Claude 経由のコメント」として記録される（AI 個別アカウントは作らない）。コメント先頭に `[reviewer: kimi]` を付ける
-- レビューの本文は helix-bus で受け取り、Claude が `gh pr review` で転記する（`scripts/pr-review.mjs` — H2 で実装）。転記時に内容を変えない
+- **各 AI が直接 `gh` で PR にレビュー本文を書く**（gh は共有認証）。helix-bus には 1 行の通知だけ。転記は行わない（H2 の pr-review.mjs は廃止）。PR が正本、bus は通知
 - CODEOWNERS はオーナー（RetryYN）と Claude の運用アカウント（オーナー本人のアカウントで代行）
 
 ### 3.5 マージ責任者（領域ごとに 1 名。「誰が merge ボタンを押すか」を固定）
 | 領域 | マージ責任者 | 条件（すべて満たしたら責任者が squash merge） | エスカレーション |
 |---|---|---|---|
-| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | 保存則・hash・契約に触れる変更、golden 変更 → Claude |
+| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | **契約本文（05_contract / docs/contracts）・golden・hash 正規化順** を変える PR のみ Claude |
 | `app/**`（Flutter） | **grok** | CI green ＋ composer または kimi の approve | FFI 契約に触れる → Claude |
 | `docs/design/basic/**`, `docs/contracts/**`（基本設計・契約） | **Claude** | README の審査列の approve ＋ grok の抜け穴審査 | 要件に矛盾 → RFC → オーナー |
 | `docs/design/detail/**`（詳細設計） | **kimi** | Claude のチェックリスト審査（§設計工程）approve | — |
 | `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | **Codex** | grok の抜け穴審査 approve ＋ 自己試験 green | required checks の変更 → Claude |
 | `docs/要件定義書*`, `docs/design/rfc/**` | **オーナー** | kimi ＋ 影響先全員の approve | — |
-| `docs/相談会/**`, `docs/design/basic/02_glossary.md`, README 類（記録・文書） | **gemini** | 記録は審査不要。glossary は kimi approve | — |
+| `docs/相談会/**`（議事録・レビュー記録・開発ログ）, README 類 | **gemini** | 記録は審査不要。ただし `docs/相談会/briefs/**` は brief 発行者の領域責任者が審査 | — |
+| `docs/design/basic/02_glossary.md` | **gemini** | kimi approve（basic/** の例外） | — |
+| `docs/design/adr/**`, `docs/GitHub運用ルール.md`, `docs/相談会/第5回_*`（体制・規則） | **Claude** | grok の抜け穴審査 | 役割・規則の変更はオーナーに日次報告 |
+| `docs/calib/**`（較正 manifest） | **kimi** | grok（分布の読み） | 代表史の置換 → オーナー |
+| `docs/dist/**`（配布） | **Codex** | grok | 署名鍵・配布先 → オーナー |
+
+複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex ＞ gemini で最上位の責任者がマージする（分割できるなら分割を求める）。
 | `docs/contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
-- 責任者は自分が writer の PR をマージしない（その領域の代理: crates→Claude、app→kimi、harness→grok、記録→Claude）
+- 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）
 - 責任者はマージ後 5 分以内に開発ログへ 1 行（`bus-ctl log` で自動化予定）と、関係者へ `[ID][merged] sha=… pr=#n` を直接 post する
 
 ### 3.6 AI 間の直接ルーティング（Claude を経由しない）
@@ -91,8 +97,15 @@
 | brief を出す | 領域のマージ責任者（コア: kimi、UI: grok、ハーネス: Codex） | writer | `[ID][brief]`（Claude は BD/契約の brief のみ） |
 | 環境・CI が壊れた | 気づいた人 | Codex | `[ENV][request]` |
 | 用語が無い・文言が要る | 誰でも | gemini | `[TERM][request]` |
-- Codex（ルーター）は 10 分ごとに `gh pr list` を見て、review-request が 30 分以上放置されていれば該当レビュアーに催促 post、条件がそろっているのに未マージなら責任者に催促 post する
+- Codex（ルーター）は 10 分ごとに `gh pr list --json number,isDraft,reviewRequests,reviews,updatedAt,labels` を見る。観測対象は **GitHub の Ready 時刻（`ready_for_review` イベント）とラベル**: writer は Ready にする時に `needs-review:<name>` ラベルを付け、reviewer は本文投稿後に外す。ラベルが 30 分以上残っていれば該当レビュアーへ催促 post、`ready-to-merge` ラベル（全 approve 後に reviewer が付ける）が 30 分残っていれば責任者へ催促
 - Claude は日次で PR 一覧・開発ログ・trace を確認してオーナーに要約する（進行の中継はしない）
+
+### 3.7 リミット管理（予算と上限）
+- **予算の正本**: `~/.helix-bus/budget.json`（オーナーが編集）。計測: `node ~/.helix-bus/usage.mjs [--hours N]`（identity ごとの wait / stop 回数 ≈ リクエスト数、予算比、WARN 80% / STOP 100%）
+- **上限**（budget.json `review`）: レビュー往復 **最大 3 ラウンド**（4 回目は責任者が判定して merge か close）、writer あたり open PR **2 本**まで、PR **300 行**まで
+- **待機ポリシー**（`waitPolicy`）: タスクを持つ AI は `timeout_sec=50`、**30 分タスク無しなら `timeout_sec=600`**（Cursor が許せば。LIMIT-TEST で確認）または待機停止。Codex は 3600
+- **STOP 時**: Claude が該当 AI に `[LIMIT][constraint] 待機停止` を送り、その日のタスクは他へ振る。合計が STOP なら新規 brief を止めてオーナーに報告
+- Claude の 2 時間ジョブで usage を確認し、日次要約に「消費 / 予算」を 1 行入れる
 
 ## 4. マージ後
 - squash merge のコミットメッセージは PR タイトル＋本文の `Refs:` 行
