@@ -12,7 +12,7 @@
 | BD-06 | `06_numeric_model.md` | scale、各量の上限、phase ごとの最大中間値と使用ビット幅の**証明表**、丸め、余り、NumericError の条件 | kimi | grok | 64×64×8 系統×2000 tick で i128 に収まる計算が表で示され、上限値が UT の境界値になる |
 | BD-07 | `07_determinism_model.md` | 走査順、4 ストリームの用途割当と 1 tick の消費回数表、禁止構造（HashMap/浮動小数点）の lint 設定、三経路・クロス OS の検証手順 | kimi | grok | 消費回数表が UT で検査できる。lint 設定が CI にある |
 | BD-08 | `08_acceptance_tests.md` | **AT 設計**: 段階 D2〜D12 ごとに AT-ID / 対応 REQ / 入力 / 期待 / 判定方法。gate 自己試験用 mutation 一覧 | kimi | Claude | 全 P0 REQ に ≥1 AT。各 AT に REQ と章参照 |
-| BD-09 | `09_performance_budget.md` | 段階ごとの予算（REQ-NFR-01/02）、計測方法（criterion / 実機）、基準端末（OPEN-03 の決定を待つ） | Claude | kimi | 予算値が CI しきい値になる |
+| BD-09 | `09_performance_budget.md` | 段階ごとの予算（REQ-NFR-01/02）、計測方法（criterion / 実機）、基準端末（OPEN-03 決定済: 全スマホ→床端末で導出） | Claude | kimi | 予算値が CI しきい値になる |
 | BD-10 | `10_persistence.md` | SaveEnvelope、schema_version / model_version の bump 規則、migration 方針とテスト | kimi | Claude | 旧 save 読込テストの設計がある |
 | BD-11 | `11_ui_flow.md` | 一巡の画面遷移（REQ-UI-01）、スケジューラ規則（REQ-UI-03 の 7 要素）、FFI 呼出順、中断復帰 | grok | kimi | 遷移が表で書かれ、AT-D12 に対応 |
 | BD-12 | `12_events_and_explainer.md` | ドメインイベント一覧、フロー台帳レコード、転換点スコア、理由コード→レバー写像 | kimi | gemini（文言） | REQ-EVT/EXP の全件が対応 |
