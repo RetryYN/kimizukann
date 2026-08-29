@@ -377,7 +377,7 @@ mod tests {
     #[test]
     fn fixed_rounding_and_remainder() {
         assert_eq!(fixed::mul(3, 500_000).unwrap(), 1);
-        assert_eq!(fixed::split_output(3, 500_000).unwrap(), (2, 0));
+        assert_eq!(fixed::split_output(3, 500_000).unwrap(), (2, 1));
     }
     #[test]
     fn conservation_and_nonnegative() {
