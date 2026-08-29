@@ -183,22 +183,20 @@ def load_rules(path: str) -> list[dict[str, Any]]:
 
 def required_reviewers(files: Iterable[str], rules: list[dict[str, Any]]) -> tuple[set[str], list[set[str]], bool]:
     normalized_files = [str(path).replace("\\", "/") for path in files]
-    matched = [
-        rule
-        for rule in rules
-        if any(fnmatch.fnmatchcase(path, pattern) for path in normalized_files for pattern in rule["paths"])
-    ]
-    exclusive = [rule for rule in matched if rule["exclusive"]]
-    if exclusive:
-        matched = exclusive
     all_required: set[str] = set()
     any_required: list[set[str]] = []
     one_non_writer = False
-    for rule in matched:
-        all_required.update(rule["all"])
-        if rule["any"]:
-            any_required.append(set(rule["any"]))
-        one_non_writer = one_non_writer or rule["one_non_writer"]
+    for path in normalized_files:
+        path_rules = [
+            rule for rule in rules if any(fnmatch.fnmatchcase(path, pattern) for pattern in rule["paths"])
+        ]
+        # An exclusive rule applies only to this matching path.  Other changed
+        # paths still contribute their own requirements (e.g. golden + crates).
+        for rule in [rule for rule in path_rules if rule["exclusive"]] or path_rules:
+            all_required.update(rule["all"])
+            if rule["any"]:
+                any_required.append(set(rule["any"]))
+            one_non_writer = one_non_writer or rule["one_non_writer"]
     return all_required, any_required, one_non_writer
 
 
@@ -209,6 +207,8 @@ def verify_ticket(ticket: dict[str, str], pr: int, head_sha: str, secret: bytes)
         return False, f"missing fields: {', '.join(missing)}"
     if ticket["pr"] != str(pr):
         return False, "PR number mismatch"
+    if not re.fullmatch(r"[0-9a-fA-F]{40}", ticket["sha"]):
+        return False, "ticket sha must be exactly 40 hexadecimal characters"
     if ticket["sha"].lower() != head_sha.lower():
         return False, "stale head sha"
     verdict = ticket["verdict"].lower()
@@ -219,7 +219,7 @@ def verify_ticket(ticket: dict[str, str], pr: int, head_sha: str, secret: bytes)
     if ticket["evidence"].lower() != "none" and not checklist_hash(ticket["evidence"]):
         return False, "evidence is not a sha256 or none"
     payload = "|".join(
-        [ticket["reviewer"], ticket["pr"], ticket["sha"], verdict, ticket["checklist"]]
+        [ticket["reviewer"], ticket["pr"], ticket["sha"], verdict, ticket["checklist"], ticket["evidence"]]
     ).encode("utf-8")
     expected = hmac.new(secret, payload, hashlib.sha256).hexdigest()
     if not hmac.compare_digest(expected, ticket["sig"].strip().lower()):
@@ -263,7 +263,9 @@ def run(args: argparse.Namespace) -> int:
         files = [str(entry.get("filename", "")) for entry in file_entries if isinstance(entry, dict)]
         if not files:
             errors.append("changed file list is empty")
-        secret_text = os.environ.get("HELIX_ATTEST_SECRET", "")
+        secret_text = os.environ.get("HELIX_ATTEST_SECRET", "").strip()
+        if head_sha and not re.fullmatch(r"[0-9a-fA-F]{40}", head_sha):
+            errors.append("head sha must be exactly 40 hexadecimal characters")
         if not secret_text:
             errors.append("HELIX_ATTEST_SECRET is not configured")
         owners = load_rules(args.owners)

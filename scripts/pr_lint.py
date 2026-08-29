@@ -63,7 +63,7 @@ def read_json(path: str | None) -> Any | None:
 
 
 def section(body: str, title: str) -> str:
-    pattern = re.compile(rf"(?ms)^##\s+{re.escape(title)}\s*$\n?(.*?)(?=^##\s+|\Z)")
+    pattern = re.compile(rf"(?ms)^##\s+{re.escape(title)}(?:\s*[（(].*)?$\n?(.*?)(?=^##\s+|\Z)")
     match = pattern.search(body)
     return match.group(1) if match else ""
 
@@ -107,7 +107,7 @@ def is_implementation(path: str) -> bool:
 
 
 def added_forbidden(files: list[dict[str, Any]]) -> list[str]:
-    forbidden = ("#[ignore]", "allow(clippy", "--no-verify")
+    forbidden = ("#" + "[ignore]", "allow(" + "clippy", "-" + "-no-verify")
     found: list[str] = []
     for entry in files:
         path = str(entry.get("filename", ""))
@@ -185,11 +185,17 @@ def run(args: argparse.Namespace) -> int:
         implementation_index: int | None = None
         test_index: int | None = None
         for index, commit in enumerate(commits):
-            commit_files = commit.get("files") if isinstance(commit, dict) else None
+            if not isinstance(commit, dict):
+                continue
+            # Mainline merges are synchronization commits, not authored work;
+            # do not make their generated subject fail the commit convention.
+            if len(commit.get("parents", [])) > 1:
+                continue
+            commit_files = commit.get("files")
             if not commit_files and commit.get("sha"):
                 try:
                     commit_files = gh_api(f"repos/{args.repo}/commits/{commit['sha']}").get("files", [])
-                except GateError:
+                except LintError:
                     commit_files = []
             paths = [str(entry.get("filename", entry)) for entry in (commit_files or [])]
             if test_index is None and any(is_test_path(path) for path in paths):

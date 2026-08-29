@@ -2,31 +2,32 @@
   "version": 1,
   "rules": [
     {
-      "paths": ["crates/**/tests/**", "docs/design/basic/08_*.md"],
+      "paths": ["crates/**/tests/**", "docs/20_design/basic/08_*.md"],
       "allOf": ["grok"],
       "oneNonWriter": true
     },
     {"paths": ["crates/**"], "allOf": ["kimi"]},
     {
-      "paths": ["docs/design/basic/**", "docs/contracts/**"],
+      "paths": ["docs/20_design/basic/**", "docs/30_contracts/**"],
       "allOf": ["grok"]
     },
     {
-      "paths": ["docs/contracts/golden/**"],
+      "paths": ["docs/30_contracts/golden/**"],
       "allOf": ["claude"],
       "exclusive": true
     },
     {
-      "paths": ["docs/design/adr/**", "docs/design/basic/05_contract.md", "docs/design/basic/07_determinism_model.md"],
+      "paths": ["docs/20_design/adr/**", "docs/20_design/basic/05_contract.md", "docs/20_design/basic/07_determinism_model.md"],
       "allOf": ["claude"]
     },
-    {"paths": ["docs/design/detail/**"], "allOf": ["kimi"]},
+    {"paths": ["docs/20_design/detail/**"], "allOf": ["kimi"]},
     {"paths": ["app/**"], "anyOf": ["grok", "composer"]},
     {"paths": [".github/**", ".githooks/**", "scripts/**"], "allOf": ["grok"]},
-    {"paths": ["docs/要件定義書*", "docs/design/rfc/**"], "allOf": ["owner"]},
-    {"paths": ["docs/design/basic/02_glossary.md"], "allOf": ["kimi"]},
+    {"paths": ["docs/10_requirements/**", "docs/20_design/rfc/**"], "allOf": ["owner"]},
+    {"paths": ["docs/20_design/basic/02_glossary.md"], "allOf": ["kimi"]},
+    {"paths": ["docs/30_contracts/**"], "allOf": ["claude"]},
+    {"paths": ["docs/40_process/**", "docs/50_records/**", "README*"], "allOf": []},
     {"paths": ["docs/calib/**"], "allOf": ["grok"]},
-    {"paths": ["docs/dist/**"], "allOf": ["grok"]},
-    {"paths": ["docs/相談会/**", "README*"], "allOf": []}
+    {"paths": ["docs/dist/**"], "allOf": ["grok"]}
   ]
 }
