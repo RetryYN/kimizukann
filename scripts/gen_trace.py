@@ -1,6 +1,6 @@
 """REQ → 基本設計章 → AT → DD → UT のトレース表を生成する。
-入力: docs/要件定義書_検証版_v*.md（最新版）、docs/design/**/*.md、crates/**/*.rs、tests
-出力: docs/design/trace.md。P0 で AT の無い要求があれば終了コード 1（CI 用）。
+入力: docs/10_requirements/要件定義書_検証版_v*.md（最新版）、docs/20_design/**/*.md、crates/**/*.rs、tests
+出力: docs/20_design/trace.md。P0 で AT の無い要求があれば終了コード 1（CI 用）。
 """
 import glob, io, os, re, sys
 
