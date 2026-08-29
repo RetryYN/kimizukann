@@ -39,16 +39,16 @@
 | REQ-SIM-03a | P0 | D2 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
 | REQ-SIM-03b | P0 | D4 | UT + AT（空き家が発生する seed が存在） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md | — |
 | REQ-SIM-04 | P0 | D1 | UT（順序）+ mutation 自己試験 | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md | — |
-| REQ-SIM-05 | P0 | D1 | UT（property: 全変換で保存）+ AT | 0001-fixed-point-i64.md, 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
+| REQ-SIM-05 | P0 | D1 | UT（property: 全変換で保存）+ AT | 0001-fixed-point-i64.md, 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D2-diffuse.md | — |
 | REQ-SIM-06 | P0 | D1/D2 | AT（1 セル・64×64） | 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
 | REQ-SIM-07 | P0 | D5 | AT | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-SIM-08 | P0 | D1/D3 | UT + property（0 ≤ energy ≤ 1） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md | — |
+| REQ-SIM-08 | P0 | D1/D3 | UT + property（0 ≤ energy ≤ 1） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, DD-D2-diffuse.md | — |
 | REQ-SIM-09 | P0 | D1 | UT | 02_glossary.md, 04_state_machines.md, 07_determinism_model.md | — |
-| REQ-SIM-10 | P0 | D2 | AT（対称性）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
+| REQ-SIM-10 | P0 | D2 | AT（対称性）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md, DD-D2-diffuse.md | — |
 | REQ-SIM-11 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
 | REQ-SIM-12 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
-| REQ-SIM-13 | P0 | D1 | property + UT（上限・上限+1） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md | — |
-| REQ-SIM-14 | P0 | D2/D6 | INSP（numeric-model）+ AT（D6 煙試験で panic 0） | 03_domain_model.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
+| REQ-SIM-13 | P0 | D1 | property + UT（上限・上限+1） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, DD-D2-diffuse.md | — |
+| REQ-SIM-14 | P0 | D2/D6 | INSP（numeric-model）+ AT（D6 煙試験で panic 0） | 03_domain_model.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D2-diffuse.md | — |
 | REQ-GEN-01 | P0 | D0 | AT（config schema additionalProperties=false） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
 | REQ-GEN-02 | P0 | D12 | INSP + USER | 02_glossary.md, 05_contract.md, 11_ui_flow.md | — |
 | REQ-GEN-03 | P0 | D4 | INSP（config golden） | 02_glossary.md | — |
@@ -112,8 +112,8 @@
 | REQ-OPS-05 | P0 | 配布 | INSP + AT（権限リスト） | 0004-rust-flutter-android.md, 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-OPS-06 | P0 | 配布 | INSP | — | — |
 | REQ-OPS-07 | P1 | 配布 | INSP | 09_performance_budget.md | — |
-| REQ-NFR-01 | P1 | D2/D4 | MEAS（criterion、CI でしきい値） | 06_numeric_model.md, 09_performance_budget.md, README.md | — |
-| REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md, 05_contract.md, 09_performance_budget.md, 10_persistence.md | — |
+| REQ-NFR-01 | P1 | D2/D4 | MEAS（criterion、CI でしきい値） | 06_numeric_model.md, 09_performance_budget.md, DD-D2-diffuse.md, README.md | — |
+| REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md, 05_contract.md, 09_performance_budget.md, 10_persistence.md, DD-D2-diffuse.md | — |
 | REQ-NFR-03 | P2 | D7 | MEAS | 09_performance_budget.md | — |
 | REQ-NFR-04 | P0 | D12 | AT（manifest 権限） | 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-NFR-05 | P0 | D12 | INSP | — | — |
