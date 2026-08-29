@@ -69,7 +69,7 @@
 ### 3.5 マージ責任者（領域ごとに 1 名。「誰が merge ボタンを押すか」を固定）
 | 領域 | マージ責任者 | 条件（すべて満たしたら責任者が squash merge） | エスカレーション |
 |---|---|---|---|
-| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | **契約本文（05_contract / docs/contracts）・golden・hash 正規化順** を変える PR のみ Claude |
+| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | **契約本文（05_contract / docs/30_contracts）・golden・hash 正規化順** を変える PR のみ Claude |
 | `app/**`（Flutter） | **grok** | CI green ＋ composer または kimi の approve | FFI 契約に触れる → Claude |
 | `docs/20_design/basic/**`, `docs/30_contracts/**`（基本設計・契約） | **Claude** | README の審査列の approve ＋ grok の抜け穴審査 | 要件に矛盾 → RFC → オーナー |
 | `docs/20_design/detail/**`（詳細設計） | **kimi** | Claude のチェックリスト審査（§設計工程）approve | — |
