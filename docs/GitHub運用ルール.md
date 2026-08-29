@@ -12,6 +12,9 @@
 | `hotfix/<ID>` | main の CI 破壊など緊急修正 | Claude のみ作成可。事後に RFC 不要だが開発ログに記録 |
 
 - ID は brief / カード ID と一致させる。ID の無いブランチは CI が reject（ブランチ名チェック job）
+- **作業ツリーの分離（必須）**: 同一 PC 上で複数の AI が同じチェックアウトを共有しているため、`git checkout` でブランチを切り替えてはならない（他者の作業ツリーが巻き込まれる）。各カードは **git worktree** で独立ディレクトリを作る:
+  `git worktree add ../kimizukann-wt/<ID> -b task/<ID> main` → その中で作業・commit・push → PR マージ後 `git worktree remove ../kimizukann-wt/<ID>`。メインのチェックアウト（`projects/kimizukann`）は常に `main` に置き、読み取り専用とする
+- `git add -A` は禁止。触った自分のファイルだけを `git add <path>` する
 - rebase は禁止（履歴の再現性のため）。main の取り込みは `git merge main`
 
 ## 2. コミット

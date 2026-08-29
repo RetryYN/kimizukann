@@ -1,0 +1,14 @@
+name: deps
+on: [push, pull_request]
+jobs:
+  deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: 依存方向（BD-01 §2）
+        run: python scripts/check_deps.py
+      - uses: dtolnay/rust-toolchain@stable
+      - name: cargo-deny
+        run: cargo install cargo-deny --locked && cargo deny --manifest-path crates/Cargo.toml check bans

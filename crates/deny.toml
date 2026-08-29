@@ -1,0 +1,13 @@
+# cargo-deny 設定（CI job `deps`）。禁止クレートと重複バージョンの検査。依存方向は scripts/check_deps.py が担当
+[bans]
+multiple-versions = "warn"
+deny = [
+  { name = "rand", reason = "PRNG は sim-core の xoshiro256** のみ（ADR-0002）" },
+  { name = "fastrand", reason = "同上" },
+]
+
+[licenses]
+allow = ["MIT", "Apache-2.0", "BSD-3-Clause", "Unicode-3.0", "Unicode-DFS-2016"]
+
+[advisories]
+ignore = []
