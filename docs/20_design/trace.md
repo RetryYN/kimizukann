@@ -84,14 +84,14 @@
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md | — |
 | REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md | — |
 | REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md | — |
-| REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | — | — |
+| REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 02_glossary.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md | — |
+| REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | 02_glossary.md | — |
 | REQ-EXP-03 | P0 | D9 | INSP + UT | 02_glossary.md, 05_contract.md | — |
 | REQ-EXP-04 | P0 | D9 | UT | 02_glossary.md, 11_ui_flow.md | — |
-| REQ-EXP-05 | P0 | D9/D12 | UT + USER | 04_state_machines.md, 05_contract.md | — |
-| REQ-EXP-06 | P1 | D9 | INSP（文言リント） | 11_ui_flow.md | — |
+| REQ-EXP-05 | P0 | D9/D12 | UT + USER | 02_glossary.md, 04_state_machines.md, 05_contract.md | — |
+| REQ-EXP-06 | P1 | D9 | INSP（文言リント） | 02_glossary.md, 11_ui_flow.md | — |
 | REQ-UI-01 | P0 | D12 | USER + AT（画面遷移テスト） | 02_glossary.md, 08_acceptance_tests.md, 11_ui_flow.md, README.md | — |
-| REQ-UI-02 | P0 | D12 | INSP（文言チェックリスト） | 11_ui_flow.md | — |
+| REQ-UI-02 | P0 | D12 | INSP（文言チェックリスト） | 02_glossary.md, 11_ui_flow.md | — |
 | REQ-UI-03 | P0 | D12 | AT（模擬 30〜120 Hz フレーム列。7 要素それぞれを独立ケースにする） | 01_context_map.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, README.md | — |
 | REQ-UI-04a | P0 | D12 | MEAS（実機） | 11_ui_flow.md | — |
 | REQ-UI-04b | P0 | D12 | MEAS（実機） | 11_ui_flow.md | — |
@@ -118,8 +118,8 @@
 | REQ-NFR-04 | P0 | D12 | AT（manifest 権限） | 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-NFR-05 | P0 | D12 | INSP | — | — |
 | REQ-NFR-06 | P0 | D8〜 | AT（旧 save 読込） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md | — |
-| REQ-NFR-07 | P0 | 全段階 | AT（REQ-SIM-05/06, GEN-04）+ INSP（文言） | 08_acceptance_tests.md | — |
-| REQ-NFR-08 | P0 | 配布 | INSP（禁止語リント） | — | — |
+| REQ-NFR-07 | P0 | 全段階 | AT（REQ-SIM-05/06, GEN-04）+ INSP（文言） | 02_glossary.md, 08_acceptance_tests.md | — |
+| REQ-NFR-08 | P0 | 配布 | INSP（禁止語リント） | 02_glossary.md | — |
 | REQ-ACC-01 | P0 | 配布 | USER | — | — |
 | REQ-ACC-02 | P0 | 配布 | USER | — | — |
 | REQ-ACC-03 | P0 | 配布 | USER | — | — |
