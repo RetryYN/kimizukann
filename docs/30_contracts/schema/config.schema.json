@@ -4,7 +4,7 @@
   "type": "object",
   "required": ["schema_version", "model_version", "seed", "grid", "lineages", "inflow"],
   "properties": {
-    "schema_version": {"type": "string"}, "model_version": {"type": "string"},
+    "schema_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"}, "model_version": {"type": "string"},
     "seed": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
     "grid": {"type": "object", "required": ["width", "height"], "properties": {"width": {"type": "integer", "minimum": 1, "maximum": 65535}, "height": {"type": "integer", "minimum": 1, "maximum": 65535}}, "additionalProperties": false},
     "lineages": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"type": "object", "required": ["id", "trait_vector", "mechanism_tags", "mortality_threshold", "waste_emission"], "properties": {"id": {"type": "integer", "minimum": 0, "maximum": 7}, "trait_vector": {"type": "object", "required": ["movement", "intake", "conversion", "maintenance_cost", "reproduction"], "properties": {"movement": {"type": "integer"}, "intake": {"type": "integer"}, "conversion": {"type": "integer"}, "maintenance_cost": {"type": "integer"}, "reproduction": {"type": "integer"}}, "additionalProperties": false}, "mechanism_tags": {"type": "object", "required": ["use_nutrient", "use_carcass", "use_waste", "toxin_sensitive", "density_bonus"], "properties": {"use_nutrient": {"type": "boolean"}, "use_carcass": {"type": "boolean"}, "use_waste": {"type": "boolean"}, "toxin_sensitive": {"type": "boolean"}, "density_bonus": {"type": "boolean"}}, "additionalProperties": false}, "mortality_threshold": {"type": "integer"}, "waste_emission": {"type": "integer"}}, "additionalProperties": false}},
