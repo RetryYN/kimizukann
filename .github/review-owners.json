@@ -28,14 +28,14 @@
       "writers": ["grok"],
       "merge": "kimi"
     },
-    {"paths": [".github/**", ".githooks/**", "scripts/**"], "allOf": ["grok"]},
+    {"paths": [".github/**", ".githooks/**", "scripts/**"], "anyOf": ["grok", "claude"]},
     {"paths": ["docs/10_requirements/**", "docs/20_design/rfc/**"], "allOf": ["owner"]},
     {
       "paths": ["docs/20_design/basic/02_glossary.md"],
       "allOf": ["grok"],
       "exclusive": true
     },
-    {"paths": ["docs/40_process/**"], "allOf": ["grok"]},
+    {"paths": ["docs/40_process/**"], "anyOf": ["grok", "claude"]},
     {"paths": ["docs/50_records/**", "README*"], "anyOf": ["claude", "grok"]},
     {"paths": ["docs/calib/**"], "allOf": ["grok"]},
     {"paths": ["docs/dist/**"], "allOf": ["grok"]}
