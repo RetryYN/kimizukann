@@ -107,6 +107,41 @@
 - **STOP 時**: Claude が該当 AI に `[LIMIT][constraint] 待機停止` を送り、その日のタスクは他へ振る。合計が STOP なら新規 brief を止めてオーナーに報告
 - Claude の 2 時間ジョブで usage を確認し、日次要約に「消費 / 予算」を 1 行入れる
 
+### 3.8 レビュー証拠ゲート（アカウントを増やさずに「レビュー無しでは落ちる」を Actions で実現）
+GitHub の Review approve は使わない（単一アカウント）。代わりに required check **`review-gate`** が PR のコメントを検査し、以下をすべて満たさない限り red にする。
+
+**A. 署名付きレビュー票（attestation）**
+- reviewer は本文を PR に書いた後、helix-bus で `attest(pr, sha, verdict)` を呼ぶ（MCP ツール、`me` 必須）。bus は `~/.helix-bus/keys/attest.secret`（オーナー配置、GitHub Secret `HELIX_ATTEST_SECRET` と同一）で **HMAC-SHA256(reviewer|pr|head_sha|verdict|checklist_hash)** を作り、PR に次の 1 コメントを投稿する:
+  ```
+  helix-review: v1
+  reviewer: kimi
+  pr: 12
+  sha: <head commit sha>
+  verdict: approve | request-changes
+  checklist: <該当チェックリストの yes/no 列の sha256>
+  evidence: <reviewer が自分で実行した検証手順の出力の sha256（§3.3「自分で実行」の証拠）>
+  sig: <hmac>
+  ```
+- `review-gate` は Secret で sig を再計算し、一致しないコメントを無視する。**sha が現在の head と一致しない票は無効**（push すると再レビューが必要＝stale approval の代替）
+- writer 自身の票は無効（PR 本文の `writer:` と reviewer が一致 → 無効）。writer 欄が無い PR は red
+
+**B. 必要レビュアーの充足**
+- `.github/review-owners.json` に「パス glob → 必須レビュアー集合（AND/OR）」を置く（§3.3 の表を機械化）。変更ファイル集合に対し全条件が approve 票で満たされること
+- `docs/contracts/**`・`golden/**`・hash 正規化順の変更は Claude 票が必須。要件・RFC はオーナー票（オーナーは GitHub の Review approve で可＝唯一の人間）
+
+**C. 証拠の突合**
+- reviewer 票の `evidence` は、CI の `verify` job が出す `report.json` 内の `state_hash` 集合の sha256 と一致すること（＝reviewer が同じ検証を本当に走らせた）。文書のみの PR は `evidence: none` を許可し、代わりに `checklist` 必須
+- writer は PR 本文に `diff --stat` を貼る。`pr-lint` が実際の diff と突合し、不一致なら red（「反映した」誤報の機械検出）
+
+**D. その他の必須 check**（§3.2 に追加）
+- `pr-lint`: テンプレ全項目、`writer:` 欄、ブランチ名、commit 形式、テスト commit が実装 commit より前、300 行、`#[ignore]`/`allow(clippy)`/`--no-verify` の追加禁止
+- `review-gate`: A〜C
+- `rounds`: `helix-review` 票の request-changes が 3 回に達したら red にし、責任者の判定コメント `helix-decision: merge|close` が無い限り開かない（§3.7）
+
+**E. 運用**
+- branch protection の required checks に `review-gate` と `pr-lint` を入れる（H2 完了時に Codex が設定）。approvals は 0 のままでよい（票が代替）
+- 票の偽造は同一 PC 上では原理的に防げない（全 AI が同じ Secret を読める）。本ゲートが守るのは **手順の省略**（レビュー無し・古い sha・writer 自己承認・証拠不一致・往復超過）であり、identity の暗号的証明ではない。identity の担保は helix-bus の `me` と events.jsonl の監査ログで行う
+
 ## 4. マージ後
 - squash merge のコミットメッセージは PR タイトル＋本文の `Refs:` 行
 - Claude が `docs/相談会/開発ログ.md` に `[ID] merged <sha> pr=#n reviewers=… ci=…` を追記（bus-ctl で自動化予定）
