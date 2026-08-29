@@ -35,7 +35,7 @@
 
 - ガード: `energy > cost × 2`（初期仮説、D3 で確定）。不成立なら繁殖 0・**乱数消費 0**。確定（BD-04 §3.2）
 - 増量: 余剰 `(energy − 2×cost) / 2` を上限に、質量は同量を nutrient から引いて biomass へ（energy→質量係数 1.0、初期仮説 D3 で確定）。質量保存のため増分は `min(余剰/2, nutrient)` でクランプ（D1 と同じ構造）。P8。参照: REQ-SIM-12
-- **抽選の導入（BD-07 §2/§3 の「D3 で確定」への回答）**: ガード成立 (cell, lineage) ごとに reproduction ストリームから 1 語を消費し、`u / 2^64 < p_repro` なら繁殖成立。`p_repro` = 1.0 を初期仮説とする（D1 と同じ振る舞いを保ちつつ消費パターンだけ先に確定する。D3 較正で < 1.0 にするか判断）。消費回数表（BD-07 §3）を本 PR で「ガード成立ごとに 1 回・確定」に更新する
+- **抽選の導入（BD-07 §2/§3 の「D3 で確定」への回答。D3-Q2 = claude 判定で採用）**: ガード成立 (cell, lineage) ごとに reproduction ストリームから 1 語を消費し、`u / 2^64 < p_repro` なら繁殖成立。`p_repro` = 1.0 を初期仮説とする（D1 と同じ振る舞いを保ちつつ消費パターンだけ先に確定する。D3 較正で < 1.0 にするか判断）。**p_repro = 1.0 でも消費をスキップしてはならない**（消費回数は状態のみの関数。BD-07 §3）。消費回数表（BD-07 §3）は本 PR で更新済み
 - 抽選導入は PRNG 消費が変わる＝振る舞い変更のため **model_version を bump**（`d3-v1`。BD-05 §14）。golden hash の更新は Claude 承認・別 PR
 - 台帳: nutrient → biomass（reason = Reproduction）＋ エネルギー台帳に Reproduction 消費
 
@@ -44,10 +44,13 @@
 - `amount = min(biomass[L], waste_emission)` を biomass → waste へ（reason = Emission）。D1 と同じ規則を複数系統に適用。P9。確定
 - 代謝残差を捨てない（INV-03）。waste > θ_w かつ toxin_sensitive なら次 tick の maintenance で ×1.4（§3）
 
-## 7. 台帳と region 集約（審査案件 D3-Q1）
+## 7. 台帳と region 集約（論点 D3-Q1 = claude 判定 r2 で確定）
 
 - 全変換は LedgerEntry を生成し、tick 終了時に region 集約の LedgerRecord（キー tick→region_id→lineage→reason→from→to、amount = 和）へ畳む（BD-01 r4 §5・D2-Q1 確定どおり）。集約・digest・保持は D2 の ledger 基盤を使い、D3 はエントリ生成のみ追加する
-- **審査案件（論点 D3-Q1）: region の機械定義が正本にない**。REQ-EVT-04 / glossary は「4 連結成分・最大 16」とのみ定め、何の述語で連結成分を取るか・採番順・16 超過時の扱いが未定義。**D2 の diffuse 台帳集約（composer）も同じ定義に依存するため早期判定が必要**。提案: 各 tick 終了時に「全系統 Σbiomass > 0 のセル」の 4 連結成分を row-major 走査の検出順に 0 起点で採番し、16 を超えた成分は ID 15 に併合する（決定的・状態のみの関数）。代替案: 静的 16 分割（4×4 ブロック）。採番が状態のみの関数である限り digest 安定性はどちらでも満たす。claude 判定を `[D3][brief]` に同梱する
+- **region は二層（確定）**:
+  - **(A) 台帳 LedgerRecord.region_id = 静的 4×4 タイル**。64×64 を 16×16 セルのタイル 16 枚に分割し、`ID = (row/16)*4 + (col/16)`（row-major、0..=15）。tick をまたいで安定し、digest も窓集計も安定。空タイルも ID を持つ（nutrient のみの区画の資源枯渇を置ける）
+  - **(B) スタンプの region_ids（REQ-EVT-04）= 動的 4 連結成分**。イベント tick の占有マスク（Σbiomass > 0）の 4 連結成分を row-major 初出順に採番（最大 16、超過は 15 に併合）。説明器側で派生計算し、保存は stamp 内のみ。**派生 ID を LedgerRecord に書かない**
+  - 動的採番を台帳に使わない理由（grok 指摘を採用）: row-major 採番は新成分の出現で ID がずれ、digest/Save の region_id が tick 間で意味を失う。16 超の併合でも無関係な塊が同 ID になる
 
 ## 8. 境界値・エラー
 
