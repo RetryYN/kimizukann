@@ -1,0 +1,27 @@
+{
+  "validated_at": "2026-07-23",
+  "baseline_version": "0.1.0",
+  "status": "pass",
+  "counts": {
+    "sources": 168,
+    "requirements": 232,
+    "business_requirements": 18,
+    "user_requirements": 26,
+    "functional_requirements": 78,
+    "simulation_requirements": 45,
+    "nonfunctional_requirements": 31,
+    "helix_requirements": 20,
+    "release_requirements": 14,
+    "reference_scenarios": 10,
+    "mcp_tools": 10
+  },
+  "checks": {
+    "unique_requirement_ids": true,
+    "unique_source_ids": true,
+    "all_sources_mapped": true,
+    "all_requirements_have_acceptance": true,
+    "all_requirements_have_release": true,
+    "all_requirements_have_source": true
+  },
+  "errors": []
+}

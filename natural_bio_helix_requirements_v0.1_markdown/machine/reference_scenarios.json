@@ -1,0 +1,209 @@
+{
+  "schema_version": "1.0",
+  "baseline_version": "0.1.0",
+  "scenarios": [
+    {
+      "scenario_id": "SCN-001",
+      "name": "スカベンジャー逆転",
+      "target_release": "R1",
+      "purpose": "突出系統が捕食され、意図的劣位系統が死骸利用で固定される。",
+      "initial_conditions": [
+        "安定系統A/B",
+        "突出系統C",
+        "低成長スカベンジャー候補D",
+        "有限資源"
+      ],
+      "expected_invariants": [
+        "Cが必ず勝つような固定適応度を持たない",
+        "死骸物質がDへ流れる",
+        "D固定または全滅の両方がseedで起こり得る"
+      ],
+      "requirements": [
+        "FR-022",
+        "FR-021",
+        "SIM-006",
+        "SIM-020"
+      ]
+    },
+    {
+      "scenario_id": "SCN-002",
+      "name": "繁栄から全滅",
+      "target_release": "R1",
+      "purpose": "個体数急増が資源枯渇と廃棄物蓄積を起こし全滅する。",
+      "initial_conditions": [
+        "高繁殖系統",
+        "有限再生資源",
+        "分解速度低"
+      ],
+      "expected_invariants": [
+        "資源なし増殖禁止",
+        "全滅が正常終端",
+        "原因イベントが記録される"
+      ],
+      "requirements": [
+        "FR-033",
+        "SIM-003",
+        "SIM-015",
+        "FR-049"
+      ]
+    },
+    {
+      "scenario_id": "SCN-003",
+      "name": "4系統から20系統",
+      "target_release": "R2",
+      "purpose": "空間・食性・交配・突然変異により多数系統へ分岐する。",
+      "initial_conditions": [
+        "4系統",
+        "複数資源帯",
+        "移動障壁",
+        "変異有効"
+      ],
+      "expected_invariants": [
+        "系統分岐が遺伝・繁殖互換差に基づく",
+        "同一表示形質でも遺伝経路差を保持"
+      ],
+      "requirements": [
+        "FR-027",
+        "SIM-014",
+        "UR-006"
+      ]
+    },
+    {
+      "scenario_id": "SCN-004",
+      "name": "社会性の固定",
+      "target_release": "R3",
+      "purpose": "単独では弱い系統が協力・警戒・役割分担で固定される。",
+      "initial_conditions": [
+        "高捕食圧",
+        "協力候補系統",
+        "血縁識別"
+      ],
+      "expected_invariants": [
+        "個体繁殖数だけで淘汰を決めない",
+        "集団利益が系統頻度へ反映"
+      ],
+      "requirements": [
+        "FR-020",
+        "SIM-022"
+      ]
+    },
+    {
+      "scenario_id": "SCN-005",
+      "name": "酸素革命",
+      "target_release": "R6",
+      "purpose": "酸素発生系統の繁栄が嫌気系統を淘汰し、好気系統を生む。",
+      "initial_conditions": [
+        "嫌気生命圏",
+        "酸素発生系統",
+        "酸化sink"
+      ],
+      "expected_invariants": [
+        "酸素は生成とsinkの収支で蓄積",
+        "ティッピング後に環境転換"
+      ],
+      "requirements": [
+        "FR-025",
+        "FR-034",
+        "SIM-031"
+      ]
+    },
+    {
+      "scenario_id": "SCN-006",
+      "name": "氷中残存と再放散",
+      "target_release": "R6",
+      "purpose": "表面絶滅後に氷中避難所系統が再出現する。",
+      "initial_conditions": [
+        "全球凍結",
+        "塩水ポケット",
+        "低代謝系統"
+      ],
+      "expected_invariants": [
+        "観測ゼロと真絶滅を区別",
+        "避難所条件が物理値から成立"
+      ],
+      "requirements": [
+        "FR-026",
+        "FR-028",
+        "SIM-032"
+      ]
+    },
+    {
+      "scenario_id": "SCN-007",
+      "name": "生命前化学の停止",
+      "target_release": "R6",
+      "purpose": "アミノ酸投入が生命を保証せず、高分子化または区画化で停止する。",
+      "initial_conditions": [
+        "天体局所環境",
+        "アミノ酸",
+        "触媒有無の比較"
+      ],
+      "expected_invariants": [
+        "自然発生非保証",
+        "段階状態と停止理由を記録"
+      ],
+      "requirements": [
+        "FR-035",
+        "SIM-029"
+      ]
+    },
+    {
+      "scenario_id": "SCN-008",
+      "name": "仮説世界比較",
+      "target_release": "R3",
+      "purpose": "漸進型と断続平衡型で同一初期条件の生命史を比較する。",
+      "initial_conditions": [
+        "同一seed集合",
+        "仮説のみ差替"
+      ],
+      "expected_invariants": [
+        "固定法則は同一",
+        "仮説差分が説明可能"
+      ],
+      "requirements": [
+        "FR-037",
+        "FR-039",
+        "SIM-027",
+        "SIM-028"
+      ]
+    },
+    {
+      "scenario_id": "SCN-009",
+      "name": "上位ステージ前提",
+      "target_release": "R6",
+      "purpose": "複数の固定単細胞系統が協調しない限り多細胞化できない。",
+      "initial_conditions": [
+        "代謝/接着/信号系統",
+        "固定状態の組合せ"
+      ],
+      "expected_invariants": [
+        "単一系統のみでは解放不可",
+        "相補機能の欠落理由を説明"
+      ],
+      "requirements": [
+        "FR-031",
+        "SIM-033"
+      ]
+    },
+    {
+      "scenario_id": "SCN-010",
+      "name": "同一条件のseed差",
+      "target_release": "R2",
+      "purpose": "同一設計でも初期接触と創始者効果で異なる歴史が生じる。",
+      "initial_conditions": [
+        "同一世界設定",
+        "複数seed"
+      ],
+      "expected_invariants": [
+        "同seed再現",
+        "別seedで合理的差",
+        "差の転換点をサマリー"
+      ],
+      "requirements": [
+        "FR-047",
+        "SIM-025",
+        "SIM-026",
+        "FR-051"
+      ]
+    }
+  ]
+}

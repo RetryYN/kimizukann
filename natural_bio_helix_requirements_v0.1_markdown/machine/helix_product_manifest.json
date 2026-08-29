@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0",
+  "product_id": "natural-bio",
+  "product_name": "NATURAL BIO（仮称）",
+  "baseline_version": "0.1.0",
+  "baseline_date": "2026-07-23",
+  "status": "requirements_baseline",
+  "first_product_after_helix": true,
+  "release_model": "hybrid_incremental_local_cloud",
+  "primary_priority": "simulation_core",
+  "documents": [
+    {
+      "path": "NATURAL_BIO_HELIX_企画要求要件定義_統合版.md",
+      "type": "master_requirements_markdown"
+    },
+    {
+      "path": "machine/requirements_catalog.json",
+      "type": "requirements_catalog"
+    },
+    {
+      "path": "machine/source_registry.json",
+      "type": "source_registry"
+    },
+    {
+      "path": "machine/traceability_matrix.json",
+      "type": "traceability"
+    },
+    {
+      "path": "machine/release_stages.json",
+      "type": "release_plan"
+    },
+    {
+      "path": "machine/reference_scenarios.json",
+      "type": "acceptance_scenarios"
+    },
+    {
+      "path": "machine/mcp_tool_contracts.json",
+      "type": "mcp_contracts"
+    },
+    {
+      "path": "machine/simulation_core_model.json",
+      "type": "domain_model"
+    }
+  ],
+  "workstreams": [
+    {
+      "workstream_id": "WS-SIM-CORE",
+      "name": "Simulation Core",
+      "priority": 1,
+      "release_start": "R1",
+      "depends_on": []
+    },
+    {
+      "workstream_id": "WS-EVENT-EXPLAIN",
+      "name": "Event Ledger / Explainer",
+      "priority": 2,
+      "release_start": "R1",
+      "depends_on": [
+        "WS-SIM-CORE"
+      ]
+    },
+    {
+      "workstream_id": "WS-WEB",
+      "name": "Web Experience",
+      "priority": 3,
+      "release_start": "R2",
+      "depends_on": [
+        "WS-SIM-CORE",
+        "WS-EVENT-EXPLAIN"
+      ]
+    },
+    {
+      "workstream_id": "WS-CLOUD",
+      "name": "Cloud Jobs / Accounts",
+      "priority": 4,
+      "release_start": "R3",
+      "depends_on": [
+        "WS-SIM-CORE"
+      ]
+    },
+    {
+      "workstream_id": "WS-MOBILE",
+      "name": "Mobile Companion / PWA",
+      "priority": 5,
+      "release_start": "R3",
+      "depends_on": [
+        "WS-WEB",
+        "WS-CLOUD"
+      ]
+    },
+    {
+      "workstream_id": "WS-CREATOR",
+      "name": "Creator / Video / Avatar",
+      "priority": 6,
+      "release_start": "R4",
+      "depends_on": [
+        "WS-EVENT-EXPLAIN",
+        "WS-WEB"
+      ]
+    },
+    {
+      "workstream_id": "WS-UGC",
+      "name": "UGC Marketplace",
+      "priority": 7,
+      "release_start": "R5",
+      "depends_on": [
+        "WS-CREATOR",
+        "WS-CLOUD"
+      ]
+    },
+    {
+      "workstream_id": "WS-MULTISCALE",
+      "name": "Multiscale / Planetary",
+      "priority": 8,
+      "release_start": "R6",
+      "depends_on": [
+        "WS-SIM-CORE"
+      ]
+    },
+    {
+      "workstream_id": "WS-UNITY",
+      "name": "Optional Unity Client",
+      "priority": 9,
+      "release_start": "R6",
+      "depends_on": [
+        "WS-WEB",
+        "WS-SIM-CORE"
+      ]
+    },
+    {
+      "workstream_id": "WS-RESEARCH",
+      "name": "Research Mode",
+      "priority": 10,
+      "release_start": "R7",
+      "depends_on": [
+        "WS-MULTISCALE",
+        "WS-CLOUD"
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "G0-BASELINE",
+      "release": "R0",
+      "requires": [
+        "source_coverage_100",
+        "requirement_ids_unique",
+        "acceptance_present",
+        "release_assigned"
+      ]
+    },
+    {
+      "gate_id": "G1-CORE-INVARIANTS",
+      "release": "R1",
+      "requires": [
+        "mass_balance",
+        "energy_balance",
+        "deterministic_replay",
+        "lineage_fixation",
+        "extinction_is_valid"
+      ]
+    },
+    {
+      "gate_id": "G2-FUN-VERTICAL",
+      "release": "R1",
+      "requires": [
+        "human_replay_interest",
+        "scn_001",
+        "scn_002",
+        "scn_010"
+      ]
+    },
+    {
+      "gate_id": "G3-WEB-ALPHA",
+      "release": "R2",
+      "requires": [
+        "web_e2e",
+        "explainer_grounded",
+        "local_save",
+        "accessible_visuals"
+      ]
+    },
+    {
+      "gate_id": "G4-CREATOR",
+      "release": "R4",
+      "requires": [
+        "replay_video",
+        "narration",
+        "ugc_builder",
+        "privacy_review"
+      ]
+    },
+    {
+      "gate_id": "G5-MARKET",
+      "release": "R5",
+      "requires": [
+        "legal_review",
+        "billing",
+        "moderation",
+        "sandbox"
+      ]
+    },
+    {
+      "gate_id": "G6-MULTISCALE",
+      "release": "R6",
+      "requires": [
+        "aggregation_conservation",
+        "planetary_uncertainty",
+        "abiogenesis_non_guarantee"
+      ]
+    },
+    {
+      "gate_id": "G7-RESEARCH",
+      "release": "R7",
+      "requires": [
+        "expert_review",
+        "scientific_adapter_validation",
+        "license_review",
+        "limits_disclosed"
+      ]
+    }
+  ],
+  "requirement_catalog": "machine/requirements_catalog.json",
+  "traceability": "machine/traceability_matrix.json",
+  "mcp_contracts": "machine/mcp_tool_contracts.json",
+  "human_readable_master": "NATURAL_BIO_HELIX_企画要求要件定義_統合版.md",
+  "document_format": "markdown"
+}

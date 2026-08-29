@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.0",
+  "baseline_version": "0.1.0",
+  "release_stages": [
+    {
+      "release_id": "R0",
+      "name": "HELIX接続・要件baseline",
+      "theme": "作るものと作らないものを固定する",
+      "local_cloud": "文書・JSON・CI検証のみ",
+      "must_exit": [
+        "要求ソース100%追跡",
+        "重複IDなし",
+        "シミュレーション不変条件baseline",
+        "HELIX manifest validation Green"
+      ],
+      "primary_deliverables": [
+        "企画書",
+        "要求定義",
+        "要件定義",
+        "シミュレーションコア詳細",
+        "HELIX接続仕様",
+        "release roadmap"
+      ]
+    },
+    {
+      "release_id": "R1",
+      "name": "Headless Simulation Core Vertical Slice",
+      "theme": "面白さの原因となる生命史が計算だけで発生するか",
+      "local_cloud": "ローカルheadless。CIで複数seed。",
+      "must_exit": [
+        "SCN-001/002/010 Green",
+        "質量・エネルギー保存",
+        "系統固定・全滅判定",
+        "決定論リプレイ",
+        "人間が結果を見て再実験案を出せる"
+      ],
+      "primary_deliverables": [
+        "simulation-core",
+        "event-ledger",
+        "reference-scenarios",
+        "CLI runner",
+        "benchmark report"
+      ]
+    },
+    {
+      "release_id": "R2",
+      "name": "Web育成Alpha",
+      "theme": "4系統を作って培養皿に放ち、理解できる",
+      "local_cloud": "ローカルWeb Worker/サーバー任意。",
+      "must_exit": [
+        "系統・環境編集",
+        "2D可視化",
+        "今どうなってる解説",
+        "リプレイ",
+        "ローカル保存",
+        "主要ブラウザE2E"
+      ],
+      "primary_deliverables": [
+        "web-app",
+        "codon-puzzle",
+        "experiment-view",
+        "explainer-basic"
+      ]
+    },
+    {
+      "release_id": "R3",
+      "name": "Learning/Experiment + PWA",
+      "theme": "比較して学び、スマホで見守る",
+      "local_cloud": "ローカル基本、長期seed比較はクラウド。",
+      "must_exit": [
+        "学習/実験モード",
+        "seed/仮説比較",
+        "PWA",
+        "モバイル通知",
+        "クラウド予算制御"
+      ],
+      "primary_deliverables": [
+        "experiment-designer",
+        "comparison",
+        "mobile-companion",
+        "cloud-jobs"
+      ]
+    },
+    {
+      "release_id": "R4",
+      "name": "Creator Studio",
+      "theme": "生命史を動画・作品・もしもへ変換",
+      "local_cloud": "ローカル編集、動画高品質処理は選択的クラウド。",
+      "must_exit": [
+        "動画タイムライン",
+        "ナレーション",
+        "字幕/チャプター",
+        "もしもbuilder",
+        "MCP authoring",
+        "Creator利用率計測"
+      ],
+      "primary_deliverables": [
+        "creator-studio",
+        "video-export",
+        "avatar/voice-change",
+        "scenario-builder"
+      ]
+    },
+    {
+      "release_id": "R5",
+      "name": "Marketplace/Developer",
+      "theme": "ユーザー作成の思考実験を流通させる",
+      "local_cloud": "UGC検証・販売・統計・配信はクラウド。",
+      "must_exit": [
+        "UGC sandbox",
+        "法務ゲート",
+        "価格/分配",
+        "通報/審査",
+        "YouTube/ライブ上位連携"
+      ],
+      "primary_deliverables": [
+        "marketplace",
+        "billing",
+        "moderation",
+        "developer-api",
+        "live-director"
+      ]
+    },
+    {
+      "release_id": "R6",
+      "name": "Scale Expansion",
+      "theme": "細胞から生態系・暫定天体へ",
+      "local_cloud": "小規模ローカル、惑星/大量seedはクラウド。Unityは投資判断後。",
+      "must_exit": [
+        "スケール集約/再展開",
+        "多細胞前提",
+        "自然発生段階",
+        "酸素革命",
+        "氷中避難所",
+        "天体局所"
+      ],
+      "primary_deliverables": [
+        "multi-scale-core",
+        "ecosystem",
+        "planetary-provisional",
+        "optional-unity-client"
+      ]
+    },
+    {
+      "release_id": "R7",
+      "name": "Research Mode",
+      "theme": "専門家監修済みの研究・教育・外部モデル連携",
+      "local_cloud": "外部solver・parameter sweepはクラウド/ローカルworker。",
+      "must_exit": [
+        "分野別監修",
+        "外部モデルライセンス",
+        "solver検証",
+        "研究出力",
+        "科学的限界表示"
+      ],
+      "primary_deliverables": [
+        "research-mode",
+        "scientific-adapters",
+        "education-license",
+        "model-registry"
+      ]
+    }
+  ]
+}

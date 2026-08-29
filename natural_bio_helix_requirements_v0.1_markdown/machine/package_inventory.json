@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "package_id": "natural-bio-helix-requirements-markdown",
+  "package_version": "0.1.0",
+  "generated_at_utc": "2026-07-22T17:33:00+00:00",
+  "inventory_scope": "All ZIP payload files except this self-referential inventory file.",
+  "file_count_excluding_inventory": 13,
+  "total_size_bytes_excluding_inventory": 405385,
+  "files": [
+    {
+      "path": "00_README.md",
+      "size_bytes": 1440,
+      "sha256": "1788e658d420341054a54db07be5de007cc907392c868c28821a4d3df87a2a63"
+    },
+    {
+      "path": "NATURAL_BIO_HELIX_企画要求要件定義_統合版.md",
+      "size_bytes": 84657,
+      "sha256": "3e8ca40cb159ce616486d6b221f6687fa6164fde382d514bb85c6fd95fc8e577"
+    },
+    {
+      "path": "machine/helix_product_manifest.json",
+      "size_bytes": 5092,
+      "sha256": "37ec31c02fa848f29117e29f7a2e3f74cc0a698091392ab5f649e120d9f0e46a"
+    },
+    {
+      "path": "machine/mcp_tool_contracts.json",
+      "size_bytes": 10575,
+      "sha256": "7b5d722d517182c6b290afc8880172828092719bf75ad8403989b282db6b099f"
+    },
+    {
+      "path": "machine/reference_scenarios.json",
+      "size_bytes": 5751,
+      "sha256": "1d26d52fb338991e3b2af7d5e7577a24a8bb182585cfa40adf78c35bada8f2a4"
+    },
+    {
+      "path": "machine/release_stages.json",
+      "size_bytes": 4766,
+      "sha256": "78812428c915afc2ff952a0da7871cd8d7558127867805f6930f1f03bebb0e5a"
+    },
+    {
+      "path": "machine/requirements_catalog.json",
+      "size_bytes": 160482,
+      "sha256": "29cd0128e9f39eb9563b82b140f30b0cb9512c92011e5c1e95edd3c835f46fdd"
+    },
+    {
+      "path": "machine/simulation_core_model.json",
+      "size_bytes": 2842,
+      "sha256": "e9f3034d61c71365b0c4fa1dc0b9d06f58ff6ee882c7b88eb2fd2fc3f12bfba7"
+    },
+    {
+      "path": "machine/source_registry.json",
+      "size_bytes": 43687,
+      "sha256": "bb302a5e33f19e3af037fa8ef19d6cedb6f8d6a662b859460f282452f0878bde"
+    },
+    {
+      "path": "machine/traceability_matrix.json",
+      "size_bytes": 82041,
+      "sha256": "c6f025cf46f9751df9c3117b3762d0afb0a478181602151852ec37810e41a143"
+    },
+    {
+      "path": "machine/validation_report.json",
+      "size_bytes": 696,
+      "sha256": "72fff7a48a48302520216f0dbcef3176a7d17fcd52e139b38ddca18388bb0d44"
+    },
+    {
+      "path": "schemas/requirements_catalog.schema.json",
+      "size_bytes": 1993,
+      "sha256": "f1adedb2682e97986938f202ecb786622ecc21f5af8327cfa8984459af9f9523"
+    },
+    {
+      "path": "tools/validate_package.py",
+      "size_bytes": 1363,
+      "sha256": "0180234df7a6c3d066021e88226d1154b41a642554f732a2e10d40a92024d6fc"
+    }
+  ]
+}

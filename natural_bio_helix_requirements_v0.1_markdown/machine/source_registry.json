@@ -1,0 +1,1182 @@
+{
+  "schema_version": "1.0",
+  "baseline_version": "0.1.0",
+  "sources": [
+    {
+      "source_key": "P01",
+      "source_id": "CHAT-001",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "本製品をHELIX完成後の最初のプロダクトとして位置づける。"
+    },
+    {
+      "source_key": "P02",
+      "source_id": "CHAT-002",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "Webアプリケーションとスマートフォンアプリケーションへ展開できる構成とする。"
+    },
+    {
+      "source_key": "P03",
+      "source_id": "CHAT-003",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "Unity等の高表現ゲームクライアントは、コアの面白さと売上を確認した後に追加できる。"
+    },
+    {
+      "source_key": "P04",
+      "source_id": "CHAT-004",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "最重要領域はシミュレーションコアであり、企画・要求・要件の中で最も細密に定義する。"
+    },
+    {
+      "source_key": "P05",
+      "source_id": "CHAT-005",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "段階的リリースとローカル／クラウド併用のハイブリッドモデルで進める。"
+    },
+    {
+      "source_key": "P06",
+      "source_id": "CHAT-006",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "POは企画から要件定義までを主導し、その下流実装はHELIXとAI開発ラインへ委譲する。"
+    },
+    {
+      "source_key": "P07",
+      "source_id": "CHAT-007",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "研究モードは初期売上の成立後に専門家監修を導入して拡張する。"
+    },
+    {
+      "source_key": "P08",
+      "source_id": "CHAT-008",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "考えることを好む大人、サイエンス動画視聴者、育成・戦略・シミュレーション愛好者を主要顧客とする。"
+    },
+    {
+      "source_key": "P09",
+      "source_id": "CHAT-009",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "目標体験は「生物版マインクラフト」、すなわち生命法則をクラフトし生命史を生成するサンドボックスである。"
+    },
+    {
+      "source_key": "P10",
+      "source_id": "CHAT-010",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "写実表現を必須とせず、プリミティブ・器官・模様・挙動の合成で生物表現を生成する。"
+    },
+    {
+      "source_key": "P11",
+      "source_id": "CHAT-011",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "科学法則と因果の可視化を、フォトリアル表現より優先する。"
+    },
+    {
+      "source_key": "P12",
+      "source_id": "CHAT-012",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "開発時の参考機としてRAM 32GB／VRAM 8GB級を想定するが、MVPはより低い環境でも動作可能な2D構成から始める。"
+    },
+    {
+      "source_key": "P13",
+      "source_id": "CHAT-013",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "Webを制作・実験・分析の中核とし、スマホを観察・通知・簡易介入・共有端末として位置づける。"
+    },
+    {
+      "source_key": "P14",
+      "source_id": "CHAT-014",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "通常シミュレーションはローカル実行を基本とし、長期・大量seed・高精度処理はクラウドへ逃がせる。"
+    },
+    {
+      "source_key": "P15",
+      "source_id": "CHAT-015",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "機能解放型サブスクリプション、演算クレジット、コンテンツ販売を組み合わせられる。"
+    },
+    {
+      "source_key": "P16",
+      "source_id": "CHAT-016",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "ユーザー作成の「もしもシリーズ」を販売可能なUGC市場として提供する。"
+    },
+    {
+      "source_key": "P17",
+      "source_id": "CHAT-017",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "UGC作者は無料または任意価格を設定でき、収益分配を受けられる。"
+    },
+    {
+      "source_key": "P18",
+      "source_id": "CHAT-018",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "YouTube等で仮説を語る文化を形成し、ゲーム内生命史を動画へ変換できる。"
+    },
+    {
+      "source_key": "P19",
+      "source_id": "CHAT-019",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "開発者・配信者向けに、AI解説によるライブ番組化を将来提供できる。"
+    },
+    {
+      "source_key": "P20",
+      "source_id": "CHAT-020",
+      "origin_type": "conversation",
+      "category": "product",
+      "statement": "本製品はHELIXの要求追跡・AI実装・検証能力を実証するリファレンス製品となる。"
+    },
+    {
+      "source_key": "M01",
+      "source_id": "CHAT-021",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "育成モード、学習モード、実験モード、研究モードの4モードを設ける。"
+    },
+    {
+      "source_key": "M02",
+      "source_id": "CHAT-022",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "育成モードは直感的操作と結果観察を中心とする。"
+    },
+    {
+      "source_key": "M03",
+      "source_id": "CHAT-023",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "学習モードは同一結果を生物・化学・物理の因果として段階的に解説する。"
+    },
+    {
+      "source_key": "M04",
+      "source_id": "CHAT-024",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "実験モードは対照群、条件固定、比較、仮説検証、再実験を支援する。"
+    },
+    {
+      "source_key": "M05",
+      "source_id": "CHAT-025",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "研究モードは方程式、solver、外部モデル、詳細パラメータを扱う上位機能とする。"
+    },
+    {
+      "source_key": "M06",
+      "source_id": "CHAT-026",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "細胞、多細胞・組織、個体・動物、生態系、惑星・衛星・彗星へスケールを変更できる。"
+    },
+    {
+      "source_key": "M07",
+      "source_id": "CHAT-027",
+      "origin_type": "conversation",
+      "category": "mode",
+      "statement": "説明粒度はモードごとに変更し、基礎説明から研究レベルの不確実性まで連続的に提示する。"
+    },
+    {
+      "source_key": "M08",
+      "source_id": "CHAT-028",
+      "origin_type": "conversation",
+      "category": "interaction",
+      "statement": "コドン編集は初心者向けパズル、中級者向けコドン、上級者向け塩基・発現条件へ段階化する。"
+    },
+    {
+      "source_key": "M09",
+      "source_id": "CHAT-029",
+      "origin_type": "conversation",
+      "category": "interaction",
+      "statement": "環境生成、生物原種、成長特性、進化仮説にガチャ的な世界生成を適用できる。"
+    },
+    {
+      "source_key": "M10",
+      "source_id": "CHAT-030",
+      "origin_type": "conversation",
+      "category": "interaction",
+      "statement": "知識がないプレイヤーへ簡易ガイド、推奨ピース、原因説明、自動修復候補を提供する。"
+    },
+    {
+      "source_key": "M11",
+      "source_id": "CHAT-031",
+      "origin_type": "conversation",
+      "category": "interaction",
+      "statement": "知識のあるプレイヤーは手動で環境、遺伝子、発現、突然変異、初期個体群を編集できる。"
+    },
+    {
+      "source_key": "S01",
+      "source_id": "CHAT-032",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "プレイヤーは1個体ではなく、各系統の複数個体を設計・生成して環境へ投入する。"
+    },
+    {
+      "source_key": "S02",
+      "source_id": "CHAT-033",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "初期個体数、比率、配置、接触順序は系統固定の結果へ影響する。"
+    },
+    {
+      "source_key": "S03",
+      "source_id": "CHAT-034",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "安定2系統・突出1系統・意図的劣位1系統は代表的なチュートリアル設計とするが固定ルールにはしない。"
+    },
+    {
+      "source_key": "S04",
+      "source_id": "CHAT-035",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "自然淘汰により生存・繁殖成功の差が世代を通じて系統頻度へ反映される。"
+    },
+    {
+      "source_key": "S05",
+      "source_id": "CHAT-036",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "類似環境では別系統が類似の形質へ収斂進化しやすい。"
+    },
+    {
+      "source_key": "S06",
+      "source_id": "CHAT-037",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "突然変異率、複製精度、修復能力、組換え頻度を変数として扱う。"
+    },
+    {
+      "source_key": "S07",
+      "source_id": "CHAT-038",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "創始者効果、遺伝的浮動、小集団の偶然が系統史へ影響する。"
+    },
+    {
+      "source_key": "S08",
+      "source_id": "CHAT-039",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "社会性、協力、役割分担、共同育児、警戒、資源共有が系統存続へ影響する。"
+    },
+    {
+      "source_key": "S09",
+      "source_id": "CHAT-040",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "捕食対象は遭遇率、捕獲コスト、栄養価、危険度、処理能力で動的に変化する。"
+    },
+    {
+      "source_key": "S10",
+      "source_id": "CHAT-041",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "スカベンジャー／分解者は死骸や排出物を資源化して独自ニッチを形成できる。"
+    },
+    {
+      "source_key": "S11",
+      "source_id": "CHAT-042",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "共生、相利、片利、細胞内共生等が複数系統の上位統合へつながる。"
+    },
+    {
+      "source_key": "S12",
+      "source_id": "CHAT-043",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "寄生、病原体、宿主依存の戦略が系統固定へ影響する。"
+    },
+    {
+      "source_key": "S13",
+      "source_id": "CHAT-044",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "4つの初期系統から20以上の安定系統へ分岐する結果を許容する。"
+    },
+    {
+      "source_key": "S14",
+      "source_id": "CHAT-045",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "全系統の全滅を正当なシミュレーション結果として扱う。"
+    },
+    {
+      "source_key": "S15",
+      "source_id": "CHAT-046",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "急増後の資源不足、酸素低下、廃棄物蓄積、連鎖的崩壊を再現する。"
+    },
+    {
+      "source_key": "S16",
+      "source_id": "CHAT-047",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "死亡個体は消去せず、タンパク質、脂質、無機塩、毒素、殻等の環境資源として残る。"
+    },
+    {
+      "source_key": "S17",
+      "source_id": "CHAT-048",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "生命活動が酸素、pH、温度、濁度、栄養、鉱物状態等の環境を改変する。"
+    },
+    {
+      "source_key": "S18",
+      "source_id": "CHAT-049",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "酸素発生型生物の増加が旧嫌気性生命圏へ毒性と環境転換をもたらす現象を扱える。"
+    },
+    {
+      "source_key": "S19",
+      "source_id": "CHAT-050",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "氷、地下、塩水ポケット、熱水域等の微小避難所に残存系統が生き残れる。"
+    },
+    {
+      "source_key": "S20",
+      "source_id": "CHAT-051",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "成功判定は強い個体の出現ではなく、形質が繁殖可能な系統として次世代へ固定されたかで行う。"
+    },
+    {
+      "source_key": "S21",
+      "source_id": "CHAT-052",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "系が安定状態へ入った後に世代評価を行い、系統固定・未固定・衰退・絶滅を判定する。"
+    },
+    {
+      "source_key": "S22",
+      "source_id": "CHAT-053",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "上位ステージの系統固定には、下位ステージで複数の相補的系統が固定済みであることを要求できる。"
+    },
+    {
+      "source_key": "S23",
+      "source_id": "CHAT-054",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "表現型が収束しても遺伝子配列は複数経路を保持できる。"
+    },
+    {
+      "source_key": "S24",
+      "source_id": "CHAT-055",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "系統固定は遺伝率、再発現率、繁殖成功、世代存続、個体数、ニッチ独立性で評価する。"
+    },
+    {
+      "source_key": "S25",
+      "source_id": "CHAT-056",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "同一または類似環境では、基本形態・機能が同じ方向へ収束することを通常挙動とする。"
+    },
+    {
+      "source_key": "S26",
+      "source_id": "CHAT-057",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "環境内で特質した形質が遺伝し、世代を越えて再現されることを達成目標とする。"
+    },
+    {
+      "source_key": "S27",
+      "source_id": "CHAT-058",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "プレイヤーは環境を読み、安定枠と独自枠の発生に必要な初期条件を設計する。"
+    },
+    {
+      "source_key": "S28",
+      "source_id": "CHAT-059",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "初期数世代の移動、接触、最初の死骸、最初の交配等が長期系統史を変える。"
+    },
+    {
+      "source_key": "S29",
+      "source_id": "CHAT-060",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "同じ条件でも乱数seedにより別の生命史が発生し、seed比較が可能である。"
+    },
+    {
+      "source_key": "S30",
+      "source_id": "CHAT-061",
+      "origin_type": "conversation",
+      "category": "simulation",
+      "statement": "観測個体数ゼロと真の絶滅を区別し、未観測の避難所集団を許容する。"
+    },
+    {
+      "source_key": "A01",
+      "source_id": "CHAT-062",
+      "origin_type": "conversation",
+      "category": "abiogenesis",
+      "statement": "プレイヤー投入がなくても、条件が整えば原始生命が自然発生する可能性を持たせる。"
+    },
+    {
+      "source_key": "A02",
+      "source_id": "CHAT-063",
+      "origin_type": "conversation",
+      "category": "abiogenesis",
+      "statement": "生命発生を有機物存在、濃縮、高分子化、触媒網、区画化、自己維持、複製、遺伝可能変異の段階で評価する。"
+    },
+    {
+      "source_key": "A03",
+      "source_id": "CHAT-064",
+      "origin_type": "conversation",
+      "category": "planetary",
+      "statement": "暫定惑星、衛星、彗星モードを用意し、観測値・推定値・仮説値を分ける。"
+    },
+    {
+      "source_key": "A04",
+      "source_id": "CHAT-065",
+      "origin_type": "conversation",
+      "category": "planetary",
+      "statement": "アミノ酸や有機物を天体環境へ投入し、分解・希薄化・重合・生命前段階を観察できる。"
+    },
+    {
+      "source_key": "A05",
+      "source_id": "CHAT-066",
+      "origin_type": "conversation",
+      "category": "planetary",
+      "statement": "彗星は生命材料、水、触媒、衝撃・加熱を運ぶ媒体として扱える。"
+    },
+    {
+      "source_key": "A06",
+      "source_id": "CHAT-067",
+      "origin_type": "conversation",
+      "category": "hypothesis",
+      "statement": "未確定の進化論・生命起源論・生物論を世界法則プリセットとして抽選・選択できる。"
+    },
+    {
+      "source_key": "A07",
+      "source_id": "CHAT-068",
+      "origin_type": "conversation",
+      "category": "hypothesis",
+      "statement": "質量保存等の確立法則は固定層、議論中の仮説は可変層として分離する。"
+    },
+    {
+      "source_key": "A08",
+      "source_id": "CHAT-069",
+      "origin_type": "conversation",
+      "category": "hypothesis",
+      "statement": "進化仮説の組合せは難易度、収束速度、分岐、固定、絶滅率を変える。"
+    },
+    {
+      "source_key": "A09",
+      "source_id": "CHAT-070",
+      "origin_type": "conversation",
+      "category": "hypothesis",
+      "statement": "高難易度では採用仮説の一部を隠し、挙動から推定させることができる。"
+    },
+    {
+      "source_key": "A10",
+      "source_id": "CHAT-071",
+      "origin_type": "conversation",
+      "category": "hypothesis",
+      "statement": "同じ初期条件を異なる仮説世界で比較できる。"
+    },
+    {
+      "source_key": "C01",
+      "source_id": "CHAT-072",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "環境は有機物・無機物の量と種類を個別に保持する。"
+    },
+    {
+      "source_key": "C02",
+      "source_id": "CHAT-073",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "アミノ酸組成そのものを環境条件・資源条件として扱う。"
+    },
+    {
+      "source_key": "C03",
+      "source_id": "CHAT-074",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "物質が存在しても、生物が取り込めなければ利用不能とする。"
+    },
+    {
+      "source_key": "C04",
+      "source_id": "CHAT-075",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "膜透過性、単純拡散、促進拡散、能動輸送を抽象化して扱う。"
+    },
+    {
+      "source_key": "C05",
+      "source_id": "CHAT-076",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "専用輸送体の有無、容量、コストが取り込み量を決める。"
+    },
+    {
+      "source_key": "C06",
+      "source_id": "CHAT-077",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "分解・合成・触媒に必要な酵素や反応経路を持つ。"
+    },
+    {
+      "source_key": "C07",
+      "source_id": "CHAT-078",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "代謝経路が連結しない場合、資源を取り込んでも利用できない。"
+    },
+    {
+      "source_key": "C08",
+      "source_id": "CHAT-079",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "中間代謝物の蓄積、浸透圧、酸化ストレス、毒性を扱う。"
+    },
+    {
+      "source_key": "C09",
+      "source_id": "CHAT-080",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "排出、解毒、貯蔵、再利用を代謝の一部として扱う。"
+    },
+    {
+      "source_key": "C10",
+      "source_id": "CHAT-081",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "糖、脂肪酸、アミノ酸、核酸塩基、酸素、二酸化炭素、硫黄・窒素化合物、毒性有機物等を扱える。"
+    },
+    {
+      "source_key": "C11",
+      "source_id": "CHAT-082",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "生物は資源を消費するだけでなく、別物質・熱・廃棄物へ変換する。"
+    },
+    {
+      "source_key": "C12",
+      "source_id": "CHAT-083",
+      "origin_type": "conversation",
+      "category": "physics",
+      "statement": "全スケールで質量・元素・エネルギー収支を破らない。"
+    },
+    {
+      "source_key": "C13",
+      "source_id": "CHAT-084",
+      "origin_type": "conversation",
+      "category": "physics",
+      "statement": "熱力学、反応速度、拡散、濃度勾配、温度、pH等を科学的整合性のある抽象モデルで扱う。"
+    },
+    {
+      "source_key": "C14",
+      "source_id": "CHAT-085",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "外部アミノ酸依存等の栄養要求性を表現できる。"
+    },
+    {
+      "source_key": "C15",
+      "source_id": "CHAT-086",
+      "origin_type": "conversation",
+      "category": "chemistry",
+      "statement": "万能代謝は維持コストが高く、専門代謝は限定資源で高効率となる。"
+    },
+    {
+      "source_key": "C16",
+      "source_id": "CHAT-087",
+      "origin_type": "conversation",
+      "category": "environment",
+      "statement": "温度、pH、酸素、光、圧力、重力、水分、流速、放射線等を環境変数として持つ。"
+    },
+    {
+      "source_key": "C17",
+      "source_id": "CHAT-088",
+      "origin_type": "conversation",
+      "category": "environment",
+      "statement": "局所的な濃度勾配、毒性、酸欠、熱源、光遮蔽等が生態的役割を変える。"
+    },
+    {
+      "source_key": "C18",
+      "source_id": "CHAT-089",
+      "origin_type": "conversation",
+      "category": "environment",
+      "statement": "排出物・死骸・環境改変により新しい資源相とニッチが動的に発生する。"
+    },
+    {
+      "source_key": "L01",
+      "source_id": "CHAT-090",
+      "origin_type": "conversation",
+      "category": "scale",
+      "statement": "細胞と動物等、スケールごとに影響する変数・更新頻度・モデルを切り替える。"
+    },
+    {
+      "source_key": "L02",
+      "source_id": "CHAT-091",
+      "origin_type": "conversation",
+      "category": "scale",
+      "statement": "分子・細胞、多細胞・組織、個体・動物、生態系、惑星の階層を持つ。"
+    },
+    {
+      "source_key": "L03",
+      "source_id": "CHAT-092",
+      "origin_type": "conversation",
+      "category": "scale",
+      "statement": "現在のステージを詳細計算し、画面外・遠方・他スケールは集約モデルで進行する。"
+    },
+    {
+      "source_key": "L04",
+      "source_id": "CHAT-093",
+      "origin_type": "conversation",
+      "category": "scale",
+      "statement": "詳細計算範囲は画面内だけでなく、因果的に影響する境界領域を含む。"
+    },
+    {
+      "source_key": "L05",
+      "source_id": "CHAT-094",
+      "origin_type": "conversation",
+      "category": "scale",
+      "statement": "下位状態を上位へ集約し、上位から下位へ再展開する際は統計量とseedで再現性を保つ。"
+    },
+    {
+      "source_key": "L06",
+      "source_id": "CHAT-095",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "同一環境、同一ゲノム、同一発現、同一内部状態の個体をまとめて一回の計算へ共有する。"
+    },
+    {
+      "source_key": "L07",
+      "source_id": "CHAT-096",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "連続値をバケット化し、同一入力結果をmemoizationできる。"
+    },
+    {
+      "source_key": "L08",
+      "source_id": "CHAT-097",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "遠方や安定状態の個体はcohortとして代表状態・個体数・分散で計算する。"
+    },
+    {
+      "source_key": "L09",
+      "source_id": "CHAT-098",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "均一環境はregionとして統合し、変化の激しい箇所だけ分割する。"
+    },
+    {
+      "source_key": "L10",
+      "source_id": "CHAT-099",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "重要度と距離に応じて更新頻度を変えるmulti-rate／event-driven更新を採用する。"
+    },
+    {
+      "source_key": "L11",
+      "source_id": "CHAT-100",
+      "origin_type": "conversation",
+      "category": "rendering",
+      "statement": "シミュレーション個体数と表示オブジェクト数を1対1にしない。"
+    },
+    {
+      "source_key": "L12",
+      "source_id": "CHAT-101",
+      "origin_type": "conversation",
+      "category": "rendering",
+      "statement": "生物の見た目は基本形状、器官、模様、色、動きの組合せで生成する。"
+    },
+    {
+      "source_key": "L13",
+      "source_id": "CHAT-102",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "拡散field等は将来GPUへ分配できるが、可変グラフ・イベント・系統処理はCPU中心とする。"
+    },
+    {
+      "source_key": "L14",
+      "source_id": "CHAT-103",
+      "origin_type": "conversation",
+      "category": "performance",
+      "statement": "宇宙・惑星全体を常時高解像度で逐次演算せず、局所ステージと集約天体モデルを組み合わせる。"
+    },
+    {
+      "source_key": "L15",
+      "source_id": "CHAT-104",
+      "origin_type": "conversation",
+      "category": "release",
+      "statement": "最初の縦切りは2Dまたは2.5Dの培養皿とする。"
+    },
+    {
+      "source_key": "E01",
+      "source_id": "CHAT-105",
+      "origin_type": "conversation",
+      "category": "explanation",
+      "statement": "プレイヤーが「これ今どうなってるの？」と質問できる。"
+    },
+    {
+      "source_key": "E02",
+      "source_id": "CHAT-106",
+      "origin_type": "conversation",
+      "category": "logging",
+      "statement": "状態データとは別に、意味のある変化を構造化イベントとして記録する。"
+    },
+    {
+      "source_key": "E03",
+      "source_id": "CHAT-107",
+      "origin_type": "conversation",
+      "category": "logging",
+      "statement": "リアルタイム、世代、時代、系統史、惑星史のサマリーを生成する。"
+    },
+    {
+      "source_key": "E04",
+      "source_id": "CHAT-108",
+      "origin_type": "conversation",
+      "category": "explanation",
+      "statement": "観測事実、確定因果、相関、仮説、未確認、判定不能を分けて表示する。"
+    },
+    {
+      "source_key": "E05",
+      "source_id": "CHAT-109",
+      "origin_type": "conversation",
+      "category": "explanation",
+      "statement": "原因候補に信頼度・根拠イベント・反証候補を付与する。"
+    },
+    {
+      "source_key": "E06",
+      "source_id": "CHAT-110",
+      "origin_type": "conversation",
+      "category": "logging",
+      "statement": "系統分岐、固定、初回捕食、共生、大量死、資源閾値、環境転換、再発見等をイベント化する。"
+    },
+    {
+      "source_key": "E07",
+      "source_id": "CHAT-111",
+      "origin_type": "conversation",
+      "category": "logging",
+      "statement": "動画録画だけでなく、カメラ変更・再編集可能な決定論的リプレイログを保存する。"
+    },
+    {
+      "source_key": "E08",
+      "source_id": "CHAT-112",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "重要イベントから自動で見どころ・チャプター候補を抽出する。"
+    },
+    {
+      "source_key": "E09",
+      "source_id": "CHAT-113",
+      "origin_type": "conversation",
+      "category": "explanation",
+      "statement": "なぜ減った、いつ増えた、何が危険か、介入しないとどうなるか等の質問へ答える。"
+    },
+    {
+      "source_key": "E10",
+      "source_id": "CHAT-114",
+      "origin_type": "conversation",
+      "category": "explanation",
+      "statement": "LLMがなくても数値・ルールベースの説明を生成できる。"
+    },
+    {
+      "source_key": "E11",
+      "source_id": "CHAT-115",
+      "origin_type": "conversation",
+      "category": "explanation",
+      "statement": "LLMを使う場合はログと計算結果を根拠にし、根拠のない因果を生成しない。"
+    },
+    {
+      "source_key": "E12",
+      "source_id": "CHAT-116",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "同じイベントログを解説、学習、動画、再実験、監査の共通資産とする。"
+    },
+    {
+      "source_key": "V01",
+      "source_id": "CHAT-117",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "シミュレーション室を動画編集・作品化のスタジオとして利用できる。"
+    },
+    {
+      "source_key": "V02",
+      "source_id": "CHAT-118",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "ユーザー自身がナレーションを録音できる。"
+    },
+    {
+      "source_key": "V03",
+      "source_id": "CHAT-119",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "初期段階では音声生成・他者音声複製を提供しない。"
+    },
+    {
+      "source_key": "V04",
+      "source_id": "CHAT-120",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "本人音声を加工するボイスチェンジャーを内蔵できる。"
+    },
+    {
+      "source_key": "V05",
+      "source_id": "CHAT-121",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "研究者・宇宙調査員等のアバターを選択・編集できる。"
+    },
+    {
+      "source_key": "V06",
+      "source_id": "CHAT-122",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "字幕、チャプター、タイトル案、説明文、サムネイル候補を生成する。"
+    },
+    {
+      "source_key": "V07",
+      "source_id": "CHAT-123",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "初期は動画ファイルと投稿素材の書き出し、後期はYouTubeアカウント連携を可能にする。"
+    },
+    {
+      "source_key": "V08",
+      "source_id": "CHAT-124",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "1つの実験からShorts、短編、長編ドキュメンタリーを生成できる。"
+    },
+    {
+      "source_key": "V09",
+      "source_id": "CHAT-125",
+      "origin_type": "conversation",
+      "category": "community",
+      "statement": "視聴者コメントや投票を再実験条件へ取り込める。"
+    },
+    {
+      "source_key": "V10",
+      "source_id": "CHAT-126",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "開発者モードではAI解説・カメラ制御によるライブ番組化を将来提供できる。"
+    },
+    {
+      "source_key": "V11",
+      "source_id": "CHAT-127",
+      "origin_type": "conversation",
+      "category": "video",
+      "statement": "AIは研究助手・実況・懐疑役として、構造化ログに基づいて発言する。"
+    },
+    {
+      "source_key": "V12",
+      "source_id": "CHAT-128",
+      "origin_type": "conversation",
+      "category": "marketing",
+      "statement": "科学動画として成立する題材とタイトルをゲーム結果から自然に生成する。"
+    },
+    {
+      "source_key": "U01",
+      "source_id": "CHAT-129",
+      "origin_type": "conversation",
+      "category": "ugc",
+      "statement": "ユーザーが「もしも酸素発生が早かったら」等の思考実験パッケージを作成できる。"
+    },
+    {
+      "source_key": "U02",
+      "source_id": "CHAT-130",
+      "origin_type": "conversation",
+      "category": "ugc",
+      "statement": "ユーザー作成パッケージは公式科学モデルと明確に区別する。"
+    },
+    {
+      "source_key": "U03",
+      "source_id": "CHAT-131",
+      "origin_type": "conversation",
+      "category": "ugc",
+      "statement": "作者は無料を含む価格を設定できる。"
+    },
+    {
+      "source_key": "U04",
+      "source_id": "CHAT-132",
+      "origin_type": "conversation",
+      "category": "ugc",
+      "statement": "作者への売上分配率を設定し、税・手数料・返金後の分配基準を明示する。"
+    },
+    {
+      "source_key": "U05",
+      "source_id": "CHAT-133",
+      "origin_type": "conversation",
+      "category": "ugc",
+      "statement": "パッケージは環境、仮説、初期系統、投入数、目標、説明、依存、バージョンを含む。"
+    },
+    {
+      "source_key": "U06",
+      "source_id": "CHAT-134",
+      "origin_type": "conversation",
+      "category": "security",
+      "statement": "初期UGCでは任意コードを許可せず、宣言的DSL／データ定義のみを許可する。"
+    },
+    {
+      "source_key": "U07",
+      "source_id": "CHAT-135",
+      "origin_type": "conversation",
+      "category": "ugc",
+      "statement": "科学的確度、採用仮説、出典、改変法則、未確定変数を商品ページへ表示する。"
+    },
+    {
+      "source_key": "U08",
+      "source_id": "CHAT-136",
+      "origin_type": "conversation",
+      "category": "legal",
+      "statement": "UGCの著作権、危険内容、誤表示、決済、税、返金、年齢区分、通報・削除を管理する。"
+    },
+    {
+      "source_key": "U09",
+      "source_id": "CHAT-137",
+      "origin_type": "conversation",
+      "category": "mcp",
+      "statement": "MCP連携でユーザー・開発者のパッケージ作成と検証を支援する。"
+    },
+    {
+      "source_key": "U10",
+      "source_id": "CHAT-138",
+      "origin_type": "conversation",
+      "category": "community",
+      "statement": "パッケージごとに実行回数、絶滅率、系統数、代表結果等の集合統計を表示できる。"
+    },
+    {
+      "source_key": "U11",
+      "source_id": "CHAT-139",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "Creator、Researcher、Developer等の機能解放型サブスクリプションを設定できる。"
+    },
+    {
+      "source_key": "U12",
+      "source_id": "CHAT-140",
+      "origin_type": "conversation",
+      "category": "business",
+      "statement": "商用利用、API、headless実行、配信制御等を上位プランへ提供できる。"
+    },
+    {
+      "source_key": "T01",
+      "source_id": "CHAT-141",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "MVPはWebアプリケーションを優先する。"
+    },
+    {
+      "source_key": "T02",
+      "source_id": "CHAT-142",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "PWAとしてホーム画面追加・アプリ風利用を可能にできる。"
+    },
+    {
+      "source_key": "T03",
+      "source_id": "CHAT-143",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "スマホは進行確認、通知、解説、簡易介入、共有、配信操作を中心とする。"
+    },
+    {
+      "source_key": "T04",
+      "source_id": "CHAT-144",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "長期計算、複数seed、惑星規模、動画高品質レンダリングはクラウドジョブへ送れる。"
+    },
+    {
+      "source_key": "T05",
+      "source_id": "CHAT-145",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "小規模培養皿シミュレーションはローカルで完結できる。"
+    },
+    {
+      "source_key": "T06",
+      "source_id": "CHAT-146",
+      "origin_type": "conversation",
+      "category": "architecture",
+      "statement": "Web、スマホ、将来Unityは同一シミュレーションコア・API・ログ契約を共有する。"
+    },
+    {
+      "source_key": "T07",
+      "source_id": "CHAT-147",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "Unityは市場性とビジュアル需要を確認してから追加する。"
+    },
+    {
+      "source_key": "T08",
+      "source_id": "CHAT-148",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "スマホでは複雑なコドン・代謝編集を簡略化し、PC/Webへ誘導できる。"
+    },
+    {
+      "source_key": "T09",
+      "source_id": "CHAT-149",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "アカウント、クラウド同期、ジョブ状態、購入履歴、UGC所有を管理する。"
+    },
+    {
+      "source_key": "T10",
+      "source_id": "CHAT-150",
+      "origin_type": "conversation",
+      "category": "platform",
+      "statement": "ローカル世界・オフライン実験を基本機能として保持し、クラウド必須化を避ける。"
+    },
+    {
+      "source_key": "H01",
+      "source_id": "CHAT-151",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "全成果物をHELIX基盤の要求・設計・テスト・PlanAssetへ接続できる。"
+    },
+    {
+      "source_key": "H02",
+      "source_id": "CHAT-152",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "要求には一意ID、優先度、リリース、受入条件、検証方法、ソース追跡を持たせる。"
+    },
+    {
+      "source_key": "H03",
+      "source_id": "CHAT-153",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "人間向け文書と機械可読JSONマニフェストを同時に提供する。"
+    },
+    {
+      "source_key": "H04",
+      "source_id": "CHAT-154",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "AI開発を役割別レーンとゲートで分離する。"
+    },
+    {
+      "source_key": "H05",
+      "source_id": "CHAT-155",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "MCPツールは型付き入出力、dry-run、権限、監査ログ、承認境界を持つ。"
+    },
+    {
+      "source_key": "H06",
+      "source_id": "CHAT-156",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "重要なシミュレーション・課金・UGC変更は独立レビューを通す。"
+    },
+    {
+      "source_key": "H07",
+      "source_id": "CHAT-157",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "リリース段階ごとにPlanAsset、依存、出口条件、証跡を定義する。"
+    },
+    {
+      "source_key": "H08",
+      "source_id": "CHAT-158",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "シミュレーションコアを最優先ワークストリームとして扱う。"
+    },
+    {
+      "source_key": "H09",
+      "source_id": "CHAT-159",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "AI生成コード・データ・法則は受入テストと不変条件を満たすまで採用しない。"
+    },
+    {
+      "source_key": "H10",
+      "source_id": "CHAT-160",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "人間はゲームとしての面白さ、理解可能性、再試行意欲を評価する。"
+    },
+    {
+      "source_key": "H11",
+      "source_id": "CHAT-161",
+      "origin_type": "conversation",
+      "category": "helix",
+      "statement": "保存則、決定論、系統固定、説明根拠、計算予算をHELIX hard gateとして扱う。"
+    },
+    {
+      "source_key": "D01",
+      "source_id": "CHAT-162",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "要件パッケージは重複ID、未追跡要求、未割当リリース、受入条件欠落を機械検証する。"
+    },
+    {
+      "source_key": "D02",
+      "source_id": "CHAT-163",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "個人情報、決済情報、子ども利用、音声録音、UGC法務は正式ローンチ前に法務レビューする。"
+    },
+    {
+      "source_key": "D03",
+      "source_id": "CHAT-164",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "科学的妥当性とゲーム内仮説はラベル、モデル版、出典、確度で区別する。"
+    },
+    {
+      "source_key": "D04",
+      "source_id": "CHAT-165",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "外部科学ライブラリ・モデルはライセンスと再配布条件を検査する。"
+    },
+    {
+      "source_key": "D05",
+      "source_id": "CHAT-166",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "初期段階では医療・診断・現実の生命作成を目的としない。"
+    },
+    {
+      "source_key": "D06",
+      "source_id": "CHAT-167",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "セーブデータ・ログ・動画・UGCの互換性をversioned schemaで管理する。"
+    },
+    {
+      "source_key": "D07",
+      "source_id": "CHAT-168",
+      "origin_type": "conversation",
+      "category": "derived",
+      "statement": "性能劣化を検出するため基準シナリオと計算予算をCIに固定する。"
+    }
+  ]
+}

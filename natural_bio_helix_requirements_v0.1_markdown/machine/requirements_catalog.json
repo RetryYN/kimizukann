@@ -1,0 +1,5323 @@
+{
+  "schema_version": "1.0",
+  "baseline_version": "0.1.0",
+  "requirements": [
+    {
+      "requirement_id": "BR-001",
+      "title": "HELIX第一号製品",
+      "statement": "本製品をHELIX開発後の最初の外部プロダクトとして企画・開発・検証する。",
+      "source_ids": [
+        "CHAT-001",
+        "CHAT-020",
+        "CHAT-151"
+      ],
+      "source_keys": [
+        "P01",
+        "P20",
+        "H01"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "製品マニフェストにfirst_product_after_helix=trueが記録される。",
+        "全主要成果物がHELIX IDへ追跡可能である。"
+      ],
+      "verification_method": "文書・マニフェスト検査",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-002",
+      "title": "シミュレーションコア優先",
+      "statement": "投資・設計・検証の最優先を生命シミュレーションコアへ置く。",
+      "source_ids": [
+        "CHAT-004",
+        "CHAT-158"
+      ],
+      "source_keys": [
+        "P04",
+        "H08"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "R1の予算・工数・ゲートの過半がコアに割り当てられる。",
+        "UIやマーケット機能がコア成立前の必須依存にならない。"
+      ],
+      "verification_method": "ロードマップ監査",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-003",
+      "title": "生物版マインクラフト価値",
+      "statement": "生命法則を組み合わせ、予想外の生命史を生成・観察・再実験できるサンドボックスを提供する。",
+      "source_ids": [
+        "CHAT-009",
+        "CHAT-008"
+      ],
+      "source_keys": [
+        "P09",
+        "P08"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "4系統投入から分岐・固定・全滅の複数結果が発生する。",
+        "プレイヤーが条件を変えて再実験できる。"
+      ],
+      "verification_method": "縦切りプレイテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-004",
+      "title": "段階的ハイブリッド展開",
+      "statement": "Web、スマホ、クラウド、将来Unityを段階的かつ共通コアで展開する。",
+      "source_ids": [
+        "CHAT-002",
+        "CHAT-003",
+        "CHAT-005",
+        "CHAT-013",
+        "CHAT-014"
+      ],
+      "source_keys": [
+        "P02",
+        "P03",
+        "P05",
+        "P13",
+        "P14"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "各リリースのスコープと出口条件が定義される。",
+        "同一コア契約を各クライアントが利用する。"
+      ],
+      "verification_method": "アーキテクチャ・ロードマップレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-005",
+      "title": "四モード商品構造",
+      "statement": "育成・学習・実験・研究の四モードを段階的に商品化する。",
+      "source_ids": [
+        "CHAT-021",
+        "CHAT-022",
+        "CHAT-023",
+        "CHAT-024",
+        "CHAT-025",
+        "CHAT-007"
+      ],
+      "source_keys": [
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "P07"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "R2までに育成、R3までに学習・実験、R7で研究を提供する計画がある。"
+      ],
+      "verification_method": "リリース計画レビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-006",
+      "title": "研究モード後期化",
+      "statement": "研究モードは収益と専門家監修体制の成立後に提供する。",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025"
+      ],
+      "source_keys": [
+        "P07",
+        "M05"
+      ],
+      "priority": "Must",
+      "target_release": "R7",
+      "acceptance_criteria": [
+        "R7開始条件に売上・監修者・科学モデル検証が含まれる。"
+      ],
+      "verification_method": "ゲート監査",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-007",
+      "title": "Webファースト",
+      "statement": "最初の有料価値検証はWebで行い、Unityを必須としない。",
+      "source_ids": [
+        "CHAT-141",
+        "CHAT-147",
+        "CHAT-104"
+      ],
+      "source_keys": [
+        "T01",
+        "T07",
+        "L15"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "Webのみで初期系統設計、実行、解説、リプレイが完結する。"
+      ],
+      "verification_method": "E2Eテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-008",
+      "title": "スマホ伴走端末",
+      "statement": "スマホは観察・通知・簡易介入・共有の継続利用を担う。",
+      "source_ids": [
+        "CHAT-143",
+        "CHAT-148",
+        "CHAT-013"
+      ],
+      "source_keys": [
+        "T03",
+        "T08",
+        "P13"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "進行通知から該当実験と説明へ遷移できる。",
+        "複雑編集はWebへの導線を持つ。"
+      ],
+      "verification_method": "モバイルUXテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-009",
+      "title": "クリエイター経済",
+      "statement": "もしもシリーズ、動画、配信、UGC販売を同一シミュレーションログから展開する。",
+      "source_ids": [
+        "CHAT-016",
+        "CHAT-018",
+        "CHAT-019",
+        "CHAT-117",
+        "CHAT-129"
+      ],
+      "source_keys": [
+        "P16",
+        "P18",
+        "P19",
+        "V01",
+        "U01"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "1つの実験からパッケージ説明・動画・共有ページを生成できる。"
+      ],
+      "verification_method": "クリエイターフローE2E",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-010",
+      "title": "機能解放型収益",
+      "statement": "本体価値を損なわず、Creator/Researcher/Developer機能、クラウド演算、UGC販売で収益化する。",
+      "source_ids": [
+        "CHAT-015",
+        "CHAT-139",
+        "CHAT-140",
+        "CHAT-144"
+      ],
+      "source_keys": [
+        "P15",
+        "U11",
+        "U12",
+        "T04"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "無料または本体購入範囲でコア体験が完結する。",
+        "上位機能と演算原価が価格表へ対応する。"
+      ],
+      "verification_method": "商品設計レビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-011",
+      "title": "YouTube文化形成",
+      "statement": "生命史を語り、仮説を議論し、再実験する動画文化を形成する。",
+      "source_ids": [
+        "CHAT-018",
+        "CHAT-124",
+        "CHAT-125",
+        "CHAT-128"
+      ],
+      "source_keys": [
+        "P18",
+        "V08",
+        "V09",
+        "V12"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "動画書き出しにチャプター・字幕・再実験情報が含まれる。"
+      ],
+      "verification_method": "クリエイターテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-012",
+      "title": "科学透明性",
+      "statement": "確立法則、簡略モデル、未確定仮説、フィクションを区別して表示する。",
+      "source_ids": [
+        "CHAT-068",
+        "CHAT-130",
+        "CHAT-135",
+        "CHAT-164"
+      ],
+      "source_keys": [
+        "A07",
+        "U02",
+        "U07",
+        "D03"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "各世界・パッケージに科学ラベルとモデル版が表示される。"
+      ],
+      "verification_method": "表示・データ監査",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-013",
+      "title": "ローカル価値維持",
+      "statement": "基本的な培養皿シミュレーションはクラウド契約なしで利用可能とする。",
+      "source_ids": [
+        "CHAT-145",
+        "CHAT-150",
+        "CHAT-014"
+      ],
+      "source_keys": [
+        "T05",
+        "T10",
+        "P14"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "オフラインまたはローカルモードで基準シナリオを完走できる。"
+      ],
+      "verification_method": "オフラインE2E",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-014",
+      "title": "AI実装委譲",
+      "statement": "要求以降の実装をHELIX管理下のAIレーンへ委譲できる。",
+      "source_ids": [
+        "CHAT-006",
+        "CHAT-154",
+        "CHAT-159"
+      ],
+      "source_keys": [
+        "P06",
+        "H04",
+        "H09"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "役割・権限・成果物・ゲートがマニフェストに定義される。"
+      ],
+      "verification_method": "HELIX接続検証",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-015",
+      "title": "人間の面白さゲート",
+      "statement": "AIが実装しても、最終的な面白さと理解可能性は人間が判定する。",
+      "source_ids": [
+        "CHAT-160"
+      ],
+      "source_keys": [
+        "H10"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "R1出口に人間プレイテストと再試行意欲の基準がある。"
+      ],
+      "verification_method": "人間プレイテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-016",
+      "title": "UGC作者収益",
+      "statement": "UGC作者へ明示的な収益分配と価格設定権を提供できる。",
+      "source_ids": [
+        "CHAT-017",
+        "CHAT-131",
+        "CHAT-132"
+      ],
+      "source_keys": [
+        "P17",
+        "U03",
+        "U04"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "価格変更・返金・税・手数料・分配額が作者画面で確認できる。"
+      ],
+      "verification_method": "決済受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-017",
+      "title": "法務段階導入",
+      "statement": "決済・UGC・音声・未成年・科学表示の法務を段階ごとのローンチゲートにする。",
+      "source_ids": [
+        "CHAT-136",
+        "CHAT-163",
+        "CHAT-165",
+        "CHAT-166"
+      ],
+      "source_keys": [
+        "U08",
+        "D02",
+        "D04",
+        "D05"
+      ],
+      "priority": "Must",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "対象法域とストアの法務チェックリストが承認される。"
+      ],
+      "verification_method": "法務レビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "BR-018",
+      "title": "スタイライズド科学表現",
+      "statement": "写実よりも因果と状態が読める視覚表現を優先する。",
+      "source_ids": [
+        "CHAT-010",
+        "CHAT-011",
+        "CHAT-101"
+      ],
+      "source_keys": [
+        "P10",
+        "P11",
+        "L12"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "代謝・酸欠・毒性・繁殖・死骸が色・形・動きで識別できる。"
+      ],
+      "verification_method": "視認性プレイテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-001",
+      "title": "複数系統の初期設計",
+      "statement": "プレイヤーは複数系統と各系統の複数個体を編集し、投入数・比率・配置を設定できる。",
+      "source_ids": [
+        "CHAT-032",
+        "CHAT-033",
+        "CHAT-031"
+      ],
+      "source_keys": [
+        "S01",
+        "S02",
+        "M11"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "プレイヤーは複数系統と各系統の複数個体を編集し、投入数・比率・配置を設定できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-002",
+      "title": "初心者コドンパズル",
+      "statement": "初心者は意味付きピースを組み合わせて遺伝・代謝機能を設計できる。",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-030"
+      ],
+      "source_keys": [
+        "M08",
+        "M10"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "初心者は意味付きピースを組み合わせて遺伝・代謝機能を設計できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-003",
+      "title": "上級遺伝編集",
+      "statement": "上級者はコドン、塩基、発現条件、変異特性を直接編集できる。",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-031",
+        "CHAT-037"
+      ],
+      "source_keys": [
+        "M08",
+        "M11",
+        "S06"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "上級者はコドン、塩基、発現条件、変異特性を直接編集できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-004",
+      "title": "環境設計",
+      "statement": "プレイヤーは物質組成、温度、pH、酸素、光等を読み、設定できる。",
+      "source_ids": [
+        "CHAT-058",
+        "CHAT-072",
+        "CHAT-087"
+      ],
+      "source_keys": [
+        "S27",
+        "C01",
+        "C16"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "プレイヤーは物質組成、温度、pH、酸素、光等を読み、設定できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-005",
+      "title": "環境ガチャ",
+      "statement": "プレイヤーは環境・原種・成長・仮説を抽選して異なる攻略条件を得られる。",
+      "source_ids": [
+        "CHAT-029",
+        "CHAT-067"
+      ],
+      "source_keys": [
+        "M09",
+        "A06"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "プレイヤーは環境・原種・成長・仮説を抽選して異なる攻略条件を得られる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-006",
+      "title": "初期設計チュートリアル",
+      "statement": "安定2・突出1・意図的劣位1の初期設計を学習用テンプレートとして利用できる。",
+      "source_ids": [
+        "CHAT-034"
+      ],
+      "source_keys": [
+        "S03"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "安定2・突出1・意図的劣位1の初期設計を学習用テンプレートとして利用できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-007",
+      "title": "自然淘汰観察",
+      "statement": "プレイヤーは自然淘汰、突然変異、収斂、分岐、絶滅を世代単位で観察できる。",
+      "source_ids": [
+        "CHAT-035",
+        "CHAT-036",
+        "CHAT-037",
+        "CHAT-044",
+        "CHAT-045"
+      ],
+      "source_keys": [
+        "S04",
+        "S05",
+        "S06",
+        "S13",
+        "S14"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "プレイヤーは自然淘汰、突然変異、収斂、分岐、絶滅を世代単位で観察できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-008",
+      "title": "系統固定達成",
+      "statement": "プレイヤーは形質が次世代へ遺伝・再発現し、系統として固定したか評価できる。",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-052",
+        "CHAT-055",
+        "CHAT-057"
+      ],
+      "source_keys": [
+        "S20",
+        "S21",
+        "S24",
+        "S26"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "プレイヤーは形質が次世代へ遺伝・再発現し、系統として固定したか評価できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-009",
+      "title": "予想外の系統史",
+      "statement": "プレイヤーの意図と異なる捕食、スカベンジャー化、社会性、分岐を結果として楽しめる。",
+      "source_ids": [
+        "CHAT-039",
+        "CHAT-040",
+        "CHAT-041",
+        "CHAT-044",
+        "CHAT-059"
+      ],
+      "source_keys": [
+        "S08",
+        "S09",
+        "S10",
+        "S13",
+        "S28"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "プレイヤーの意図と異なる捕食、スカベンジャー化、社会性、分岐を結果として楽しめる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-010",
+      "title": "資源崩壊の理解",
+      "statement": "個体数増加が資源不足や廃棄物による全滅へつながることを観察できる。",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-048",
+        "CHAT-082"
+      ],
+      "source_keys": [
+        "S15",
+        "S17",
+        "C11"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "個体数増加が資源不足や廃棄物による全滅へつながることを観察できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-011",
+      "title": "死骸・排出物ニッチ",
+      "statement": "死亡と排出が新資源と新系統の成立へつながることを観察できる。",
+      "source_ids": [
+        "CHAT-047",
+        "CHAT-089",
+        "CHAT-041"
+      ],
+      "source_keys": [
+        "S16",
+        "C18",
+        "S10"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "死亡と排出が新資源と新系統の成立へつながることを観察できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-012",
+      "title": "seed比較",
+      "statement": "同じ条件を複数seedで実行し、初期挙動と結果差を比較できる。",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-059"
+      ],
+      "source_keys": [
+        "S29",
+        "S28"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "同じ条件を複数seedで実行し、初期挙動と結果差を比較できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-013",
+      "title": "仮説世界比較",
+      "statement": "同じ条件を異なる進化仮説で実行し、難易度と生命史差を比較できる。",
+      "source_ids": [
+        "CHAT-069",
+        "CHAT-071"
+      ],
+      "source_keys": [
+        "A08",
+        "A10"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "同じ条件を異なる進化仮説で実行し、難易度と生命史差を比較できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-014",
+      "title": "今どうなってる質問",
+      "statement": "プレイヤーは現在状況、原因、危険、次の転換点を質問できる。",
+      "source_ids": [
+        "CHAT-105",
+        "CHAT-113"
+      ],
+      "source_keys": [
+        "E01",
+        "E09"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "プレイヤーは現在状況、原因、危険、次の転換点を質問できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-015",
+      "title": "多層解説",
+      "statement": "プレイヤーは育成・学習・実験・研究の粒度で同じ現象を理解できる。",
+      "source_ids": [
+        "CHAT-027",
+        "CHAT-108"
+      ],
+      "source_keys": [
+        "M07",
+        "E04"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "プレイヤーは育成・学習・実験・研究の粒度で同じ現象を理解できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-016",
+      "title": "リプレイ",
+      "statement": "プレイヤーは生命史を巻き戻し、別カメラ・速度・表示で再生できる。",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-116"
+      ],
+      "source_keys": [
+        "E07",
+        "E12"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "プレイヤーは生命史を巻き戻し、別カメラ・速度・表示で再生できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-017",
+      "title": "動画作品化",
+      "statement": "プレイヤーは実験ログを動画へ編集し、自分のナレーションを追加できる。",
+      "source_ids": [
+        "CHAT-117",
+        "CHAT-118",
+        "CHAT-122"
+      ],
+      "source_keys": [
+        "V01",
+        "V02",
+        "V06"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "プレイヤーは実験ログを動画へ編集し、自分のナレーションを追加できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-018",
+      "title": "音声匿名化",
+      "statement": "プレイヤーは本人音声へボイスチェンジャーを適用できる。",
+      "source_ids": [
+        "CHAT-119",
+        "CHAT-120"
+      ],
+      "source_keys": [
+        "V03",
+        "V04"
+      ],
+      "priority": "Could",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "プレイヤーは本人音声へボイスチェンジャーを適用できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-019",
+      "title": "アバター表現",
+      "statement": "プレイヤーは配信・解説用アバターを利用できる。",
+      "source_ids": [
+        "CHAT-121"
+      ],
+      "source_keys": [
+        "V05"
+      ],
+      "priority": "Could",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "プレイヤーは配信・解説用アバターを利用できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-020",
+      "title": "モバイル観察",
+      "statement": "プレイヤーはスマホで進行、異常、系統固定、全滅を確認できる。",
+      "source_ids": [
+        "CHAT-143"
+      ],
+      "source_keys": [
+        "T03"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "プレイヤーはスマホで進行、異常、系統固定、全滅を確認できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-021",
+      "title": "もしも作成",
+      "statement": "クリエイターは環境・仮説・系統・目標を組み合わせて再配布可能なシナリオを作れる。",
+      "source_ids": [
+        "CHAT-129",
+        "CHAT-133"
+      ],
+      "source_keys": [
+        "U01",
+        "U05"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "クリエイターは環境・仮説・系統・目標を組み合わせて再配布可能なシナリオを作れる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-022",
+      "title": "もしも販売",
+      "statement": "クリエイターはシナリオを無料または有料で公開できる。",
+      "source_ids": [
+        "CHAT-131",
+        "CHAT-132"
+      ],
+      "source_keys": [
+        "U03",
+        "U04"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "クリエイターはシナリオを無料または有料で公開できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-023",
+      "title": "集合結果閲覧",
+      "statement": "利用者は同一もしもシリーズの結果分布を閲覧できる。",
+      "source_ids": [
+        "CHAT-138"
+      ],
+      "source_keys": [
+        "U10"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "利用者は同一もしもシリーズの結果分布を閲覧できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-024",
+      "title": "自然発生実験",
+      "statement": "プレイヤーは生命前物質だけを投入し、どの段階で反応が止まるか観察できる。",
+      "source_ids": [
+        "CHAT-062",
+        "CHAT-063",
+        "CHAT-065"
+      ],
+      "source_keys": [
+        "A01",
+        "A02",
+        "A04"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "プレイヤーは生命前物質だけを投入し、どの段階で反応が止まるか観察できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-025",
+      "title": "天体実験",
+      "statement": "プレイヤーは惑星・衛星・彗星の暫定条件で生命発生・維持を試せる。",
+      "source_ids": [
+        "CHAT-064",
+        "CHAT-066"
+      ],
+      "source_keys": [
+        "A03",
+        "A05"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "プレイヤーは惑星・衛星・彗星の暫定条件で生命発生・維持を試せる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "UR-026",
+      "title": "スケール移動",
+      "statement": "プレイヤーは細胞から生態系・天体へ移動し、原因を上下スケールで追跡できる。",
+      "source_ids": [
+        "CHAT-026",
+        "CHAT-090",
+        "CHAT-094"
+      ],
+      "source_keys": [
+        "M06",
+        "L01",
+        "L05"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "プレイヤーは細胞から生態系・天体へ移動し、原因を上下スケールで追跡できる。",
+        "操作結果が保存・再現される。"
+      ],
+      "verification_method": "ユーザー受入テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-001",
+      "title": "世界作成",
+      "statement": "新規世界にseed、法則プロファイル、科学ラベル、計算予算を設定する。",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-068",
+        "CHAT-103"
+      ],
+      "source_keys": [
+        "S29",
+        "A07",
+        "L14"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "新規世界にseed、法則プロファイル、科学ラベル、計算予算を設定する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-002",
+      "title": "初期系統数",
+      "statement": "世界は最低4系統を初期投入でき、上限を計算予算で制御する。",
+      "source_ids": [
+        "CHAT-032",
+        "CHAT-044"
+      ],
+      "source_keys": [
+        "S01",
+        "S13"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "世界は最低4系統を初期投入でき、上限を計算予算で制御する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-003",
+      "title": "系統個体群設定",
+      "statement": "各系統に個体数、位置分布、年齢分布、性・繁殖方式を設定する。",
+      "source_ids": [
+        "CHAT-033",
+        "CHAT-059"
+      ],
+      "source_keys": [
+        "S02",
+        "S28"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "各系統に個体数、位置分布、年齢分布、性・繁殖方式を設定する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-004",
+      "title": "コドンピース",
+      "statement": "コドンピースは機能、接続条件、維持コスト、発現条件を持つ。",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-077",
+        "CHAT-086"
+      ],
+      "source_keys": [
+        "M08",
+        "C06",
+        "C15"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "コドンピースは機能、接続条件、維持コスト、発現条件を持つ。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-005",
+      "title": "遺伝子ブロック",
+      "statement": "複数コドンを遺伝子ブロックとして保存・再利用する。",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-031"
+      ],
+      "source_keys": [
+        "M08",
+        "M11"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "複数コドンを遺伝子ブロックとして保存・再利用する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-006",
+      "title": "発現制御",
+      "statement": "環境、ライフステージ、内部状態、他個体信号で遺伝子発現を切り替える。",
+      "source_ids": [
+        "CHAT-031",
+        "CHAT-039",
+        "CHAT-088"
+      ],
+      "source_keys": [
+        "M11",
+        "S08",
+        "C17"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "環境、ライフステージ、内部状態、他個体信号で遺伝子発現を切り替える。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-007",
+      "title": "遺伝子検証",
+      "statement": "編集時に開始・終了、依存経路、維持コスト、致死欠損を検証する。",
+      "source_ids": [
+        "CHAT-030",
+        "CHAT-078",
+        "CHAT-079"
+      ],
+      "source_keys": [
+        "M10",
+        "C07",
+        "C08"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "編集時に開始・終了、依存経路、維持コスト、致死欠損を検証する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-008",
+      "title": "環境物質台帳",
+      "statement": "物質は元素組成、相、濃度、拡散係数、毒性、利用可能性を持つ。",
+      "source_ids": [
+        "CHAT-072",
+        "CHAT-081",
+        "CHAT-084"
+      ],
+      "source_keys": [
+        "C01",
+        "C10",
+        "C13"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "物質は元素組成、相、濃度、拡散係数、毒性、利用可能性を持つ。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-009",
+      "title": "環境field",
+      "statement": "温度、pH、酸素、光等を空間fieldまたはregion値として保持する。",
+      "source_ids": [
+        "CHAT-087",
+        "CHAT-088",
+        "CHAT-098"
+      ],
+      "source_keys": [
+        "C16",
+        "C17",
+        "L09"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "温度、pH、酸素、光等を空間fieldまたはregion値として保持する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-010",
+      "title": "膜輸送",
+      "statement": "物質取り込みは膜透過性、輸送体、濃度勾配、エネルギーコストで決まる。",
+      "source_ids": [
+        "CHAT-074",
+        "CHAT-075",
+        "CHAT-076"
+      ],
+      "source_keys": [
+        "C03",
+        "C04",
+        "C05"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "物質取り込みは膜透過性、輸送体、濃度勾配、エネルギーコストで決まる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-011",
+      "title": "代謝反応",
+      "statement": "反応は基質、生成物、触媒、速度、エネルギー、条件を持つ。",
+      "source_ids": [
+        "CHAT-077",
+        "CHAT-082",
+        "CHAT-084"
+      ],
+      "source_keys": [
+        "C06",
+        "C11",
+        "C13"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "反応は基質、生成物、触媒、速度、エネルギー、条件を持つ。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-012",
+      "title": "経路連結",
+      "statement": "代謝経路の欠損と中間物蓄積を検出・反映する。",
+      "source_ids": [
+        "CHAT-078",
+        "CHAT-079"
+      ],
+      "source_keys": [
+        "C07",
+        "C08"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "代謝経路の欠損と中間物蓄積を検出・反映する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-013",
+      "title": "排出と解毒",
+      "statement": "生物は排出、解毒、貯蔵、再利用を選択できる。",
+      "source_ids": [
+        "CHAT-080"
+      ],
+      "source_keys": [
+        "C09"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "生物は排出、解毒、貯蔵、再利用を選択できる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-014",
+      "title": "栄養要求性",
+      "statement": "外部アミノ酸等への依存を形質として表現する。",
+      "source_ids": [
+        "CHAT-073",
+        "CHAT-085"
+      ],
+      "source_keys": [
+        "C02",
+        "C14"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "外部アミノ酸等への依存を形質として表現する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-015",
+      "title": "維持コスト",
+      "statement": "遺伝子、酵素、器官、社会行動は維持エネルギーと材料を消費する。",
+      "source_ids": [
+        "CHAT-086",
+        "CHAT-039"
+      ],
+      "source_keys": [
+        "C15",
+        "S08"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "遺伝子、酵素、器官、社会行動は維持エネルギーと材料を消費する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-016",
+      "title": "資源変換",
+      "statement": "摂取物質をATP、構造材料、熱、排出物へ変換する。",
+      "source_ids": [
+        "CHAT-082",
+        "CHAT-083"
+      ],
+      "source_keys": [
+        "C11",
+        "C12"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "摂取物質をATP、構造材料、熱、排出物へ変換する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-017",
+      "title": "生物ライフサイクル",
+      "statement": "出生、成長、成熟、繁殖、老化、死亡を持つ。",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-055"
+      ],
+      "source_keys": [
+        "S20",
+        "S24"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "出生、成長、成熟、繁殖、老化、死亡を持つ。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-018",
+      "title": "繁殖",
+      "statement": "無性・有性・交配互換・配偶子等を段階的に実装できる。",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-053"
+      ],
+      "source_keys": [
+        "S20",
+        "S22"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "無性・有性・交配互換・配偶子等を段階的に実装できる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-019",
+      "title": "突然変異",
+      "statement": "置換、重複、欠失、逆位、組換え、発現変化をモデル化できる。",
+      "source_ids": [
+        "CHAT-037",
+        "CHAT-054"
+      ],
+      "source_keys": [
+        "S06",
+        "S23"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "置換、重複、欠失、逆位、組換え、発現変化をモデル化できる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-020",
+      "title": "社会行動",
+      "statement": "協力、警戒、共有、役割分担を行動ルールとして表現する。",
+      "source_ids": [
+        "CHAT-039"
+      ],
+      "source_keys": [
+        "S08"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "協力、警戒、共有、役割分担を行動ルールとして表現する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-021",
+      "title": "捕食",
+      "statement": "捕食者は動的な獲物選択と捕食成功判定を行う。",
+      "source_ids": [
+        "CHAT-040"
+      ],
+      "source_keys": [
+        "S09"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "捕食者は動的な獲物選択と捕食成功判定を行う。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-022",
+      "title": "スカベンジ",
+      "statement": "死骸資源を検出し、利用可能な系統が摂取する。",
+      "source_ids": [
+        "CHAT-041",
+        "CHAT-047"
+      ],
+      "source_keys": [
+        "S10",
+        "S16"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "死骸資源を検出し、利用可能な系統が摂取する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-023",
+      "title": "共生",
+      "statement": "複数系統の物質交換、保護、内部化を表現する。",
+      "source_ids": [
+        "CHAT-042"
+      ],
+      "source_keys": [
+        "S11"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "複数系統の物質交換、保護、内部化を表現する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-024",
+      "title": "寄生・病原",
+      "statement": "宿主依存、感染、伝播、宿主抵抗を表現する。",
+      "source_ids": [
+        "CHAT-043"
+      ],
+      "source_keys": [
+        "S12"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "宿主依存、感染、伝播、宿主抵抗を表現する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-025",
+      "title": "環境改変",
+      "statement": "生物活動による物質field・大気・光・pHの変化を反映する。",
+      "source_ids": [
+        "CHAT-048",
+        "CHAT-049"
+      ],
+      "source_keys": [
+        "S17",
+        "S18"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "生物活動による物質field・大気・光・pHの変化を反映する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-026",
+      "title": "避難所",
+      "statement": "氷中・地下等の微小regionで低頻度残存集団を維持できる。",
+      "source_ids": [
+        "CHAT-050",
+        "CHAT-061"
+      ],
+      "source_keys": [
+        "S19",
+        "S30"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "氷中・地下等の微小regionで低頻度残存集団を維持できる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-027",
+      "title": "個体群分岐",
+      "statement": "集団が遺伝・表現・繁殖互換の差で複数系統へ分岐する。",
+      "source_ids": [
+        "CHAT-044",
+        "CHAT-054"
+      ],
+      "source_keys": [
+        "S13",
+        "S23"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "集団が遺伝・表現・繁殖互換の差で複数系統へ分岐する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-028",
+      "title": "絶滅判定",
+      "statement": "観測ゼロ、休眠・避難所、真の絶滅を区別する。",
+      "source_ids": [
+        "CHAT-045",
+        "CHAT-061"
+      ],
+      "source_keys": [
+        "S14",
+        "S30"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "観測ゼロ、休眠・避難所、真の絶滅を区別する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-029",
+      "title": "系統固定判定",
+      "statement": "固定判定は複数世代の形質頻度、遺伝率、発現率、繁殖集団、ニッチを用いる。",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-052",
+        "CHAT-055"
+      ],
+      "source_keys": [
+        "S20",
+        "S21",
+        "S24"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "固定判定は複数世代の形質頻度、遺伝率、発現率、繁殖集団、ニッチを用いる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-030",
+      "title": "収斂判定",
+      "statement": "異なる遺伝系統が類似機能・形態へ収束したことを検出する。",
+      "source_ids": [
+        "CHAT-036",
+        "CHAT-056"
+      ],
+      "source_keys": [
+        "S05",
+        "S25"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "異なる遺伝系統が類似機能・形態へ収束したことを検出する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-031",
+      "title": "上位ステージ解放",
+      "statement": "相補的な複数下位系統固定を上位ステージの前提にできる。",
+      "source_ids": [
+        "CHAT-053"
+      ],
+      "source_keys": [
+        "S22"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "相補的な複数下位系統固定を上位ステージの前提にできる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-032",
+      "title": "世代評価",
+      "statement": "安定判定後に固定・多様化・衰退・絶滅・未収束を評価する。",
+      "source_ids": [
+        "CHAT-052"
+      ],
+      "source_keys": [
+        "S21"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "安定判定後に固定・多様化・衰退・絶滅・未収束を評価する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-033",
+      "title": "収容力崩壊",
+      "statement": "資源再生量を消費が超えた場合のboom-bustを発生させる。",
+      "source_ids": [
+        "CHAT-046"
+      ],
+      "source_keys": [
+        "S15"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "資源再生量を消費が超えた場合のboom-bustを発生させる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-034",
+      "title": "環境ティッピング",
+      "statement": "酸素吸収源飽和等の閾値で環境状態を非線形に転換する。",
+      "source_ids": [
+        "CHAT-049",
+        "CHAT-048"
+      ],
+      "source_keys": [
+        "S18",
+        "S17"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "酸素吸収源飽和等の閾値で環境状態を非線形に転換する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-035",
+      "title": "自然発生段階",
+      "statement": "生命前反応を段階状態で進行・停止させる。",
+      "source_ids": [
+        "CHAT-062",
+        "CHAT-063"
+      ],
+      "source_keys": [
+        "A01",
+        "A02"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "生命前反応を段階状態で進行・停止させる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-036",
+      "title": "天体局所ステージ",
+      "statement": "天体全体を集約し、選択局所だけ詳細化する。",
+      "source_ids": [
+        "CHAT-064",
+        "CHAT-103"
+      ],
+      "source_keys": [
+        "A03",
+        "L14"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "天体全体を集約し、選択局所だけ詳細化する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-037",
+      "title": "仮説プロファイル",
+      "statement": "世界に可変仮説の組合せと確度を設定する。",
+      "source_ids": [
+        "CHAT-067",
+        "CHAT-068",
+        "CHAT-069"
+      ],
+      "source_keys": [
+        "A06",
+        "A07",
+        "A08"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "世界に可変仮説の組合せと確度を設定する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-038",
+      "title": "仮説非公開",
+      "statement": "高難易度で仮説を部分非公開にできる。",
+      "source_ids": [
+        "CHAT-070"
+      ],
+      "source_keys": [
+        "A09"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "高難易度で仮説を部分非公開にできる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-039",
+      "title": "世界比較",
+      "statement": "仮説またはseed以外を固定して比較実験する。",
+      "source_ids": [
+        "CHAT-071",
+        "CHAT-060"
+      ],
+      "source_keys": [
+        "A10",
+        "S29"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "仮説またはseed以外を固定して比較実験する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-040",
+      "title": "アクティブステージ詳細計算",
+      "statement": "現在のステージと因果境界を詳細計算し、画面外・他スケールは集約する。",
+      "source_ids": [
+        "CHAT-092",
+        "CHAT-093"
+      ],
+      "source_keys": [
+        "L03",
+        "L04"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "現在のステージと因果境界を詳細計算し、画面外・他スケールは集約する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-041",
+      "title": "スケール集約",
+      "statement": "細胞状態を器官能力、個体性能、個体群フラックスへ集約する。",
+      "source_ids": [
+        "CHAT-090",
+        "CHAT-091",
+        "CHAT-094"
+      ],
+      "source_keys": [
+        "L01",
+        "L02",
+        "L05"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "細胞状態を器官能力、個体性能、個体群フラックスへ集約する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-042",
+      "title": "スケール再展開",
+      "statement": "上位状態から統計・seed・履歴を用いて下位初期状態を再展開する。",
+      "source_ids": [
+        "CHAT-094"
+      ],
+      "source_keys": [
+        "L05"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "上位状態から統計・seed・履歴を用いて下位初期状態を再展開する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-043",
+      "title": "cohort管理",
+      "statement": "類似個体をcohort化し、特殊イベント時に個体へ昇格させる。",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097"
+      ],
+      "source_keys": [
+        "L06",
+        "L08"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "類似個体をcohort化し、特殊イベント時に個体へ昇格させる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-044",
+      "title": "region管理",
+      "statement": "環境regionを差分と相互作用で分割・統合する。",
+      "source_ids": [
+        "CHAT-098"
+      ],
+      "source_keys": [
+        "L09"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "環境regionを差分と相互作用で分割・統合する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-045",
+      "title": "計算キャッシュ",
+      "statement": "量子化入力の計算結果を再利用する。",
+      "source_ids": [
+        "CHAT-096"
+      ],
+      "source_keys": [
+        "L07"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "量子化入力の計算結果を再利用する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-046",
+      "title": "多段更新",
+      "statement": "対象ごとに更新頻度を設定し、重要イベントで即時更新する。",
+      "source_ids": [
+        "CHAT-099"
+      ],
+      "source_keys": [
+        "L10"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "対象ごとに更新頻度を設定し、重要イベントで即時更新する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-047",
+      "title": "決定論リプレイ",
+      "statement": "seed、入力、モデル版から同一結果を再生成する。",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-111"
+      ],
+      "source_keys": [
+        "S29",
+        "E07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "seed、入力、モデル版から同一結果を再生成する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-048",
+      "title": "表示合成",
+      "statement": "生物外観を共有部品とパラメータで生成する。",
+      "source_ids": [
+        "CHAT-100",
+        "CHAT-101"
+      ],
+      "source_keys": [
+        "L11",
+        "L12"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "生物外観を共有部品とパラメータで生成する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-049",
+      "title": "科学オーバーレイ",
+      "statement": "物質濃度、ATP、毒性、系統、捕食、死骸を重ねて表示する。",
+      "source_ids": [
+        "CHAT-011",
+        "CHAT-107"
+      ],
+      "source_keys": [
+        "P11",
+        "E03"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "物質濃度、ATP、毒性、系統、捕食、死骸を重ねて表示する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-050",
+      "title": "イベント検出",
+      "statement": "重要な状態変化を閾値・変化率・初回発生で検出する。",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-110"
+      ],
+      "source_keys": [
+        "E02",
+        "E06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "重要な状態変化を閾値・変化率・初回発生で検出する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-051",
+      "title": "構造化イベント",
+      "statement": "イベントは対象、時刻、観測差分、候補原因、根拠、確度を持つ。",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-109"
+      ],
+      "source_keys": [
+        "E02",
+        "E05"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "イベントは対象、時刻、観測差分、候補原因、根拠、確度を持つ。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-052",
+      "title": "階層サマリー",
+      "statement": "複数時間軸・系統・惑星単位のサマリーを生成する。",
+      "source_ids": [
+        "CHAT-107"
+      ],
+      "source_keys": [
+        "E03"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "複数時間軸・系統・惑星単位のサマリーを生成する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-053",
+      "title": "状態質問",
+      "statement": "自然言語または定型質問で現在・過去・予測を照会する。",
+      "source_ids": [
+        "CHAT-105",
+        "CHAT-113"
+      ],
+      "source_keys": [
+        "E01",
+        "E09"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "自然言語または定型質問で現在・過去・予測を照会する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-054",
+      "title": "説明ラベル",
+      "statement": "説明は事実、因果、相関、仮説、未知をラベル付けする。",
+      "source_ids": [
+        "CHAT-108",
+        "CHAT-115"
+      ],
+      "source_keys": [
+        "E04",
+        "E11"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "説明は事実、因果、相関、仮説、未知をラベル付けする。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-055",
+      "title": "基礎解説器",
+      "statement": "LLMなしでテンプレートと因果グラフから説明する。",
+      "source_ids": [
+        "CHAT-114"
+      ],
+      "source_keys": [
+        "E10"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "LLMなしでテンプレートと因果グラフから説明する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-056",
+      "title": "LLM補助解説",
+      "statement": "LLMは構造化イベントと数値を引用して自然文を生成する。",
+      "source_ids": [
+        "CHAT-115"
+      ],
+      "source_keys": [
+        "E11"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "LLMは構造化イベントと数値を引用して自然文を生成する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-057",
+      "title": "見どころ抽出",
+      "statement": "転換点・逆転・絶滅・再発見を動画候補へ変換する。",
+      "source_ids": [
+        "CHAT-112",
+        "CHAT-128"
+      ],
+      "source_keys": [
+        "E08",
+        "V12"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "転換点・逆転・絶滅・再発見を動画候補へ変換する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-058",
+      "title": "タイムライン編集",
+      "statement": "ユーザーはリプレイ範囲、カメラ、速度、図表を編集する。",
+      "source_ids": [
+        "CHAT-117",
+        "CHAT-111"
+      ],
+      "source_keys": [
+        "V01",
+        "E07"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "ユーザーはリプレイ範囲、カメラ、速度、図表を編集する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-059",
+      "title": "ナレーション録音",
+      "statement": "動画タイムラインへマイク音声を録音・配置する。",
+      "source_ids": [
+        "CHAT-118"
+      ],
+      "source_keys": [
+        "V02"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "動画タイムラインへマイク音声を録音・配置する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-060",
+      "title": "ボイスチェンジャー",
+      "statement": "録音音声へプリセット加工を適用する。",
+      "source_ids": [
+        "CHAT-120"
+      ],
+      "source_keys": [
+        "V04"
+      ],
+      "priority": "Could",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "録音音声へプリセット加工を適用する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-061",
+      "title": "音声生成非搭載",
+      "statement": "初期リリースではTTS・音声クローンを搭載しない。",
+      "source_ids": [
+        "CHAT-119"
+      ],
+      "source_keys": [
+        "V03"
+      ],
+      "priority": "Must",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "初期リリースではTTS・音声クローンを搭載しない。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-062",
+      "title": "アバター",
+      "statement": "解説者アバターと表情・状態を表示する。",
+      "source_ids": [
+        "CHAT-121"
+      ],
+      "source_keys": [
+        "V05"
+      ],
+      "priority": "Could",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "解説者アバターと表情・状態を表示する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-063",
+      "title": "動画素材生成",
+      "statement": "字幕、チャプター、タイトル、説明、サムネイル候補を出力する。",
+      "source_ids": [
+        "CHAT-122"
+      ],
+      "source_keys": [
+        "V06"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "字幕、チャプター、タイトル、説明、サムネイル候補を出力する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-064",
+      "title": "動画エクスポート",
+      "statement": "動画ファイルと付随メタデータを出力する。",
+      "source_ids": [
+        "CHAT-123"
+      ],
+      "source_keys": [
+        "V07"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "動画ファイルと付随メタデータを出力する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-065",
+      "title": "YouTube連携",
+      "statement": "認可後に限定公開等へアップロードできる。",
+      "source_ids": [
+        "CHAT-123"
+      ],
+      "source_keys": [
+        "V07"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "認可後に限定公開等へアップロードできる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-066",
+      "title": "再実験チケット",
+      "statement": "コメント・投票内容を条件差分として保存する。",
+      "source_ids": [
+        "CHAT-125"
+      ],
+      "source_keys": [
+        "V09"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "コメント・投票内容を条件差分として保存する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-067",
+      "title": "AIライブ進行",
+      "statement": "AIがイベントに基づきカメラ・テロップ・解説を進行する。",
+      "source_ids": [
+        "CHAT-126",
+        "CHAT-127"
+      ],
+      "source_keys": [
+        "V10",
+        "V11"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "AIがイベントに基づきカメラ・テロップ・解説を進行する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-068",
+      "title": "UGCパッケージ作成",
+      "statement": "宣言的UIでシナリオパッケージを作成する。",
+      "source_ids": [
+        "CHAT-129",
+        "CHAT-133",
+        "CHAT-134"
+      ],
+      "source_keys": [
+        "U01",
+        "U05",
+        "U06"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "宣言的UIでシナリオパッケージを作成する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-069",
+      "title": "UGC検証",
+      "statement": "パッケージの依存、保存則、法則ラベル、悪意ある内容を検証する。",
+      "source_ids": [
+        "CHAT-134",
+        "CHAT-135",
+        "CHAT-136"
+      ],
+      "source_keys": [
+        "U06",
+        "U07",
+        "U08"
+      ],
+      "priority": "Must",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "パッケージの依存、保存則、法則ラベル、悪意ある内容を検証する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-070",
+      "title": "UGC公開",
+      "statement": "作者は説明・価格・ライセンス・科学ラベルを付けて公開する。",
+      "source_ids": [
+        "CHAT-130",
+        "CHAT-131",
+        "CHAT-135"
+      ],
+      "source_keys": [
+        "U02",
+        "U03",
+        "U07"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "作者は説明・価格・ライセンス・科学ラベルを付けて公開する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-071",
+      "title": "UGC購入・分配",
+      "statement": "購入、所有、返金、分配、作者残高を管理する。",
+      "source_ids": [
+        "CHAT-132",
+        "CHAT-136"
+      ],
+      "source_keys": [
+        "U04",
+        "U08"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "購入、所有、返金、分配、作者残高を管理する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-072",
+      "title": "UGC統計",
+      "statement": "パッケージ結果を匿名集計する。",
+      "source_ids": [
+        "CHAT-138"
+      ],
+      "source_keys": [
+        "U10"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "パッケージ結果を匿名集計する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-073",
+      "title": "アカウント",
+      "statement": "アカウント、世界、設定、購入、UGCを同期する。",
+      "source_ids": [
+        "CHAT-149"
+      ],
+      "source_keys": [
+        "T09"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "アカウント、世界、設定、購入、UGCを同期する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-074",
+      "title": "ローカルモード",
+      "statement": "認証なしでもローカル世界を作成・保存できる。",
+      "source_ids": [
+        "CHAT-145",
+        "CHAT-150"
+      ],
+      "source_keys": [
+        "T05",
+        "T10"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "認証なしでもローカル世界を作成・保存できる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-075",
+      "title": "クラウドジョブ",
+      "statement": "重い実験を非同期ジョブとして送信・監視・中止する。",
+      "source_ids": [
+        "CHAT-144"
+      ],
+      "source_keys": [
+        "T04"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "重い実験を非同期ジョブとして送信・監視・中止する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-076",
+      "title": "スマホ通知",
+      "statement": "系統固定、全滅、資源危機、ジョブ完了を通知する。",
+      "source_ids": [
+        "CHAT-143"
+      ],
+      "source_keys": [
+        "T03"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "系統固定、全滅、資源危機、ジョブ完了を通知する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-077",
+      "title": "共通API",
+      "statement": "各クライアントはversioned simulation APIとevent schemaを共有する。",
+      "source_ids": [
+        "CHAT-146",
+        "CHAT-167"
+      ],
+      "source_keys": [
+        "T06",
+        "D06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "各クライアントはversioned simulation APIとevent schemaを共有する。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "FR-078",
+      "title": "MCPパッケージ作成",
+      "statement": "MCPから環境・系統・反応・仮説・テストを作成できる。",
+      "source_ids": [
+        "CHAT-137",
+        "CHAT-155"
+      ],
+      "source_keys": [
+        "U09",
+        "H05"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "MCPから環境・系統・反応・仮説・テストを作成できる。",
+        "不正入力は明示エラーとなりsilent fallbackしない。"
+      ],
+      "verification_method": "機能・統合テスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-001",
+      "title": "元素収支不変",
+      "statement": "閉じた系で各元素の総量は、外部流入出を除き保存される。",
+      "source_ids": [
+        "CHAT-083"
+      ],
+      "source_keys": [
+        "C12"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "閉じた系で各元素の総量は、外部流入出を除き保存される。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-002",
+      "title": "エネルギー収支不変",
+      "statement": "ATP・熱・化学エネルギーの生成は入力エネルギーと反応モデルに拘束される。",
+      "source_ids": [
+        "CHAT-083",
+        "CHAT-084"
+      ],
+      "source_keys": [
+        "C12",
+        "C13"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "ATP・熱・化学エネルギーの生成は入力エネルギーと反応モデルに拘束される。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-003",
+      "title": "無資源増殖禁止",
+      "statement": "生物は必要材料とエネルギーなしに成長・繁殖しない。",
+      "source_ids": [
+        "CHAT-072",
+        "CHAT-082",
+        "CHAT-083"
+      ],
+      "source_keys": [
+        "C01",
+        "C11",
+        "C12"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "生物は必要材料とエネルギーなしに成長・繁殖しない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-004",
+      "title": "輸送前利用禁止",
+      "statement": "膜を通過または輸送されていない物質は細胞内反応で利用されない。",
+      "source_ids": [
+        "CHAT-074",
+        "CHAT-075",
+        "CHAT-076"
+      ],
+      "source_keys": [
+        "C03",
+        "C04",
+        "C05"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "膜を通過または輸送されていない物質は細胞内反応で利用されない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-005",
+      "title": "経路欠損反映",
+      "statement": "必要反応が欠けた経路は出力を生成せず、中間物を適切に蓄積する。",
+      "source_ids": [
+        "CHAT-078",
+        "CHAT-079"
+      ],
+      "source_keys": [
+        "C07",
+        "C08"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "必要反応が欠けた経路は出力を生成せず、中間物を適切に蓄積する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-006",
+      "title": "死骸永続",
+      "statement": "死体は分解・摂取・化学変化されるまで環境に残る。",
+      "source_ids": [
+        "CHAT-047"
+      ],
+      "source_keys": [
+        "S16"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "死体は分解・摂取・化学変化されるまで環境に残る。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-007",
+      "title": "個体死亡非消滅",
+      "statement": "死亡時の内部物質を環境物質へ変換する。",
+      "source_ids": [
+        "CHAT-047",
+        "CHAT-082"
+      ],
+      "source_keys": [
+        "S16",
+        "C11"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "死亡時の内部物質を環境物質へ変換する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-008",
+      "title": "自然選択非直接操作",
+      "statement": "系統頻度は生存・繁殖の結果として変わり、単一適応度の直接加算だけで決めない。",
+      "source_ids": [
+        "CHAT-035",
+        "CHAT-058"
+      ],
+      "source_keys": [
+        "S04",
+        "S27"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "系統頻度は生存・繁殖の結果として変わり、単一適応度の直接加算だけで決めない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-009",
+      "title": "突然変異探索固定分離",
+      "statement": "探索に有利な高変異率は固定を壊す可能性を持つ。",
+      "source_ids": [
+        "CHAT-037",
+        "CHAT-055"
+      ],
+      "source_keys": [
+        "S06",
+        "S24"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "探索に有利な高変異率は固定を壊す可能性を持つ。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-010",
+      "title": "固定前クリア禁止",
+      "statement": "単一個体の発現だけでは系統固定と判定しない。",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-055"
+      ],
+      "source_keys": [
+        "S20",
+        "S24"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "単一個体の発現だけでは系統固定と判定しない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-011",
+      "title": "繁殖集団要件",
+      "statement": "固定系統は自立して子孫を生む繁殖集団を持つ。",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-055"
+      ],
+      "source_keys": [
+        "S20",
+        "S24"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "固定系統は自立して子孫を生む繁殖集団を持つ。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-012",
+      "title": "形質再発現要件",
+      "statement": "固定形質は子孫で所定割合以上再発現する。",
+      "source_ids": [
+        "CHAT-055",
+        "CHAT-057"
+      ],
+      "source_keys": [
+        "S24",
+        "S26"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "固定形質は子孫で所定割合以上再発現する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-013",
+      "title": "複数世代要件",
+      "statement": "固定判定は設定世代数以上の継続を必要とする。",
+      "source_ids": [
+        "CHAT-052",
+        "CHAT-055"
+      ],
+      "source_keys": [
+        "S21",
+        "S24"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "固定判定は設定世代数以上の継続を必要とする。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-014",
+      "title": "収斂非同一遺伝子",
+      "statement": "収斂形質を同一遺伝子配列へ強制しない。",
+      "source_ids": [
+        "CHAT-054",
+        "CHAT-056"
+      ],
+      "source_keys": [
+        "S23",
+        "S25"
+      ],
+      "priority": "Must",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "収斂形質を同一遺伝子配列へ強制しない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-015",
+      "title": "全滅正当性",
+      "statement": "全滅はエラーではなく、原因付き終端状態として保存される。",
+      "source_ids": [
+        "CHAT-045"
+      ],
+      "source_keys": [
+        "S14"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "全滅はエラーではなく、原因付き終端状態として保存される。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-016",
+      "title": "隠れ残存",
+      "statement": "観測不能regionの個体を絶滅から除外し得る。",
+      "source_ids": [
+        "CHAT-050",
+        "CHAT-061"
+      ],
+      "source_keys": [
+        "S19",
+        "S30"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "観測不能regionの個体を絶滅から除外し得る。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-017",
+      "title": "資源再生",
+      "statement": "資源は供給、再生、流入、分解で増減する。",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-089"
+      ],
+      "source_keys": [
+        "S15",
+        "C18"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "資源は供給、再生、流入、分解で増減する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-018",
+      "title": "収容力動的",
+      "statement": "環境収容力は資源、廃棄物、捕食、気候で変化する。",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-048"
+      ],
+      "source_keys": [
+        "S15",
+        "S17"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "環境収容力は資源、廃棄物、捕食、気候で変化する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-019",
+      "title": "急増破綻",
+      "statement": "急増系統は自系統の成功で環境を悪化させ得る。",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-048"
+      ],
+      "source_keys": [
+        "S15",
+        "S17"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "急増系統は自系統の成功で環境を悪化させ得る。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-020",
+      "title": "ニッチ創発",
+      "statement": "役割名を事前固定せず、資源利用と相互作用から生態的役割を判定する。",
+      "source_ids": [
+        "CHAT-041",
+        "CHAT-089"
+      ],
+      "source_keys": [
+        "S10",
+        "C18"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "役割名を事前固定せず、資源利用と相互作用から生態的役割を判定する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-021",
+      "title": "捕食可変性",
+      "statement": "捕食対象は固定IDでなくコスト・価値・遭遇率から選択する。",
+      "source_ids": [
+        "CHAT-040"
+      ],
+      "source_keys": [
+        "S09"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "捕食対象は固定IDでなくコスト・価値・遭遇率から選択する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-022",
+      "title": "社会性集団効果",
+      "statement": "個体の繁殖数が低くても血縁集団の存続へ寄与し得る。",
+      "source_ids": [
+        "CHAT-039"
+      ],
+      "source_keys": [
+        "S08"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "個体の繁殖数が低くても血縁集団の存続へ寄与し得る。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-023",
+      "title": "創始者効果",
+      "statement": "少数投入と初回繁殖の偶然が遺伝頻度へ残る。",
+      "source_ids": [
+        "CHAT-038",
+        "CHAT-033"
+      ],
+      "source_keys": [
+        "S07",
+        "S02"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "少数投入と初回繁殖の偶然が遺伝頻度へ残る。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-024",
+      "title": "初期配置効果",
+      "statement": "配置・接触・資源帯先占が結果へ影響する。",
+      "source_ids": [
+        "CHAT-059",
+        "CHAT-033"
+      ],
+      "source_keys": [
+        "S28",
+        "S02"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "配置・接触・資源帯先占が結果へ影響する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-025",
+      "title": "seed再現",
+      "statement": "同一seed・入力・バージョンで結果が一致する。",
+      "source_ids": [
+        "CHAT-060"
+      ],
+      "source_keys": [
+        "S29"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "同一seed・入力・バージョンで結果が一致する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-026",
+      "title": "seed多様性",
+      "statement": "seed差により合理的範囲で生命史が変化する。",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-059"
+      ],
+      "source_keys": [
+        "S29",
+        "S28"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "seed差により合理的範囲で生命史が変化する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-027",
+      "title": "仮説固定層保護",
+      "statement": "仮説プロファイルは保存則等の固定層を上書きできない。",
+      "source_ids": [
+        "CHAT-068",
+        "CHAT-083"
+      ],
+      "source_keys": [
+        "A07",
+        "C12"
+      ],
+      "priority": "Must",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "仮説プロファイルは保存則等の固定層を上書きできない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-028",
+      "title": "仮説影響可視化",
+      "statement": "仮説が変更した遷移・確率・制約を表示する。",
+      "source_ids": [
+        "CHAT-069",
+        "CHAT-071"
+      ],
+      "source_keys": [
+        "A08",
+        "A10"
+      ],
+      "priority": "Must",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "仮説が変更した遷移・確率・制約を表示する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-029",
+      "title": "自然発生非保証",
+      "statement": "有機物投入は生命発生を保証せず、各段階で停止し得る。",
+      "source_ids": [
+        "CHAT-063",
+        "CHAT-065"
+      ],
+      "source_keys": [
+        "A02",
+        "A04"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "有機物投入は生命発生を保証せず、各段階で停止し得る。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-030",
+      "title": "天体不確実性",
+      "statement": "観測値、推定値、仮説値を別フィールドで保持する。",
+      "source_ids": [
+        "CHAT-064"
+      ],
+      "source_keys": [
+        "A03"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "観測値、推定値、仮説値を別フィールドで保持する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-031",
+      "title": "酸素転換",
+      "statement": "酸素生成と吸収sinkの収支で大気・環境酸素が変化する。",
+      "source_ids": [
+        "CHAT-049",
+        "CHAT-048"
+      ],
+      "source_keys": [
+        "S18",
+        "S17"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "酸素生成と吸収sinkの収支で大気・環境酸素が変化する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-032",
+      "title": "凍結避難所",
+      "statement": "局所液体・塩・熱源・光等から避難所が自然発生する。",
+      "source_ids": [
+        "CHAT-050"
+      ],
+      "source_keys": [
+        "S19"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "局所液体・塩・熱源・光等から避難所が自然発生する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-033",
+      "title": "段階上位化",
+      "statement": "上位ステージは下位で固定された複数機能系統を材料にする。",
+      "source_ids": [
+        "CHAT-053"
+      ],
+      "source_keys": [
+        "S22"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "上位ステージは下位で固定された複数機能系統を材料にする。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-034",
+      "title": "スケール保存",
+      "statement": "集約前後で総物質・バイオマス・主要系統頻度を保存する。",
+      "source_ids": [
+        "CHAT-094",
+        "CHAT-083"
+      ],
+      "source_keys": [
+        "L05",
+        "C12"
+      ],
+      "priority": "Must",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "集約前後で総物質・バイオマス・主要系統頻度を保存する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-035",
+      "title": "cohort等価性",
+      "statement": "cohort計算は許容誤差内で個別計算と一致する。",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097"
+      ],
+      "source_keys": [
+        "L06",
+        "L08"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "cohort計算は許容誤差内で個別計算と一致する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-036",
+      "title": "cohort昇格",
+      "statement": "突然変異、捕食、交配、病気、特殊接触個体をcohortから分離する。",
+      "source_ids": [
+        "CHAT-097",
+        "CHAT-059"
+      ],
+      "source_keys": [
+        "L08",
+        "S28"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "突然変異、捕食、交配、病気、特殊接触個体をcohortから分離する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-037",
+      "title": "region等価性",
+      "statement": "統合regionは許容誤差内で細分gridと一致する。",
+      "source_ids": [
+        "CHAT-098"
+      ],
+      "source_keys": [
+        "L09"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "統合regionは許容誤差内で細分gridと一致する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-038",
+      "title": "キャッシュ妥当性",
+      "statement": "memoization keyはモデル版、入力bucket、seed依存性を含む。",
+      "source_ids": [
+        "CHAT-096",
+        "CHAT-167"
+      ],
+      "source_keys": [
+        "L07",
+        "D06"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "memoization keyはモデル版、入力bucket、seed依存性を含む。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-039",
+      "title": "多段時間整合",
+      "statement": "低頻度更新対象も境界流入出とイベントを失わない。",
+      "source_ids": [
+        "CHAT-099",
+        "CHAT-093"
+      ],
+      "source_keys": [
+        "L10",
+        "L04"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "低頻度更新対象も境界流入出とイベントを失わない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-040",
+      "title": "レンダー分離",
+      "statement": "表示の省略はシミュレーション状態を変更しない。",
+      "source_ids": [
+        "CHAT-100"
+      ],
+      "source_keys": [
+        "L11"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "表示の省略はシミュレーション状態を変更しない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-041",
+      "title": "イベント完全性",
+      "statement": "重要イベントは関連する生状態ID・前後値・モデル版へ追跡できる。",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-110"
+      ],
+      "source_keys": [
+        "E02",
+        "E06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "重要イベントは関連する生状態ID・前後値・モデル版へ追跡できる。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-042",
+      "title": "説明根拠",
+      "statement": "説明文の各主要主張はイベントまたは集計値へリンクする。",
+      "source_ids": [
+        "CHAT-108",
+        "CHAT-109",
+        "CHAT-115"
+      ],
+      "source_keys": [
+        "E04",
+        "E05",
+        "E11"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "説明文の各主要主張はイベントまたは集計値へリンクする。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-043",
+      "title": "予測不確実性",
+      "statement": "将来予測は確率または範囲として提示し断定しない。",
+      "source_ids": [
+        "CHAT-109",
+        "CHAT-108"
+      ],
+      "source_keys": [
+        "E05",
+        "E04"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "将来予測は確率または範囲として提示し断定しない。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-044",
+      "title": "動画再レンダリング",
+      "statement": "同一ログから異なる視点・速度で同じ生命史を再出力できる。",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-117"
+      ],
+      "source_keys": [
+        "E07",
+        "V01"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "同一ログから異なる視点・速度で同じ生命史を再出力できる。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "SIM-045",
+      "title": "UGC法則境界",
+      "statement": "UGCは固定科学不変条件を変更できず、仮説・環境・初期条件の範囲で拡張する。",
+      "source_ids": [
+        "CHAT-134",
+        "CHAT-135",
+        "CHAT-068"
+      ],
+      "source_keys": [
+        "U06",
+        "U07",
+        "A07"
+      ],
+      "priority": "Must",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "UGCは固定科学不変条件を変更できず、仮説・環境・初期条件の範囲で拡張する。",
+        "反例fixtureで違反が検出される。"
+      ],
+      "verification_method": "不変条件・property・mutationテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-001",
+      "title": "決定論",
+      "statement": "同一入力・seed・モデル版から同一イベント列を再現する。",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-111"
+      ],
+      "source_keys": [
+        "S29",
+        "E07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "同一入力・seed・モデル版から同一イベント列を再現する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-002",
+      "title": "性能予算",
+      "statement": "基準シナリオのCPU時間、RAM、ストレージ、イベント数に上限を設ける。",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097",
+        "CHAT-099",
+        "CHAT-168"
+      ],
+      "source_keys": [
+        "L06",
+        "L08",
+        "L10",
+        "D07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "基準シナリオのCPU時間、RAM、ストレージ、イベント数に上限を設ける。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-003",
+      "title": "MVP端末適合",
+      "statement": "2D培養皿MVPは一般的な16GB級PCブラウザで動作することを目標とする。",
+      "source_ids": [
+        "CHAT-012",
+        "CHAT-104"
+      ],
+      "source_keys": [
+        "P12",
+        "L15"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "2D培養皿MVPは一般的な16GB級PCブラウザで動作することを目標とする。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-004",
+      "title": "開発基準機",
+      "statement": "32GB RAM／8GB VRAM級で開発・プロファイル・将来表示検証が可能である。",
+      "source_ids": [
+        "CHAT-012"
+      ],
+      "source_keys": [
+        "P12"
+      ],
+      "priority": "Should",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "32GB RAM／8GB VRAM級で開発・プロファイル・将来表示検証が可能である。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-005",
+      "title": "スケーラビリティ",
+      "statement": "個体数増加時はcohort・region・多段更新で劣化を制御する。",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097",
+        "CHAT-098",
+        "CHAT-099"
+      ],
+      "source_keys": [
+        "L06",
+        "L08",
+        "L09",
+        "L10"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "個体数増加時はcohort・region・多段更新で劣化を制御する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-006",
+      "title": "CPU/GPU責務分離",
+      "statement": "拡散field等の一括演算はGPUへ移行可能とし、可変グラフ・イベント・系統処理はCPU正本を維持する。",
+      "source_ids": [
+        "CHAT-102"
+      ],
+      "source_keys": [
+        "L13"
+      ],
+      "priority": "Should",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "拡散field等の一括演算はGPUへ移行可能とし、可変グラフ・イベント・系統処理はCPU正本を維持する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-007",
+      "title": "計算費制御",
+      "statement": "クラウドジョブは予算見積、上限、中止、再開、請求見込みを持つ。",
+      "source_ids": [
+        "CHAT-144",
+        "CHAT-015"
+      ],
+      "source_keys": [
+        "T04",
+        "P15"
+      ],
+      "priority": "Must",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "クラウドジョブは予算見積、上限、中止、再開、請求見込みを持つ。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-008",
+      "title": "可観測性",
+      "statement": "ジョブ、solver、イベント、キャッシュ、cohort、regionの計測を収集する。",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-168"
+      ],
+      "source_keys": [
+        "E02",
+        "D07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "ジョブ、solver、イベント、キャッシュ、cohort、regionの計測を収集する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-009",
+      "title": "説明可能性",
+      "statement": "ユーザーに見える主要結果は因果・相関・未知の区別を持つ。",
+      "source_ids": [
+        "CHAT-108",
+        "CHAT-109"
+      ],
+      "source_keys": [
+        "E04",
+        "E05"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "ユーザーに見える主要結果は因果・相関・未知の区別を持つ。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-010",
+      "title": "科学透明性",
+      "statement": "モデル版、仮説、簡略化、出典、確度を閲覧できる。",
+      "source_ids": [
+        "CHAT-068",
+        "CHAT-135",
+        "CHAT-164"
+      ],
+      "source_keys": [
+        "A07",
+        "U07",
+        "D03"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "モデル版、仮説、簡略化、出典、確度を閲覧できる。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-011",
+      "title": "安全な失敗",
+      "statement": "solver不成立、数値不安定、データ不足は偽の生命結果に変換せず停止または判定不能とする。",
+      "source_ids": [
+        "CHAT-161",
+        "CHAT-084"
+      ],
+      "source_keys": [
+        "H11",
+        "C13"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "solver不成立、数値不安定、データ不足は偽の生命結果に変換せず停止または判定不能とする。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-012",
+      "title": "データ互換",
+      "statement": "セーブ、ログ、UGC、動画メタデータはversioned schemaとmigrationを持つ。",
+      "source_ids": [
+        "CHAT-167",
+        "CHAT-146"
+      ],
+      "source_keys": [
+        "D06",
+        "T06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "セーブ、ログ、UGC、動画メタデータはversioned schemaとmigrationを持つ。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-013",
+      "title": "セキュリティ",
+      "statement": "UGC、MCP、API、ファイル取込は最小権限と検証を行う。",
+      "source_ids": [
+        "CHAT-134",
+        "CHAT-155"
+      ],
+      "source_keys": [
+        "U06",
+        "H05"
+      ],
+      "priority": "Must",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "UGC、MCP、API、ファイル取込は最小権限と検証を行う。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-014",
+      "title": "任意コード禁止",
+      "statement": "一般UGCは実行可能コード、ネイティブライブラリ、外部processを含めない。",
+      "source_ids": [
+        "CHAT-134"
+      ],
+      "source_keys": [
+        "U06"
+      ],
+      "priority": "Must",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "一般UGCは実行可能コード、ネイティブライブラリ、外部processを含めない。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-015",
+      "title": "プライバシー",
+      "statement": "音声、アカウント、購入、動画、ログの収集目的と保持期間を明示する。",
+      "source_ids": [
+        "CHAT-163",
+        "CHAT-118"
+      ],
+      "source_keys": [
+        "D02",
+        "V02"
+      ],
+      "priority": "Must",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "音声、アカウント、購入、動画、ログの収集目的と保持期間を明示する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-016",
+      "title": "音声安全",
+      "statement": "実在人物模倣プリセットや無断音声複製を初期機能に含めない。",
+      "source_ids": [
+        "CHAT-119",
+        "CHAT-120",
+        "CHAT-163"
+      ],
+      "source_keys": [
+        "V03",
+        "V04",
+        "D02"
+      ],
+      "priority": "Must",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "実在人物模倣プリセットや無断音声複製を初期機能に含めない。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-017",
+      "title": "法務適合",
+      "statement": "UGC、決済、ストア、YouTube、税、返金、未成年の法務確認を行う。",
+      "source_ids": [
+        "CHAT-136",
+        "CHAT-163"
+      ],
+      "source_keys": [
+        "U08",
+        "D02"
+      ],
+      "priority": "Must",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "UGC、決済、ストア、YouTube、税、返金、未成年の法務確認を行う。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-018",
+      "title": "ライセンス適合",
+      "statement": "科学モデル、ライブラリ、素材のライセンスを追跡する。",
+      "source_ids": [
+        "CHAT-165"
+      ],
+      "source_keys": [
+        "D04"
+      ],
+      "priority": "Must",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "科学モデル、ライブラリ、素材のライセンスを追跡する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-019",
+      "title": "アクセシビリティ",
+      "statement": "色だけに依存せず、キーボード操作、字幕、読み上げ可能なUIを提供する。",
+      "source_ids": [
+        "CHAT-030",
+        "CHAT-122"
+      ],
+      "source_keys": [
+        "M10",
+        "V06"
+      ],
+      "priority": "Should",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "色だけに依存せず、キーボード操作、字幕、読み上げ可能なUIを提供する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-020",
+      "title": "国際化",
+      "statement": "UI・説明・UGCメタデータを将来多言語化できる。",
+      "source_ids": [
+        "CHAT-018",
+        "CHAT-129"
+      ],
+      "source_keys": [
+        "P18",
+        "U01"
+      ],
+      "priority": "Could",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "UI・説明・UGCメタデータを将来多言語化できる。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-021",
+      "title": "オフライン耐性",
+      "statement": "ローカル実験はネットワーク障害で失われない。",
+      "source_ids": [
+        "CHAT-150"
+      ],
+      "source_keys": [
+        "T10"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "ローカル実験はネットワーク障害で失われない。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-022",
+      "title": "同期競合",
+      "statement": "ローカルとクラウドの世界競合をコピー・選択・マージ不能表示で安全に扱う。",
+      "source_ids": [
+        "CHAT-149",
+        "CHAT-150"
+      ],
+      "source_keys": [
+        "T09",
+        "T10"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "ローカルとクラウドの世界競合をコピー・選択・マージ不能表示で安全に扱う。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-023",
+      "title": "バックアップ",
+      "statement": "世界・UGC・動画タイムラインをエクスポート・復元できる。",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-133"
+      ],
+      "source_keys": [
+        "E07",
+        "U05"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "世界・UGC・動画タイムラインをエクスポート・復元できる。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-024",
+      "title": "API安定性",
+      "statement": "公開API/MCPはsemantic versionと互換性規則を持つ。",
+      "source_ids": [
+        "CHAT-155",
+        "CHAT-146",
+        "CHAT-167"
+      ],
+      "source_keys": [
+        "H05",
+        "T06",
+        "D06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "公開API/MCPはsemantic versionと互換性規則を持つ。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-025",
+      "title": "テスト容易性",
+      "statement": "シミュレーションコアはUI・ネットワーク・LLMなしでheadless実行できる。",
+      "source_ids": [
+        "CHAT-006",
+        "CHAT-146"
+      ],
+      "source_keys": [
+        "P06",
+        "T06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "シミュレーションコアはUI・ネットワーク・LLMなしでheadless実行できる。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-026",
+      "title": "人間可読監査",
+      "statement": "機械ログと対応する人間向けサマリーを生成する。",
+      "source_ids": [
+        "CHAT-107",
+        "CHAT-153"
+      ],
+      "source_keys": [
+        "E03",
+        "H03"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "機械ログと対応する人間向けサマリーを生成する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-027",
+      "title": "誤情報防止",
+      "statement": "研究モード前の出力を現実の科学的結論・医療判断として表示しない。",
+      "source_ids": [
+        "CHAT-164",
+        "CHAT-166"
+      ],
+      "source_keys": [
+        "D03",
+        "D05"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "研究モード前の出力を現実の科学的結論・医療判断として表示しない。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-028",
+      "title": "コンテンツ審査",
+      "statement": "UGCの通報、非公開化、削除、異議、作者通知を提供する。",
+      "source_ids": [
+        "CHAT-136"
+      ],
+      "source_keys": [
+        "U08"
+      ],
+      "priority": "Must",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "UGCの通報、非公開化、削除、異議、作者通知を提供する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-029",
+      "title": "リプレイ完全性",
+      "statement": "イベントログの欠落・改変を検出し、動画や説明の根拠を保護する。",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-116"
+      ],
+      "source_keys": [
+        "E07",
+        "E12"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "イベントログの欠落・改変を検出し、動画や説明の根拠を保護する。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-030",
+      "title": "モデル差替性",
+      "statement": "独自簡略solverを将来SBML等の外部科学solverへ差替え可能にする。",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025",
+        "CHAT-165"
+      ],
+      "source_keys": [
+        "P07",
+        "M05",
+        "D04"
+      ],
+      "priority": "Should",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "独自簡略solverを将来SBML等の外部科学solverへ差替え可能にする。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "NFR-031",
+      "title": "クライアント分離",
+      "statement": "Web/モバイル/UnityのUI都合がコア法則を変更しない。",
+      "source_ids": [
+        "CHAT-146",
+        "CHAT-147"
+      ],
+      "source_keys": [
+        "T06",
+        "T07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "Web/モバイル/UnityのUI都合がコア法則を変更しない。"
+      ],
+      "verification_method": "非機能・負荷・セキュリティテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-001",
+      "title": "製品マニフェスト",
+      "statement": "HELIXが製品ID、文書、要求集合、リリース、ワークストリームを読み取れるJSONを提供する。",
+      "source_ids": [
+        "CHAT-151",
+        "CHAT-153"
+      ],
+      "source_keys": [
+        "H01",
+        "H03"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "HELIXが製品ID、文書、要求集合、リリース、ワークストリームを読み取れるJSONを提供する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-002",
+      "title": "要求カタログ",
+      "statement": "全要求をJSONカタログとして提供する。",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-153"
+      ],
+      "source_keys": [
+        "H02",
+        "H03"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "全要求をJSONカタログとして提供する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-003",
+      "title": "ソース台帳",
+      "statement": "会話由来要求を一意IDで台帳化し、要求へ追跡する。",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-162"
+      ],
+      "source_keys": [
+        "H02",
+        "D01"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "会話由来要求を一意IDで台帳化し、要求へ追跡する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-004",
+      "title": "追跡検証",
+      "statement": "未マップソース、重複要求ID、受入条件欠落をCIで失敗させる。",
+      "source_ids": [
+        "CHAT-162",
+        "CHAT-161"
+      ],
+      "source_keys": [
+        "D01",
+        "H11"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "未マップソース、重複要求ID、受入条件欠落をCIで失敗させる。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-005",
+      "title": "PlanAsset分割",
+      "statement": "リリース・ワークストリーム・依存をPlanAssetへ分割する。",
+      "source_ids": [
+        "CHAT-157"
+      ],
+      "source_keys": [
+        "H07"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "リリース・ワークストリーム・依存をPlanAssetへ分割する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-006",
+      "title": "コア先行ゲート",
+      "statement": "UI・収益機能はコア不変条件Greenまで正式実装を進めない。",
+      "source_ids": [
+        "CHAT-158",
+        "CHAT-004"
+      ],
+      "source_keys": [
+        "H08",
+        "P04"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "UI・収益機能はコア不変条件Greenまで正式実装を進めない。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-007",
+      "title": "AI役割分離",
+      "statement": "企画変換、コア実装、Web、説明、QA、レビューを別レーンにする。",
+      "source_ids": [
+        "CHAT-154"
+      ],
+      "source_keys": [
+        "H04"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "企画変換、コア実装、Web、説明、QA、レビューを別レーンにする。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-008",
+      "title": "書込権限",
+      "statement": "AI/MCPの書込対象をwork package単位で制限する。",
+      "source_ids": [
+        "CHAT-155"
+      ],
+      "source_keys": [
+        "H05"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "AI/MCPの書込対象をwork package単位で制限する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-009",
+      "title": "dry-run",
+      "statement": "破壊的MCP操作はdry-runと差分を返す。",
+      "source_ids": [
+        "CHAT-155"
+      ],
+      "source_keys": [
+        "H05"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "破壊的MCP操作はdry-runと差分を返す。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-010",
+      "title": "監査ログ",
+      "statement": "MCP操作はactor、tool、input digest、output digest、changed assetsを記録する。",
+      "source_ids": [
+        "CHAT-155",
+        "CHAT-106"
+      ],
+      "source_keys": [
+        "H05",
+        "E02"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "MCP操作はactor、tool、input digest、output digest、changed assetsを記録する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-011",
+      "title": "独立レビュー",
+      "statement": "コア法則・経済・UGC境界は実装者と別レーンがレビューする。",
+      "source_ids": [
+        "CHAT-156"
+      ],
+      "source_keys": [
+        "H06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "コア法則・経済・UGC境界は実装者と別レーンがレビューする。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-012",
+      "title": "AI生成受入",
+      "statement": "AI生成物はテスト、型、schema、lint、シナリオ比較を通過する。",
+      "source_ids": [
+        "CHAT-159"
+      ],
+      "source_keys": [
+        "H09"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "AI生成物はテスト、型、schema、lint、シナリオ比較を通過する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-013",
+      "title": "プレイ感評価",
+      "statement": "R1以降に人間プレイ感ゲートを置く。",
+      "source_ids": [
+        "CHAT-160"
+      ],
+      "source_keys": [
+        "H10"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "R1以降に人間プレイ感ゲートを置く。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-014",
+      "title": "基準シナリオ",
+      "statement": "重要挙動をreference scenarioとしてversion管理する。",
+      "source_ids": [
+        "CHAT-161",
+        "CHAT-168"
+      ],
+      "source_keys": [
+        "H11",
+        "D07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "重要挙動をreference scenarioとしてversion管理する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-015",
+      "title": "モデル変更影響",
+      "statement": "法則・確率・数値変更時に影響する要求・シナリオ・説明を列挙する。",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-157"
+      ],
+      "source_keys": [
+        "H02",
+        "H07"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "法則・確率・数値変更時に影響する要求・シナリオ・説明を列挙する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-016",
+      "title": "MCPシミュレーション",
+      "statement": "MCPから世界作成、系統追加、反応追加、検証、実行、比較、説明を行う。",
+      "source_ids": [
+        "CHAT-137",
+        "CHAT-155"
+      ],
+      "source_keys": [
+        "U09",
+        "H05"
+      ],
+      "priority": "Should",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "MCPから世界作成、系統追加、反応追加、検証、実行、比較、説明を行う。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-017",
+      "title": "MCPパッケージ",
+      "statement": "MCPからもしもパッケージを生成・検証・プレビューする。",
+      "source_ids": [
+        "CHAT-137",
+        "CHAT-155"
+      ],
+      "source_keys": [
+        "U09",
+        "H05"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "MCPからもしもパッケージを生成・検証・プレビューする。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-018",
+      "title": "証跡固定",
+      "statement": "テスト結果とモデル版を同一commit/releaseへ結合する。",
+      "source_ids": [
+        "CHAT-161",
+        "CHAT-167"
+      ],
+      "source_keys": [
+        "H11",
+        "D06"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "テスト結果とモデル版を同一commit/releaseへ結合する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-019",
+      "title": "変更管理",
+      "statement": "要求変更はソース、理由、影響、リリース、承認を記録する。",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-157"
+      ],
+      "source_keys": [
+        "H02",
+        "H07"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "要求変更はソース、理由、影響、リリース、承認を記録する。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "HLX-020",
+      "title": "段階出口",
+      "statement": "各リリースは必須要求、品質、法務、収益、監修の出口条件を持つ。",
+      "source_ids": [
+        "CHAT-157",
+        "CHAT-005"
+      ],
+      "source_keys": [
+        "H07",
+        "P05"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "各リリースは必須要求、品質、法務、収益、監修の出口条件を持つ。"
+      ],
+      "verification_method": "HELIX schema・gateテスト",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-001",
+      "title": "R0基盤接続",
+      "statement": "企画・要求・要件・コア詳細・HELIXマニフェストをbaseline化する。",
+      "source_ids": [
+        "CHAT-001",
+        "CHAT-151",
+        "CHAT-153"
+      ],
+      "source_keys": [
+        "P01",
+        "H01",
+        "H03"
+      ],
+      "priority": "Must",
+      "target_release": "R0",
+      "acceptance_criteria": [
+        "企画・要求・要件・コア詳細・HELIXマニフェストをbaseline化する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-002",
+      "title": "R1ヘッドレス縦切り",
+      "statement": "4系統、資源、捕食、死骸、変異、固定、全滅、ログをheadlessで実証する。",
+      "source_ids": [
+        "CHAT-104",
+        "CHAT-044",
+        "CHAT-045",
+        "CHAT-106"
+      ],
+      "source_keys": [
+        "L15",
+        "S13",
+        "S14",
+        "E02"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "4系統、資源、捕食、死骸、変異、固定、全滅、ログをheadlessで実証する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-003",
+      "title": "R2 Web育成版",
+      "statement": "Webで系統・環境設計、2D観察、説明、リプレイを提供する。",
+      "source_ids": [
+        "CHAT-141",
+        "CHAT-022",
+        "CHAT-105"
+      ],
+      "source_keys": [
+        "T01",
+        "M02",
+        "E01"
+      ],
+      "priority": "Must",
+      "target_release": "R2",
+      "acceptance_criteria": [
+        "Webで系統・環境設計、2D観察、説明、リプレイを提供する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-004",
+      "title": "R3 学習実験版",
+      "statement": "学習・実験、seed/仮説比較、PWA、スマホ伴走、クラウドジョブを提供する。",
+      "source_ids": [
+        "CHAT-023",
+        "CHAT-024",
+        "CHAT-142",
+        "CHAT-143",
+        "CHAT-144"
+      ],
+      "source_keys": [
+        "M03",
+        "M04",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "priority": "Should",
+      "target_release": "R3",
+      "acceptance_criteria": [
+        "学習・実験、seed/仮説比較、PWA、スマホ伴走、クラウドジョブを提供する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-005",
+      "title": "R4 Creator版",
+      "statement": "動画、ナレーション、アバター、ボイスチェンジャー、もしも作成、MCP制作を提供する。",
+      "source_ids": [
+        "CHAT-117",
+        "CHAT-118",
+        "CHAT-120",
+        "CHAT-121",
+        "CHAT-129",
+        "CHAT-137"
+      ],
+      "source_keys": [
+        "V01",
+        "V02",
+        "V04",
+        "V05",
+        "U01",
+        "U09"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "動画、ナレーション、アバター、ボイスチェンジャー、もしも作成、MCP制作を提供する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-006",
+      "title": "R5 Marketplace版",
+      "statement": "UGC販売、自由価格、分配、審査、YouTube/ライブ上位連携を提供する。",
+      "source_ids": [
+        "CHAT-131",
+        "CHAT-132",
+        "CHAT-136",
+        "CHAT-123",
+        "CHAT-126"
+      ],
+      "source_keys": [
+        "U03",
+        "U04",
+        "U08",
+        "V07",
+        "V10"
+      ],
+      "priority": "Could",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "UGC販売、自由価格、分配、審査、YouTube/ライブ上位連携を提供する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-007",
+      "title": "R6 スケール拡張",
+      "statement": "多細胞、動物、生態系、天体、自然発生、避難所、ティッピングを追加する。",
+      "source_ids": [
+        "CHAT-026",
+        "CHAT-062",
+        "CHAT-064",
+        "CHAT-050",
+        "CHAT-053"
+      ],
+      "source_keys": [
+        "M06",
+        "A01",
+        "A03",
+        "S19",
+        "S22"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "多細胞、動物、生態系、天体、自然発生、避難所、ティッピングを追加する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-008",
+      "title": "R7 研究版",
+      "statement": "専門家監修、外部科学モデル、詳細solver、研究出力を提供する。",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025",
+        "CHAT-165"
+      ],
+      "source_keys": [
+        "P07",
+        "M05",
+        "D04"
+      ],
+      "priority": "Could",
+      "target_release": "R7",
+      "acceptance_criteria": [
+        "専門家監修、外部科学モデル、詳細solver、研究出力を提供する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-009",
+      "title": "Unity後期判断",
+      "statement": "Unity導入はWeb版の継続率、動画需要、資金、表現ROIで判断する。",
+      "source_ids": [
+        "CHAT-003",
+        "CHAT-147"
+      ],
+      "source_keys": [
+        "P03",
+        "T07"
+      ],
+      "priority": "Could",
+      "target_release": "R6",
+      "acceptance_criteria": [
+        "Unity導入はWeb版の継続率、動画需要、資金、表現ROIで判断する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-010",
+      "title": "ローカルクラウド併存",
+      "statement": "各リリースでローカル可能範囲とクラウド専用範囲を明記する。",
+      "source_ids": [
+        "CHAT-014",
+        "CHAT-144",
+        "CHAT-145"
+      ],
+      "source_keys": [
+        "P14",
+        "T04",
+        "T05"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "各リリースでローカル可能範囲とクラウド専用範囲を明記する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-011",
+      "title": "研究監修ゲート",
+      "statement": "研究版は分野別監修者とレビュー証跡なしに出荷しない。",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025"
+      ],
+      "source_keys": [
+        "P07",
+        "M05"
+      ],
+      "priority": "Must",
+      "target_release": "R7",
+      "acceptance_criteria": [
+        "研究版は分野別監修者とレビュー証跡なしに出荷しない。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-012",
+      "title": "マーケット法務ゲート",
+      "statement": "有料UGC開始前に利用規約、分配、税、返金、通報、ストア条件を承認する。",
+      "source_ids": [
+        "CHAT-136",
+        "CHAT-163"
+      ],
+      "source_keys": [
+        "U08",
+        "D02"
+      ],
+      "priority": "Must",
+      "target_release": "R5",
+      "acceptance_criteria": [
+        "有料UGC開始前に利用規約、分配、税、返金、通報、ストア条件を承認する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-013",
+      "title": "Creator収益検証",
+      "statement": "R4で動画作成・共有の利用率を測り、R5市場投資を判断する。",
+      "source_ids": [
+        "CHAT-018",
+        "CHAT-128"
+      ],
+      "source_keys": [
+        "P18",
+        "V12"
+      ],
+      "priority": "Should",
+      "target_release": "R4",
+      "acceptance_criteria": [
+        "R4で動画作成・共有の利用率を測り、R5市場投資を判断する。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    },
+    {
+      "requirement_id": "REL-014",
+      "title": "面白さ継続ゲート",
+      "statement": "各主要リリースで「条件を変えて再実験したい」割合を測る。",
+      "source_ids": [
+        "CHAT-160",
+        "CHAT-009"
+      ],
+      "source_keys": [
+        "H10",
+        "P09"
+      ],
+      "priority": "Must",
+      "target_release": "R1",
+      "acceptance_criteria": [
+        "各主要リリースで「条件を変えて再実験したい」割合を測る。"
+      ],
+      "verification_method": "リリースゲートレビュー",
+      "rationale": "",
+      "tags": [],
+      "status": "baseline"
+    }
+  ]
+}

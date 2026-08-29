@@ -1,0 +1,453 @@
+{
+  "schema_version": "1.0",
+  "baseline_version": "0.1.0",
+  "tools": [
+    {
+      "tool_id": "natural_bio.requirements.get_baseline",
+      "mode": "read",
+      "description": "要求baselineと指定IDの詳細を返す。",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "baseline_version",
+          "requirements"
+        ],
+        "properties": {
+          "baseline_version": {
+            "type": "string"
+          },
+          "requirements": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "none",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.simulation.create_world",
+      "mode": "write",
+      "description": "seed・法則・環境を指定して世界定義をdry-runまたは作成する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "seed",
+          "law_profile",
+          "environment",
+          "dry_run"
+        ],
+        "properties": {
+          "seed": {
+            "type": "integer"
+          },
+          "law_profile": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "valid",
+          "diff",
+          "world_id"
+        ],
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "diff": {
+            "type": "object"
+          },
+          "world_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "required_when_dry_run_false",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.simulation.add_lineage",
+      "mode": "write",
+      "description": "系統、個体数、配置、ゲノムを追加する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "world_id",
+          "lineage",
+          "dry_run"
+        ],
+        "properties": {
+          "world_id": {
+            "type": "string"
+          },
+          "lineage": {
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "valid",
+          "violations",
+          "diff"
+        ],
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "violations": {
+            "type": "array"
+          },
+          "diff": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "required_when_dry_run_false",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.simulation.add_reaction",
+      "mode": "write",
+      "description": "反応式を追加し元素・エネルギー収支を検証する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "reaction",
+          "dry_run"
+        ],
+        "properties": {
+          "reaction": {
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "balanced",
+          "violations",
+          "diff"
+        ],
+        "properties": {
+          "balanced": {
+            "type": "boolean"
+          },
+          "violations": {
+            "type": "array"
+          },
+          "diff": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "required_when_dry_run_false",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.simulation.validate_model",
+      "mode": "read",
+      "description": "保存則、経路、固定判定、計算予算、schemaを検証する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "model_ref"
+        ],
+        "properties": {
+          "model_ref": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "ok",
+          "findings"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "findings": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "none",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.simulation.run",
+      "mode": "execute",
+      "description": "headlessシミュレーションを予算内で実行する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "world_ref",
+          "generations",
+          "compute_budget"
+        ],
+        "properties": {
+          "world_ref": {
+            "type": "string"
+          },
+          "generations": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "compute_budget": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "run_id",
+          "status",
+          "cost_estimate"
+        ],
+        "properties": {
+          "run_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "cost_estimate": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "required_for_cloud_or_high_budget",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.simulation.compare_runs",
+      "mode": "read",
+      "description": "seed・仮説・条件差の生命史を比較する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "run_ids"
+        ],
+        "properties": {
+          "run_ids": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "differences",
+          "turning_points"
+        ],
+        "properties": {
+          "differences": {
+            "type": "array"
+          },
+          "turning_points": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "none",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.explainer.explain",
+      "mode": "read",
+      "description": "指定時点・系統・イベントを事実/推論/未知に分けて説明する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "run_id",
+          "question",
+          "mode"
+        ],
+        "properties": {
+          "run_id": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "growth",
+              "learning",
+              "experiment",
+              "research"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "facts",
+          "inferences",
+          "unknowns",
+          "evidence_refs"
+        ],
+        "properties": {
+          "facts": {
+            "type": "array"
+          },
+          "inferences": {
+            "type": "array"
+          },
+          "unknowns": {
+            "type": "array"
+          },
+          "evidence_refs": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "none",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.creator.create_package",
+      "mode": "write",
+      "description": "もしもパッケージを作成または更新する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "package",
+          "dry_run"
+        ],
+        "properties": {
+          "package": {
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "valid",
+          "diff",
+          "review_requirements"
+        ],
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "diff": {
+            "type": "object"
+          },
+          "review_requirements": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "required_when_dry_run_false",
+      "audit": true
+    },
+    {
+      "tool_id": "natural_bio.release.evaluate_gate",
+      "mode": "read",
+      "description": "リリース出口条件と証跡を評価する。",
+      "input_schema": {
+        "type": "object",
+        "required": [
+          "release_id",
+          "artifact_ref"
+        ],
+        "properties": {
+          "release_id": {
+            "type": "string"
+          },
+          "artifact_ref": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "decision",
+          "missing_evidence",
+          "failed_requirements"
+        ],
+        "properties": {
+          "decision": {
+            "enum": [
+              "allow",
+              "block",
+              "inconclusive"
+            ]
+          },
+          "missing_evidence": {
+            "type": "array"
+          },
+          "failed_requirements": {
+            "type": "array"
+          }
+        },
+        "additionalProperties": false
+      },
+      "approval": "none",
+      "audit": true
+    }
+  ]
+}

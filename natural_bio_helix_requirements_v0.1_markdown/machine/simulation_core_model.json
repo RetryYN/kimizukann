@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "model_name": "NaturalBioSimulationCore",
+  "fixed_law_layer": [
+    "element_mass_balance",
+    "energy_accounting",
+    "transport_before_use",
+    "reaction_stoichiometry",
+    "no_growth_without_resources",
+    "explicit_uncertainty"
+  ],
+  "hypothesis_layer_examples": [
+    "origin_of_life_path",
+    "mutation_bias",
+    "punctuated_equilibrium_strength",
+    "neutral_drift_strength",
+    "epigenetic_inheritance_duration",
+    "developmental_constraint_strength",
+    "symbiogenesis_frequency"
+  ],
+  "scales": [
+    {
+      "scale_id": "molecular_cellular",
+      "primary_state": [
+        "substances",
+        "membrane",
+        "transporters",
+        "reactions",
+        "ATP",
+        "gene_expression",
+        "division"
+      ]
+    },
+    {
+      "scale_id": "multicellular_tissue",
+      "primary_state": [
+        "cell_types",
+        "adhesion",
+        "signals",
+        "transport_capacity",
+        "growth",
+        "repair",
+        "differentiation"
+      ]
+    },
+    {
+      "scale_id": "individual_animal",
+      "primary_state": [
+        "organs",
+        "energy_budget",
+        "movement",
+        "senses",
+        "behavior",
+        "reproduction",
+        "health"
+      ]
+    },
+    {
+      "scale_id": "ecosystem",
+      "primary_state": [
+        "lineage_cohorts",
+        "food_web",
+        "resource_cycles",
+        "habitat",
+        "disease",
+        "seasonality"
+      ]
+    },
+    {
+      "scale_id": "planetary_provisional",
+      "primary_state": [
+        "atmosphere",
+        "ocean",
+        "crust",
+        "radiation",
+        "climate",
+        "impact_flux",
+        "uncertainty_model"
+      ]
+    }
+  ],
+  "core_entities": [
+    "World",
+    "LawProfile",
+    "EnvironmentRegion",
+    "Substance",
+    "Reaction",
+    "Genome",
+    "GeneBlock",
+    "Phenotype",
+    "Individual",
+    "Cohort",
+    "Lineage",
+    "Interaction",
+    "Event",
+    "Summary",
+    "SimulationRun",
+    "EvidenceRef"
+  ],
+  "lineage_fixation_metrics": [
+    "phenotype_frequency",
+    "heritability",
+    "offspring_reexpression",
+    "reproductive_population",
+    "persistence_generations",
+    "niche_independence",
+    "environmental_robustness",
+    "genetic_variance"
+  ],
+  "optimization_strategies": [
+    "signature_batching",
+    "memoization",
+    "cohort_aggregation",
+    "adaptive_region_merge",
+    "multi_rate_ticks",
+    "event_driven_promotion",
+    "render_simulation_decoupling"
+  ],
+  "event_classes": [
+    "trait_emergence",
+    "first_predation",
+    "first_scavenging",
+    "symbiosis_start",
+    "lineage_split",
+    "lineage_fixation",
+    "resource_threshold",
+    "population_boom",
+    "population_collapse",
+    "extinction",
+    "refuge_survival",
+    "rediscovery",
+    "environment_tipping",
+    "abiogenesis_stage_change"
+  ]
+}

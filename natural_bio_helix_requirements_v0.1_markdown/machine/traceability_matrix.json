@@ -1,0 +1,3562 @@
+{
+  "schema_version": "1.0",
+  "baseline_version": "0.1.0",
+  "source_to_requirements": [
+    {
+      "source_id": "CHAT-001",
+      "source_key": "P01",
+      "statement": "本製品をHELIX完成後の最初のプロダクトとして位置づける。",
+      "requirement_ids": [
+        "BR-001",
+        "REL-001"
+      ]
+    },
+    {
+      "source_id": "CHAT-002",
+      "source_key": "P02",
+      "statement": "Webアプリケーションとスマートフォンアプリケーションへ展開できる構成とする。",
+      "requirement_ids": [
+        "BR-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-003",
+      "source_key": "P03",
+      "statement": "Unity等の高表現ゲームクライアントは、コアの面白さと売上を確認した後に追加できる。",
+      "requirement_ids": [
+        "BR-004",
+        "REL-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-004",
+      "source_key": "P04",
+      "statement": "最重要領域はシミュレーションコアであり、企画・要求・要件の中で最も細密に定義する。",
+      "requirement_ids": [
+        "BR-002",
+        "HLX-006"
+      ]
+    },
+    {
+      "source_id": "CHAT-005",
+      "source_key": "P05",
+      "statement": "段階的リリースとローカル／クラウド併用のハイブリッドモデルで進める。",
+      "requirement_ids": [
+        "BR-004",
+        "HLX-020"
+      ]
+    },
+    {
+      "source_id": "CHAT-006",
+      "source_key": "P06",
+      "statement": "POは企画から要件定義までを主導し、その下流実装はHELIXとAI開発ラインへ委譲する。",
+      "requirement_ids": [
+        "BR-014",
+        "NFR-025"
+      ]
+    },
+    {
+      "source_id": "CHAT-007",
+      "source_key": "P07",
+      "statement": "研究モードは初期売上の成立後に専門家監修を導入して拡張する。",
+      "requirement_ids": [
+        "BR-005",
+        "BR-006",
+        "NFR-030",
+        "REL-008",
+        "REL-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-008",
+      "source_key": "P08",
+      "statement": "考えることを好む大人、サイエンス動画視聴者、育成・戦略・シミュレーション愛好者を主要顧客とする。",
+      "requirement_ids": [
+        "BR-003"
+      ]
+    },
+    {
+      "source_id": "CHAT-009",
+      "source_key": "P09",
+      "statement": "目標体験は「生物版マインクラフト」、すなわち生命法則をクラフトし生命史を生成するサンドボックスである。",
+      "requirement_ids": [
+        "BR-003",
+        "REL-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-010",
+      "source_key": "P10",
+      "statement": "写実表現を必須とせず、プリミティブ・器官・模様・挙動の合成で生物表現を生成する。",
+      "requirement_ids": [
+        "BR-018"
+      ]
+    },
+    {
+      "source_id": "CHAT-011",
+      "source_key": "P11",
+      "statement": "科学法則と因果の可視化を、フォトリアル表現より優先する。",
+      "requirement_ids": [
+        "BR-018",
+        "FR-049"
+      ]
+    },
+    {
+      "source_id": "CHAT-012",
+      "source_key": "P12",
+      "statement": "開発時の参考機としてRAM 32GB／VRAM 8GB級を想定するが、MVPはより低い環境でも動作可能な2D構成から始める。",
+      "requirement_ids": [
+        "NFR-003",
+        "NFR-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-013",
+      "source_key": "P13",
+      "statement": "Webを制作・実験・分析の中核とし、スマホを観察・通知・簡易介入・共有端末として位置づける。",
+      "requirement_ids": [
+        "BR-004",
+        "BR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-014",
+      "source_key": "P14",
+      "statement": "通常シミュレーションはローカル実行を基本とし、長期・大量seed・高精度処理はクラウドへ逃がせる。",
+      "requirement_ids": [
+        "BR-004",
+        "BR-013",
+        "REL-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-015",
+      "source_key": "P15",
+      "statement": "機能解放型サブスクリプション、演算クレジット、コンテンツ販売を組み合わせられる。",
+      "requirement_ids": [
+        "BR-010",
+        "NFR-007"
+      ]
+    },
+    {
+      "source_id": "CHAT-016",
+      "source_key": "P16",
+      "statement": "ユーザー作成の「もしもシリーズ」を販売可能なUGC市場として提供する。",
+      "requirement_ids": [
+        "BR-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-017",
+      "source_key": "P17",
+      "statement": "UGC作者は無料または任意価格を設定でき、収益分配を受けられる。",
+      "requirement_ids": [
+        "BR-016"
+      ]
+    },
+    {
+      "source_id": "CHAT-018",
+      "source_key": "P18",
+      "statement": "YouTube等で仮説を語る文化を形成し、ゲーム内生命史を動画へ変換できる。",
+      "requirement_ids": [
+        "BR-009",
+        "BR-011",
+        "NFR-020",
+        "REL-013"
+      ]
+    },
+    {
+      "source_id": "CHAT-019",
+      "source_key": "P19",
+      "statement": "開発者・配信者向けに、AI解説によるライブ番組化を将来提供できる。",
+      "requirement_ids": [
+        "BR-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-020",
+      "source_key": "P20",
+      "statement": "本製品はHELIXの要求追跡・AI実装・検証能力を実証するリファレンス製品となる。",
+      "requirement_ids": [
+        "BR-001"
+      ]
+    },
+    {
+      "source_id": "CHAT-021",
+      "source_key": "M01",
+      "statement": "育成モード、学習モード、実験モード、研究モードの4モードを設ける。",
+      "requirement_ids": [
+        "BR-005"
+      ]
+    },
+    {
+      "source_id": "CHAT-022",
+      "source_key": "M02",
+      "statement": "育成モードは直感的操作と結果観察を中心とする。",
+      "requirement_ids": [
+        "BR-005",
+        "REL-003"
+      ]
+    },
+    {
+      "source_id": "CHAT-023",
+      "source_key": "M03",
+      "statement": "学習モードは同一結果を生物・化学・物理の因果として段階的に解説する。",
+      "requirement_ids": [
+        "BR-005",
+        "REL-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-024",
+      "source_key": "M04",
+      "statement": "実験モードは対照群、条件固定、比較、仮説検証、再実験を支援する。",
+      "requirement_ids": [
+        "BR-005",
+        "REL-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-025",
+      "source_key": "M05",
+      "statement": "研究モードは方程式、solver、外部モデル、詳細パラメータを扱う上位機能とする。",
+      "requirement_ids": [
+        "BR-005",
+        "BR-006",
+        "NFR-030",
+        "REL-008",
+        "REL-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-026",
+      "source_key": "M06",
+      "statement": "細胞、多細胞・組織、個体・動物、生態系、惑星・衛星・彗星へスケールを変更できる。",
+      "requirement_ids": [
+        "REL-007",
+        "UR-026"
+      ]
+    },
+    {
+      "source_id": "CHAT-027",
+      "source_key": "M07",
+      "statement": "説明粒度はモードごとに変更し、基礎説明から研究レベルの不確実性まで連続的に提示する。",
+      "requirement_ids": [
+        "UR-015"
+      ]
+    },
+    {
+      "source_id": "CHAT-028",
+      "source_key": "M08",
+      "statement": "コドン編集は初心者向けパズル、中級者向けコドン、上級者向け塩基・発現条件へ段階化する。",
+      "requirement_ids": [
+        "FR-004",
+        "FR-005",
+        "UR-002",
+        "UR-003"
+      ]
+    },
+    {
+      "source_id": "CHAT-029",
+      "source_key": "M09",
+      "statement": "環境生成、生物原種、成長特性、進化仮説にガチャ的な世界生成を適用できる。",
+      "requirement_ids": [
+        "UR-005"
+      ]
+    },
+    {
+      "source_id": "CHAT-030",
+      "source_key": "M10",
+      "statement": "知識がないプレイヤーへ簡易ガイド、推奨ピース、原因説明、自動修復候補を提供する。",
+      "requirement_ids": [
+        "FR-007",
+        "NFR-019",
+        "UR-002"
+      ]
+    },
+    {
+      "source_id": "CHAT-031",
+      "source_key": "M11",
+      "statement": "知識のあるプレイヤーは手動で環境、遺伝子、発現、突然変異、初期個体群を編集できる。",
+      "requirement_ids": [
+        "FR-005",
+        "FR-006",
+        "UR-001",
+        "UR-003"
+      ]
+    },
+    {
+      "source_id": "CHAT-032",
+      "source_key": "S01",
+      "statement": "プレイヤーは1個体ではなく、各系統の複数個体を設計・生成して環境へ投入する。",
+      "requirement_ids": [
+        "FR-002",
+        "UR-001"
+      ]
+    },
+    {
+      "source_id": "CHAT-033",
+      "source_key": "S02",
+      "statement": "初期個体数、比率、配置、接触順序は系統固定の結果へ影響する。",
+      "requirement_ids": [
+        "FR-003",
+        "SIM-023",
+        "SIM-024",
+        "UR-001"
+      ]
+    },
+    {
+      "source_id": "CHAT-034",
+      "source_key": "S03",
+      "statement": "安定2系統・突出1系統・意図的劣位1系統は代表的なチュートリアル設計とするが固定ルールにはしない。",
+      "requirement_ids": [
+        "UR-006"
+      ]
+    },
+    {
+      "source_id": "CHAT-035",
+      "source_key": "S04",
+      "statement": "自然淘汰により生存・繁殖成功の差が世代を通じて系統頻度へ反映される。",
+      "requirement_ids": [
+        "SIM-008",
+        "UR-007"
+      ]
+    },
+    {
+      "source_id": "CHAT-036",
+      "source_key": "S05",
+      "statement": "類似環境では別系統が類似の形質へ収斂進化しやすい。",
+      "requirement_ids": [
+        "FR-030",
+        "UR-007"
+      ]
+    },
+    {
+      "source_id": "CHAT-037",
+      "source_key": "S06",
+      "statement": "突然変異率、複製精度、修復能力、組換え頻度を変数として扱う。",
+      "requirement_ids": [
+        "FR-019",
+        "SIM-009",
+        "UR-003",
+        "UR-007"
+      ]
+    },
+    {
+      "source_id": "CHAT-038",
+      "source_key": "S07",
+      "statement": "創始者効果、遺伝的浮動、小集団の偶然が系統史へ影響する。",
+      "requirement_ids": [
+        "SIM-023"
+      ]
+    },
+    {
+      "source_id": "CHAT-039",
+      "source_key": "S08",
+      "statement": "社会性、協力、役割分担、共同育児、警戒、資源共有が系統存続へ影響する。",
+      "requirement_ids": [
+        "FR-006",
+        "FR-015",
+        "FR-020",
+        "SIM-022",
+        "UR-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-040",
+      "source_key": "S09",
+      "statement": "捕食対象は遭遇率、捕獲コスト、栄養価、危険度、処理能力で動的に変化する。",
+      "requirement_ids": [
+        "FR-021",
+        "SIM-021",
+        "UR-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-041",
+      "source_key": "S10",
+      "statement": "スカベンジャー／分解者は死骸や排出物を資源化して独自ニッチを形成できる。",
+      "requirement_ids": [
+        "FR-022",
+        "SIM-020",
+        "UR-009",
+        "UR-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-042",
+      "source_key": "S11",
+      "statement": "共生、相利、片利、細胞内共生等が複数系統の上位統合へつながる。",
+      "requirement_ids": [
+        "FR-023"
+      ]
+    },
+    {
+      "source_id": "CHAT-043",
+      "source_key": "S12",
+      "statement": "寄生、病原体、宿主依存の戦略が系統固定へ影響する。",
+      "requirement_ids": [
+        "FR-024"
+      ]
+    },
+    {
+      "source_id": "CHAT-044",
+      "source_key": "S13",
+      "statement": "4つの初期系統から20以上の安定系統へ分岐する結果を許容する。",
+      "requirement_ids": [
+        "FR-002",
+        "FR-027",
+        "REL-002",
+        "UR-007",
+        "UR-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-045",
+      "source_key": "S14",
+      "statement": "全系統の全滅を正当なシミュレーション結果として扱う。",
+      "requirement_ids": [
+        "FR-028",
+        "REL-002",
+        "SIM-015",
+        "UR-007"
+      ]
+    },
+    {
+      "source_id": "CHAT-046",
+      "source_key": "S15",
+      "statement": "急増後の資源不足、酸素低下、廃棄物蓄積、連鎖的崩壊を再現する。",
+      "requirement_ids": [
+        "FR-033",
+        "SIM-017",
+        "SIM-018",
+        "SIM-019",
+        "UR-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-047",
+      "source_key": "S16",
+      "statement": "死亡個体は消去せず、タンパク質、脂質、無機塩、毒素、殻等の環境資源として残る。",
+      "requirement_ids": [
+        "FR-022",
+        "SIM-006",
+        "SIM-007",
+        "UR-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-048",
+      "source_key": "S17",
+      "statement": "生命活動が酸素、pH、温度、濁度、栄養、鉱物状態等の環境を改変する。",
+      "requirement_ids": [
+        "FR-025",
+        "FR-034",
+        "SIM-018",
+        "SIM-019",
+        "SIM-031",
+        "UR-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-049",
+      "source_key": "S18",
+      "statement": "酸素発生型生物の増加が旧嫌気性生命圏へ毒性と環境転換をもたらす現象を扱える。",
+      "requirement_ids": [
+        "FR-025",
+        "FR-034",
+        "SIM-031"
+      ]
+    },
+    {
+      "source_id": "CHAT-050",
+      "source_key": "S19",
+      "statement": "氷、地下、塩水ポケット、熱水域等の微小避難所に残存系統が生き残れる。",
+      "requirement_ids": [
+        "FR-026",
+        "REL-007",
+        "SIM-016",
+        "SIM-032"
+      ]
+    },
+    {
+      "source_id": "CHAT-051",
+      "source_key": "S20",
+      "statement": "成功判定は強い個体の出現ではなく、形質が繁殖可能な系統として次世代へ固定されたかで行う。",
+      "requirement_ids": [
+        "FR-017",
+        "FR-018",
+        "FR-029",
+        "SIM-010",
+        "SIM-011",
+        "UR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-052",
+      "source_key": "S21",
+      "statement": "系が安定状態へ入った後に世代評価を行い、系統固定・未固定・衰退・絶滅を判定する。",
+      "requirement_ids": [
+        "FR-029",
+        "FR-032",
+        "SIM-013",
+        "UR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-053",
+      "source_key": "S22",
+      "statement": "上位ステージの系統固定には、下位ステージで複数の相補的系統が固定済みであることを要求できる。",
+      "requirement_ids": [
+        "FR-018",
+        "FR-031",
+        "REL-007",
+        "SIM-033"
+      ]
+    },
+    {
+      "source_id": "CHAT-054",
+      "source_key": "S23",
+      "statement": "表現型が収束しても遺伝子配列は複数経路を保持できる。",
+      "requirement_ids": [
+        "FR-019",
+        "FR-027",
+        "SIM-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-055",
+      "source_key": "S24",
+      "statement": "系統固定は遺伝率、再発現率、繁殖成功、世代存続、個体数、ニッチ独立性で評価する。",
+      "requirement_ids": [
+        "FR-017",
+        "FR-029",
+        "SIM-009",
+        "SIM-010",
+        "SIM-011",
+        "SIM-012",
+        "SIM-013",
+        "UR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-056",
+      "source_key": "S25",
+      "statement": "同一または類似環境では、基本形態・機能が同じ方向へ収束することを通常挙動とする。",
+      "requirement_ids": [
+        "FR-030",
+        "SIM-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-057",
+      "source_key": "S26",
+      "statement": "環境内で特質した形質が遺伝し、世代を越えて再現されることを達成目標とする。",
+      "requirement_ids": [
+        "SIM-012",
+        "UR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-058",
+      "source_key": "S27",
+      "statement": "プレイヤーは環境を読み、安定枠と独自枠の発生に必要な初期条件を設計する。",
+      "requirement_ids": [
+        "SIM-008",
+        "UR-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-059",
+      "source_key": "S28",
+      "statement": "初期数世代の移動、接触、最初の死骸、最初の交配等が長期系統史を変える。",
+      "requirement_ids": [
+        "FR-003",
+        "SIM-024",
+        "SIM-026",
+        "SIM-036",
+        "UR-009",
+        "UR-012"
+      ]
+    },
+    {
+      "source_id": "CHAT-060",
+      "source_key": "S29",
+      "statement": "同じ条件でも乱数seedにより別の生命史が発生し、seed比較が可能である。",
+      "requirement_ids": [
+        "FR-001",
+        "FR-039",
+        "FR-047",
+        "NFR-001",
+        "SIM-025",
+        "SIM-026",
+        "UR-012"
+      ]
+    },
+    {
+      "source_id": "CHAT-061",
+      "source_key": "S30",
+      "statement": "観測個体数ゼロと真の絶滅を区別し、未観測の避難所集団を許容する。",
+      "requirement_ids": [
+        "FR-026",
+        "FR-028",
+        "SIM-016"
+      ]
+    },
+    {
+      "source_id": "CHAT-062",
+      "source_key": "A01",
+      "statement": "プレイヤー投入がなくても、条件が整えば原始生命が自然発生する可能性を持たせる。",
+      "requirement_ids": [
+        "FR-035",
+        "REL-007",
+        "UR-024"
+      ]
+    },
+    {
+      "source_id": "CHAT-063",
+      "source_key": "A02",
+      "statement": "生命発生を有機物存在、濃縮、高分子化、触媒網、区画化、自己維持、複製、遺伝可能変異の段階で評価する。",
+      "requirement_ids": [
+        "FR-035",
+        "SIM-029",
+        "UR-024"
+      ]
+    },
+    {
+      "source_id": "CHAT-064",
+      "source_key": "A03",
+      "statement": "暫定惑星、衛星、彗星モードを用意し、観測値・推定値・仮説値を分ける。",
+      "requirement_ids": [
+        "FR-036",
+        "REL-007",
+        "SIM-030",
+        "UR-025"
+      ]
+    },
+    {
+      "source_id": "CHAT-065",
+      "source_key": "A04",
+      "statement": "アミノ酸や有機物を天体環境へ投入し、分解・希薄化・重合・生命前段階を観察できる。",
+      "requirement_ids": [
+        "SIM-029",
+        "UR-024"
+      ]
+    },
+    {
+      "source_id": "CHAT-066",
+      "source_key": "A05",
+      "statement": "彗星は生命材料、水、触媒、衝撃・加熱を運ぶ媒体として扱える。",
+      "requirement_ids": [
+        "UR-025"
+      ]
+    },
+    {
+      "source_id": "CHAT-067",
+      "source_key": "A06",
+      "statement": "未確定の進化論・生命起源論・生物論を世界法則プリセットとして抽選・選択できる。",
+      "requirement_ids": [
+        "FR-037",
+        "UR-005"
+      ]
+    },
+    {
+      "source_id": "CHAT-068",
+      "source_key": "A07",
+      "statement": "質量保存等の確立法則は固定層、議論中の仮説は可変層として分離する。",
+      "requirement_ids": [
+        "BR-012",
+        "FR-001",
+        "FR-037",
+        "NFR-010",
+        "SIM-027",
+        "SIM-045"
+      ]
+    },
+    {
+      "source_id": "CHAT-069",
+      "source_key": "A08",
+      "statement": "進化仮説の組合せは難易度、収束速度、分岐、固定、絶滅率を変える。",
+      "requirement_ids": [
+        "FR-037",
+        "SIM-028",
+        "UR-013"
+      ]
+    },
+    {
+      "source_id": "CHAT-070",
+      "source_key": "A09",
+      "statement": "高難易度では採用仮説の一部を隠し、挙動から推定させることができる。",
+      "requirement_ids": [
+        "FR-038"
+      ]
+    },
+    {
+      "source_id": "CHAT-071",
+      "source_key": "A10",
+      "statement": "同じ初期条件を異なる仮説世界で比較できる。",
+      "requirement_ids": [
+        "FR-039",
+        "SIM-028",
+        "UR-013"
+      ]
+    },
+    {
+      "source_id": "CHAT-072",
+      "source_key": "C01",
+      "statement": "環境は有機物・無機物の量と種類を個別に保持する。",
+      "requirement_ids": [
+        "FR-008",
+        "SIM-003",
+        "UR-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-073",
+      "source_key": "C02",
+      "statement": "アミノ酸組成そのものを環境条件・資源条件として扱う。",
+      "requirement_ids": [
+        "FR-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-074",
+      "source_key": "C03",
+      "statement": "物質が存在しても、生物が取り込めなければ利用不能とする。",
+      "requirement_ids": [
+        "FR-010",
+        "SIM-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-075",
+      "source_key": "C04",
+      "statement": "膜透過性、単純拡散、促進拡散、能動輸送を抽象化して扱う。",
+      "requirement_ids": [
+        "FR-010",
+        "SIM-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-076",
+      "source_key": "C05",
+      "statement": "専用輸送体の有無、容量、コストが取り込み量を決める。",
+      "requirement_ids": [
+        "FR-010",
+        "SIM-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-077",
+      "source_key": "C06",
+      "statement": "分解・合成・触媒に必要な酵素や反応経路を持つ。",
+      "requirement_ids": [
+        "FR-004",
+        "FR-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-078",
+      "source_key": "C07",
+      "statement": "代謝経路が連結しない場合、資源を取り込んでも利用できない。",
+      "requirement_ids": [
+        "FR-007",
+        "FR-012",
+        "SIM-005"
+      ]
+    },
+    {
+      "source_id": "CHAT-079",
+      "source_key": "C08",
+      "statement": "中間代謝物の蓄積、浸透圧、酸化ストレス、毒性を扱う。",
+      "requirement_ids": [
+        "FR-007",
+        "FR-012",
+        "SIM-005"
+      ]
+    },
+    {
+      "source_id": "CHAT-080",
+      "source_key": "C09",
+      "statement": "排出、解毒、貯蔵、再利用を代謝の一部として扱う。",
+      "requirement_ids": [
+        "FR-013"
+      ]
+    },
+    {
+      "source_id": "CHAT-081",
+      "source_key": "C10",
+      "statement": "糖、脂肪酸、アミノ酸、核酸塩基、酸素、二酸化炭素、硫黄・窒素化合物、毒性有機物等を扱える。",
+      "requirement_ids": [
+        "FR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-082",
+      "source_key": "C11",
+      "statement": "生物は資源を消費するだけでなく、別物質・熱・廃棄物へ変換する。",
+      "requirement_ids": [
+        "FR-011",
+        "FR-016",
+        "SIM-003",
+        "SIM-007",
+        "UR-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-083",
+      "source_key": "C12",
+      "statement": "全スケールで質量・元素・エネルギー収支を破らない。",
+      "requirement_ids": [
+        "FR-016",
+        "SIM-001",
+        "SIM-002",
+        "SIM-003",
+        "SIM-027",
+        "SIM-034"
+      ]
+    },
+    {
+      "source_id": "CHAT-084",
+      "source_key": "C13",
+      "statement": "熱力学、反応速度、拡散、濃度勾配、温度、pH等を科学的整合性のある抽象モデルで扱う。",
+      "requirement_ids": [
+        "FR-008",
+        "FR-011",
+        "NFR-011",
+        "SIM-002"
+      ]
+    },
+    {
+      "source_id": "CHAT-085",
+      "source_key": "C14",
+      "statement": "外部アミノ酸依存等の栄養要求性を表現できる。",
+      "requirement_ids": [
+        "FR-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-086",
+      "source_key": "C15",
+      "statement": "万能代謝は維持コストが高く、専門代謝は限定資源で高効率となる。",
+      "requirement_ids": [
+        "FR-004",
+        "FR-015"
+      ]
+    },
+    {
+      "source_id": "CHAT-087",
+      "source_key": "C16",
+      "statement": "温度、pH、酸素、光、圧力、重力、水分、流速、放射線等を環境変数として持つ。",
+      "requirement_ids": [
+        "FR-009",
+        "UR-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-088",
+      "source_key": "C17",
+      "statement": "局所的な濃度勾配、毒性、酸欠、熱源、光遮蔽等が生態的役割を変える。",
+      "requirement_ids": [
+        "FR-006",
+        "FR-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-089",
+      "source_key": "C18",
+      "statement": "排出物・死骸・環境改変により新しい資源相とニッチが動的に発生する。",
+      "requirement_ids": [
+        "SIM-017",
+        "SIM-020",
+        "UR-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-090",
+      "source_key": "L01",
+      "statement": "細胞と動物等、スケールごとに影響する変数・更新頻度・モデルを切り替える。",
+      "requirement_ids": [
+        "FR-041",
+        "UR-026"
+      ]
+    },
+    {
+      "source_id": "CHAT-091",
+      "source_key": "L02",
+      "statement": "分子・細胞、多細胞・組織、個体・動物、生態系、惑星の階層を持つ。",
+      "requirement_ids": [
+        "FR-041"
+      ]
+    },
+    {
+      "source_id": "CHAT-092",
+      "source_key": "L03",
+      "statement": "現在のステージを詳細計算し、画面外・遠方・他スケールは集約モデルで進行する。",
+      "requirement_ids": [
+        "FR-040"
+      ]
+    },
+    {
+      "source_id": "CHAT-093",
+      "source_key": "L04",
+      "statement": "詳細計算範囲は画面内だけでなく、因果的に影響する境界領域を含む。",
+      "requirement_ids": [
+        "FR-040",
+        "SIM-039"
+      ]
+    },
+    {
+      "source_id": "CHAT-094",
+      "source_key": "L05",
+      "statement": "下位状態を上位へ集約し、上位から下位へ再展開する際は統計量とseedで再現性を保つ。",
+      "requirement_ids": [
+        "FR-041",
+        "FR-042",
+        "SIM-034",
+        "UR-026"
+      ]
+    },
+    {
+      "source_id": "CHAT-095",
+      "source_key": "L06",
+      "statement": "同一環境、同一ゲノム、同一発現、同一内部状態の個体をまとめて一回の計算へ共有する。",
+      "requirement_ids": [
+        "FR-043",
+        "NFR-002",
+        "NFR-005",
+        "SIM-035"
+      ]
+    },
+    {
+      "source_id": "CHAT-096",
+      "source_key": "L07",
+      "statement": "連続値をバケット化し、同一入力結果をmemoizationできる。",
+      "requirement_ids": [
+        "FR-045",
+        "SIM-038"
+      ]
+    },
+    {
+      "source_id": "CHAT-097",
+      "source_key": "L08",
+      "statement": "遠方や安定状態の個体はcohortとして代表状態・個体数・分散で計算する。",
+      "requirement_ids": [
+        "FR-043",
+        "NFR-002",
+        "NFR-005",
+        "SIM-035",
+        "SIM-036"
+      ]
+    },
+    {
+      "source_id": "CHAT-098",
+      "source_key": "L09",
+      "statement": "均一環境はregionとして統合し、変化の激しい箇所だけ分割する。",
+      "requirement_ids": [
+        "FR-009",
+        "FR-044",
+        "NFR-005",
+        "SIM-037"
+      ]
+    },
+    {
+      "source_id": "CHAT-099",
+      "source_key": "L10",
+      "statement": "重要度と距離に応じて更新頻度を変えるmulti-rate／event-driven更新を採用する。",
+      "requirement_ids": [
+        "FR-046",
+        "NFR-002",
+        "NFR-005",
+        "SIM-039"
+      ]
+    },
+    {
+      "source_id": "CHAT-100",
+      "source_key": "L11",
+      "statement": "シミュレーション個体数と表示オブジェクト数を1対1にしない。",
+      "requirement_ids": [
+        "FR-048",
+        "SIM-040"
+      ]
+    },
+    {
+      "source_id": "CHAT-101",
+      "source_key": "L12",
+      "statement": "生物の見た目は基本形状、器官、模様、色、動きの組合せで生成する。",
+      "requirement_ids": [
+        "BR-018",
+        "FR-048"
+      ]
+    },
+    {
+      "source_id": "CHAT-102",
+      "source_key": "L13",
+      "statement": "拡散field等は将来GPUへ分配できるが、可変グラフ・イベント・系統処理はCPU中心とする。",
+      "requirement_ids": [
+        "NFR-006"
+      ]
+    },
+    {
+      "source_id": "CHAT-103",
+      "source_key": "L14",
+      "statement": "宇宙・惑星全体を常時高解像度で逐次演算せず、局所ステージと集約天体モデルを組み合わせる。",
+      "requirement_ids": [
+        "FR-001",
+        "FR-036"
+      ]
+    },
+    {
+      "source_id": "CHAT-104",
+      "source_key": "L15",
+      "statement": "最初の縦切りは2Dまたは2.5Dの培養皿とする。",
+      "requirement_ids": [
+        "BR-007",
+        "NFR-003",
+        "REL-002"
+      ]
+    },
+    {
+      "source_id": "CHAT-105",
+      "source_key": "E01",
+      "statement": "プレイヤーが「これ今どうなってるの？」と質問できる。",
+      "requirement_ids": [
+        "FR-053",
+        "REL-003",
+        "UR-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-106",
+      "source_key": "E02",
+      "statement": "状態データとは別に、意味のある変化を構造化イベントとして記録する。",
+      "requirement_ids": [
+        "FR-050",
+        "FR-051",
+        "HLX-010",
+        "NFR-008",
+        "REL-002",
+        "SIM-041"
+      ]
+    },
+    {
+      "source_id": "CHAT-107",
+      "source_key": "E03",
+      "statement": "リアルタイム、世代、時代、系統史、惑星史のサマリーを生成する。",
+      "requirement_ids": [
+        "FR-049",
+        "FR-052",
+        "NFR-026"
+      ]
+    },
+    {
+      "source_id": "CHAT-108",
+      "source_key": "E04",
+      "statement": "観測事実、確定因果、相関、仮説、未確認、判定不能を分けて表示する。",
+      "requirement_ids": [
+        "FR-054",
+        "NFR-009",
+        "SIM-042",
+        "SIM-043",
+        "UR-015"
+      ]
+    },
+    {
+      "source_id": "CHAT-109",
+      "source_key": "E05",
+      "statement": "原因候補に信頼度・根拠イベント・反証候補を付与する。",
+      "requirement_ids": [
+        "FR-051",
+        "NFR-009",
+        "SIM-042",
+        "SIM-043"
+      ]
+    },
+    {
+      "source_id": "CHAT-110",
+      "source_key": "E06",
+      "statement": "系統分岐、固定、初回捕食、共生、大量死、資源閾値、環境転換、再発見等をイベント化する。",
+      "requirement_ids": [
+        "FR-050",
+        "SIM-041"
+      ]
+    },
+    {
+      "source_id": "CHAT-111",
+      "source_key": "E07",
+      "statement": "動画録画だけでなく、カメラ変更・再編集可能な決定論的リプレイログを保存する。",
+      "requirement_ids": [
+        "FR-047",
+        "FR-058",
+        "NFR-001",
+        "NFR-023",
+        "NFR-029",
+        "SIM-044",
+        "UR-016"
+      ]
+    },
+    {
+      "source_id": "CHAT-112",
+      "source_key": "E08",
+      "statement": "重要イベントから自動で見どころ・チャプター候補を抽出する。",
+      "requirement_ids": [
+        "FR-057"
+      ]
+    },
+    {
+      "source_id": "CHAT-113",
+      "source_key": "E09",
+      "statement": "なぜ減った、いつ増えた、何が危険か、介入しないとどうなるか等の質問へ答える。",
+      "requirement_ids": [
+        "FR-053",
+        "UR-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-114",
+      "source_key": "E10",
+      "statement": "LLMがなくても数値・ルールベースの説明を生成できる。",
+      "requirement_ids": [
+        "FR-055"
+      ]
+    },
+    {
+      "source_id": "CHAT-115",
+      "source_key": "E11",
+      "statement": "LLMを使う場合はログと計算結果を根拠にし、根拠のない因果を生成しない。",
+      "requirement_ids": [
+        "FR-054",
+        "FR-056",
+        "SIM-042"
+      ]
+    },
+    {
+      "source_id": "CHAT-116",
+      "source_key": "E12",
+      "statement": "同じイベントログを解説、学習、動画、再実験、監査の共通資産とする。",
+      "requirement_ids": [
+        "NFR-029",
+        "UR-016"
+      ]
+    },
+    {
+      "source_id": "CHAT-117",
+      "source_key": "V01",
+      "statement": "シミュレーション室を動画編集・作品化のスタジオとして利用できる。",
+      "requirement_ids": [
+        "BR-009",
+        "FR-058",
+        "REL-005",
+        "SIM-044",
+        "UR-017"
+      ]
+    },
+    {
+      "source_id": "CHAT-118",
+      "source_key": "V02",
+      "statement": "ユーザー自身がナレーションを録音できる。",
+      "requirement_ids": [
+        "FR-059",
+        "NFR-015",
+        "REL-005",
+        "UR-017"
+      ]
+    },
+    {
+      "source_id": "CHAT-119",
+      "source_key": "V03",
+      "statement": "初期段階では音声生成・他者音声複製を提供しない。",
+      "requirement_ids": [
+        "FR-061",
+        "NFR-016",
+        "UR-018"
+      ]
+    },
+    {
+      "source_id": "CHAT-120",
+      "source_key": "V04",
+      "statement": "本人音声を加工するボイスチェンジャーを内蔵できる。",
+      "requirement_ids": [
+        "FR-060",
+        "NFR-016",
+        "REL-005",
+        "UR-018"
+      ]
+    },
+    {
+      "source_id": "CHAT-121",
+      "source_key": "V05",
+      "statement": "研究者・宇宙調査員等のアバターを選択・編集できる。",
+      "requirement_ids": [
+        "FR-062",
+        "REL-005",
+        "UR-019"
+      ]
+    },
+    {
+      "source_id": "CHAT-122",
+      "source_key": "V06",
+      "statement": "字幕、チャプター、タイトル案、説明文、サムネイル候補を生成する。",
+      "requirement_ids": [
+        "FR-063",
+        "NFR-019",
+        "UR-017"
+      ]
+    },
+    {
+      "source_id": "CHAT-123",
+      "source_key": "V07",
+      "statement": "初期は動画ファイルと投稿素材の書き出し、後期はYouTubeアカウント連携を可能にする。",
+      "requirement_ids": [
+        "FR-064",
+        "FR-065",
+        "REL-006"
+      ]
+    },
+    {
+      "source_id": "CHAT-124",
+      "source_key": "V08",
+      "statement": "1つの実験からShorts、短編、長編ドキュメンタリーを生成できる。",
+      "requirement_ids": [
+        "BR-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-125",
+      "source_key": "V09",
+      "statement": "視聴者コメントや投票を再実験条件へ取り込める。",
+      "requirement_ids": [
+        "BR-011",
+        "FR-066"
+      ]
+    },
+    {
+      "source_id": "CHAT-126",
+      "source_key": "V10",
+      "statement": "開発者モードではAI解説・カメラ制御によるライブ番組化を将来提供できる。",
+      "requirement_ids": [
+        "FR-067",
+        "REL-006"
+      ]
+    },
+    {
+      "source_id": "CHAT-127",
+      "source_key": "V11",
+      "statement": "AIは研究助手・実況・懐疑役として、構造化ログに基づいて発言する。",
+      "requirement_ids": [
+        "FR-067"
+      ]
+    },
+    {
+      "source_id": "CHAT-128",
+      "source_key": "V12",
+      "statement": "科学動画として成立する題材とタイトルをゲーム結果から自然に生成する。",
+      "requirement_ids": [
+        "BR-011",
+        "FR-057",
+        "REL-013"
+      ]
+    },
+    {
+      "source_id": "CHAT-129",
+      "source_key": "U01",
+      "statement": "ユーザーが「もしも酸素発生が早かったら」等の思考実験パッケージを作成できる。",
+      "requirement_ids": [
+        "BR-009",
+        "FR-068",
+        "NFR-020",
+        "REL-005",
+        "UR-021"
+      ]
+    },
+    {
+      "source_id": "CHAT-130",
+      "source_key": "U02",
+      "statement": "ユーザー作成パッケージは公式科学モデルと明確に区別する。",
+      "requirement_ids": [
+        "BR-012",
+        "FR-070"
+      ]
+    },
+    {
+      "source_id": "CHAT-131",
+      "source_key": "U03",
+      "statement": "作者は無料を含む価格を設定できる。",
+      "requirement_ids": [
+        "BR-016",
+        "FR-070",
+        "REL-006",
+        "UR-022"
+      ]
+    },
+    {
+      "source_id": "CHAT-132",
+      "source_key": "U04",
+      "statement": "作者への売上分配率を設定し、税・手数料・返金後の分配基準を明示する。",
+      "requirement_ids": [
+        "BR-016",
+        "FR-071",
+        "REL-006",
+        "UR-022"
+      ]
+    },
+    {
+      "source_id": "CHAT-133",
+      "source_key": "U05",
+      "statement": "パッケージは環境、仮説、初期系統、投入数、目標、説明、依存、バージョンを含む。",
+      "requirement_ids": [
+        "FR-068",
+        "NFR-023",
+        "UR-021"
+      ]
+    },
+    {
+      "source_id": "CHAT-134",
+      "source_key": "U06",
+      "statement": "初期UGCでは任意コードを許可せず、宣言的DSL／データ定義のみを許可する。",
+      "requirement_ids": [
+        "FR-068",
+        "FR-069",
+        "NFR-013",
+        "NFR-014",
+        "SIM-045"
+      ]
+    },
+    {
+      "source_id": "CHAT-135",
+      "source_key": "U07",
+      "statement": "科学的確度、採用仮説、出典、改変法則、未確定変数を商品ページへ表示する。",
+      "requirement_ids": [
+        "BR-012",
+        "FR-069",
+        "FR-070",
+        "NFR-010",
+        "SIM-045"
+      ]
+    },
+    {
+      "source_id": "CHAT-136",
+      "source_key": "U08",
+      "statement": "UGCの著作権、危険内容、誤表示、決済、税、返金、年齢区分、通報・削除を管理する。",
+      "requirement_ids": [
+        "BR-017",
+        "FR-069",
+        "FR-071",
+        "NFR-017",
+        "NFR-028",
+        "REL-006",
+        "REL-012"
+      ]
+    },
+    {
+      "source_id": "CHAT-137",
+      "source_key": "U09",
+      "statement": "MCP連携でユーザー・開発者のパッケージ作成と検証を支援する。",
+      "requirement_ids": [
+        "FR-078",
+        "HLX-016",
+        "HLX-017",
+        "REL-005"
+      ]
+    },
+    {
+      "source_id": "CHAT-138",
+      "source_key": "U10",
+      "statement": "パッケージごとに実行回数、絶滅率、系統数、代表結果等の集合統計を表示できる。",
+      "requirement_ids": [
+        "FR-072",
+        "UR-023"
+      ]
+    },
+    {
+      "source_id": "CHAT-139",
+      "source_key": "U11",
+      "statement": "Creator、Researcher、Developer等の機能解放型サブスクリプションを設定できる。",
+      "requirement_ids": [
+        "BR-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-140",
+      "source_key": "U12",
+      "statement": "商用利用、API、headless実行、配信制御等を上位プランへ提供できる。",
+      "requirement_ids": [
+        "BR-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-141",
+      "source_key": "T01",
+      "statement": "MVPはWebアプリケーションを優先する。",
+      "requirement_ids": [
+        "BR-007",
+        "REL-003"
+      ]
+    },
+    {
+      "source_id": "CHAT-142",
+      "source_key": "T02",
+      "statement": "PWAとしてホーム画面追加・アプリ風利用を可能にできる。",
+      "requirement_ids": [
+        "REL-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-143",
+      "source_key": "T03",
+      "statement": "スマホは進行確認、通知、解説、簡易介入、共有、配信操作を中心とする。",
+      "requirement_ids": [
+        "BR-008",
+        "FR-076",
+        "REL-004",
+        "UR-020"
+      ]
+    },
+    {
+      "source_id": "CHAT-144",
+      "source_key": "T04",
+      "statement": "長期計算、複数seed、惑星規模、動画高品質レンダリングはクラウドジョブへ送れる。",
+      "requirement_ids": [
+        "BR-010",
+        "FR-075",
+        "NFR-007",
+        "REL-004",
+        "REL-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-145",
+      "source_key": "T05",
+      "statement": "小規模培養皿シミュレーションはローカルで完結できる。",
+      "requirement_ids": [
+        "BR-013",
+        "FR-074",
+        "REL-010"
+      ]
+    },
+    {
+      "source_id": "CHAT-146",
+      "source_key": "T06",
+      "statement": "Web、スマホ、将来Unityは同一シミュレーションコア・API・ログ契約を共有する。",
+      "requirement_ids": [
+        "FR-077",
+        "NFR-012",
+        "NFR-024",
+        "NFR-025",
+        "NFR-031"
+      ]
+    },
+    {
+      "source_id": "CHAT-147",
+      "source_key": "T07",
+      "statement": "Unityは市場性とビジュアル需要を確認してから追加する。",
+      "requirement_ids": [
+        "BR-007",
+        "NFR-031",
+        "REL-009"
+      ]
+    },
+    {
+      "source_id": "CHAT-148",
+      "source_key": "T08",
+      "statement": "スマホでは複雑なコドン・代謝編集を簡略化し、PC/Webへ誘導できる。",
+      "requirement_ids": [
+        "BR-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-149",
+      "source_key": "T09",
+      "statement": "アカウント、クラウド同期、ジョブ状態、購入履歴、UGC所有を管理する。",
+      "requirement_ids": [
+        "FR-073",
+        "NFR-022"
+      ]
+    },
+    {
+      "source_id": "CHAT-150",
+      "source_key": "T10",
+      "statement": "ローカル世界・オフライン実験を基本機能として保持し、クラウド必須化を避ける。",
+      "requirement_ids": [
+        "BR-013",
+        "FR-074",
+        "NFR-021",
+        "NFR-022"
+      ]
+    },
+    {
+      "source_id": "CHAT-151",
+      "source_key": "H01",
+      "statement": "全成果物をHELIX基盤の要求・設計・テスト・PlanAssetへ接続できる。",
+      "requirement_ids": [
+        "BR-001",
+        "HLX-001",
+        "REL-001"
+      ]
+    },
+    {
+      "source_id": "CHAT-152",
+      "source_key": "H02",
+      "statement": "要求には一意ID、優先度、リリース、受入条件、検証方法、ソース追跡を持たせる。",
+      "requirement_ids": [
+        "HLX-002",
+        "HLX-003",
+        "HLX-015",
+        "HLX-019"
+      ]
+    },
+    {
+      "source_id": "CHAT-153",
+      "source_key": "H03",
+      "statement": "人間向け文書と機械可読JSONマニフェストを同時に提供する。",
+      "requirement_ids": [
+        "HLX-001",
+        "HLX-002",
+        "NFR-026",
+        "REL-001"
+      ]
+    },
+    {
+      "source_id": "CHAT-154",
+      "source_key": "H04",
+      "statement": "AI開発を役割別レーンとゲートで分離する。",
+      "requirement_ids": [
+        "BR-014",
+        "HLX-007"
+      ]
+    },
+    {
+      "source_id": "CHAT-155",
+      "source_key": "H05",
+      "statement": "MCPツールは型付き入出力、dry-run、権限、監査ログ、承認境界を持つ。",
+      "requirement_ids": [
+        "FR-078",
+        "HLX-008",
+        "HLX-009",
+        "HLX-010",
+        "HLX-016",
+        "HLX-017",
+        "NFR-013",
+        "NFR-024"
+      ]
+    },
+    {
+      "source_id": "CHAT-156",
+      "source_key": "H06",
+      "statement": "重要なシミュレーション・課金・UGC変更は独立レビューを通す。",
+      "requirement_ids": [
+        "HLX-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-157",
+      "source_key": "H07",
+      "statement": "リリース段階ごとにPlanAsset、依存、出口条件、証跡を定義する。",
+      "requirement_ids": [
+        "HLX-005",
+        "HLX-015",
+        "HLX-019",
+        "HLX-020"
+      ]
+    },
+    {
+      "source_id": "CHAT-158",
+      "source_key": "H08",
+      "statement": "シミュレーションコアを最優先ワークストリームとして扱う。",
+      "requirement_ids": [
+        "BR-002",
+        "HLX-006"
+      ]
+    },
+    {
+      "source_id": "CHAT-159",
+      "source_key": "H09",
+      "statement": "AI生成コード・データ・法則は受入テストと不変条件を満たすまで採用しない。",
+      "requirement_ids": [
+        "BR-014",
+        "HLX-012"
+      ]
+    },
+    {
+      "source_id": "CHAT-160",
+      "source_key": "H10",
+      "statement": "人間はゲームとしての面白さ、理解可能性、再試行意欲を評価する。",
+      "requirement_ids": [
+        "BR-015",
+        "HLX-013",
+        "REL-014"
+      ]
+    },
+    {
+      "source_id": "CHAT-161",
+      "source_key": "H11",
+      "statement": "保存則、決定論、系統固定、説明根拠、計算予算をHELIX hard gateとして扱う。",
+      "requirement_ids": [
+        "HLX-004",
+        "HLX-014",
+        "HLX-018",
+        "NFR-011"
+      ]
+    },
+    {
+      "source_id": "CHAT-162",
+      "source_key": "D01",
+      "statement": "要件パッケージは重複ID、未追跡要求、未割当リリース、受入条件欠落を機械検証する。",
+      "requirement_ids": [
+        "HLX-003",
+        "HLX-004"
+      ]
+    },
+    {
+      "source_id": "CHAT-163",
+      "source_key": "D02",
+      "statement": "個人情報、決済情報、子ども利用、音声録音、UGC法務は正式ローンチ前に法務レビューする。",
+      "requirement_ids": [
+        "BR-017",
+        "NFR-015",
+        "NFR-016",
+        "NFR-017",
+        "REL-012"
+      ]
+    },
+    {
+      "source_id": "CHAT-164",
+      "source_key": "D03",
+      "statement": "科学的妥当性とゲーム内仮説はラベル、モデル版、出典、確度で区別する。",
+      "requirement_ids": [
+        "BR-012",
+        "NFR-010",
+        "NFR-027"
+      ]
+    },
+    {
+      "source_id": "CHAT-165",
+      "source_key": "D04",
+      "statement": "外部科学ライブラリ・モデルはライセンスと再配布条件を検査する。",
+      "requirement_ids": [
+        "BR-017",
+        "NFR-018",
+        "NFR-030",
+        "REL-008"
+      ]
+    },
+    {
+      "source_id": "CHAT-166",
+      "source_key": "D05",
+      "statement": "初期段階では医療・診断・現実の生命作成を目的としない。",
+      "requirement_ids": [
+        "BR-017",
+        "NFR-027"
+      ]
+    },
+    {
+      "source_id": "CHAT-167",
+      "source_key": "D06",
+      "statement": "セーブデータ・ログ・動画・UGCの互換性をversioned schemaで管理する。",
+      "requirement_ids": [
+        "FR-077",
+        "HLX-018",
+        "NFR-012",
+        "NFR-024",
+        "SIM-038"
+      ]
+    },
+    {
+      "source_id": "CHAT-168",
+      "source_key": "D07",
+      "statement": "性能劣化を検出するため基準シナリオと計算予算をCIに固定する。",
+      "requirement_ids": [
+        "HLX-014",
+        "NFR-002",
+        "NFR-008"
+      ]
+    }
+  ],
+  "requirement_to_sources": [
+    {
+      "requirement_id": "BR-001",
+      "source_ids": [
+        "CHAT-001",
+        "CHAT-020",
+        "CHAT-151"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "BR-002",
+      "source_ids": [
+        "CHAT-004",
+        "CHAT-158"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "BR-003",
+      "source_ids": [
+        "CHAT-009",
+        "CHAT-008"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "BR-004",
+      "source_ids": [
+        "CHAT-002",
+        "CHAT-003",
+        "CHAT-005",
+        "CHAT-013",
+        "CHAT-014"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "BR-005",
+      "source_ids": [
+        "CHAT-021",
+        "CHAT-022",
+        "CHAT-023",
+        "CHAT-024",
+        "CHAT-025",
+        "CHAT-007"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "BR-006",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025"
+      ],
+      "target_release": "R7"
+    },
+    {
+      "requirement_id": "BR-007",
+      "source_ids": [
+        "CHAT-141",
+        "CHAT-147",
+        "CHAT-104"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "BR-008",
+      "source_ids": [
+        "CHAT-143",
+        "CHAT-148",
+        "CHAT-013"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "BR-009",
+      "source_ids": [
+        "CHAT-016",
+        "CHAT-018",
+        "CHAT-019",
+        "CHAT-117",
+        "CHAT-129"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "BR-010",
+      "source_ids": [
+        "CHAT-015",
+        "CHAT-139",
+        "CHAT-140",
+        "CHAT-144"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "BR-011",
+      "source_ids": [
+        "CHAT-018",
+        "CHAT-124",
+        "CHAT-125",
+        "CHAT-128"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "BR-012",
+      "source_ids": [
+        "CHAT-068",
+        "CHAT-130",
+        "CHAT-135",
+        "CHAT-164"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "BR-013",
+      "source_ids": [
+        "CHAT-145",
+        "CHAT-150",
+        "CHAT-014"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "BR-014",
+      "source_ids": [
+        "CHAT-006",
+        "CHAT-154",
+        "CHAT-159"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "BR-015",
+      "source_ids": [
+        "CHAT-160"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "BR-016",
+      "source_ids": [
+        "CHAT-017",
+        "CHAT-131",
+        "CHAT-132"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "BR-017",
+      "source_ids": [
+        "CHAT-136",
+        "CHAT-163",
+        "CHAT-165",
+        "CHAT-166"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "BR-018",
+      "source_ids": [
+        "CHAT-010",
+        "CHAT-011",
+        "CHAT-101"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-001",
+      "source_ids": [
+        "CHAT-032",
+        "CHAT-033",
+        "CHAT-031"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-002",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-030"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-003",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-031",
+        "CHAT-037"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-004",
+      "source_ids": [
+        "CHAT-058",
+        "CHAT-072",
+        "CHAT-087"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-005",
+      "source_ids": [
+        "CHAT-029",
+        "CHAT-067"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-006",
+      "source_ids": [
+        "CHAT-034"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-007",
+      "source_ids": [
+        "CHAT-035",
+        "CHAT-036",
+        "CHAT-037",
+        "CHAT-044",
+        "CHAT-045"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-008",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-052",
+        "CHAT-055",
+        "CHAT-057"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-009",
+      "source_ids": [
+        "CHAT-039",
+        "CHAT-040",
+        "CHAT-041",
+        "CHAT-044",
+        "CHAT-059"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "UR-010",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-048",
+        "CHAT-082"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "UR-011",
+      "source_ids": [
+        "CHAT-047",
+        "CHAT-089",
+        "CHAT-041"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "UR-012",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-059"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-013",
+      "source_ids": [
+        "CHAT-069",
+        "CHAT-071"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-014",
+      "source_ids": [
+        "CHAT-105",
+        "CHAT-113"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "UR-015",
+      "source_ids": [
+        "CHAT-027",
+        "CHAT-108"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-016",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-116"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-017",
+      "source_ids": [
+        "CHAT-117",
+        "CHAT-118",
+        "CHAT-122"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "UR-018",
+      "source_ids": [
+        "CHAT-119",
+        "CHAT-120"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "UR-019",
+      "source_ids": [
+        "CHAT-121"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "UR-020",
+      "source_ids": [
+        "CHAT-143"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "UR-021",
+      "source_ids": [
+        "CHAT-129",
+        "CHAT-133"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "UR-022",
+      "source_ids": [
+        "CHAT-131",
+        "CHAT-132"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "UR-023",
+      "source_ids": [
+        "CHAT-138"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "UR-024",
+      "source_ids": [
+        "CHAT-062",
+        "CHAT-063",
+        "CHAT-065"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "UR-025",
+      "source_ids": [
+        "CHAT-064",
+        "CHAT-066"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "UR-026",
+      "source_ids": [
+        "CHAT-026",
+        "CHAT-090",
+        "CHAT-094"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-001",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-068",
+        "CHAT-103"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-002",
+      "source_ids": [
+        "CHAT-032",
+        "CHAT-044"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-003",
+      "source_ids": [
+        "CHAT-033",
+        "CHAT-059"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-004",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-077",
+        "CHAT-086"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-005",
+      "source_ids": [
+        "CHAT-028",
+        "CHAT-031"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-006",
+      "source_ids": [
+        "CHAT-031",
+        "CHAT-039",
+        "CHAT-088"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-007",
+      "source_ids": [
+        "CHAT-030",
+        "CHAT-078",
+        "CHAT-079"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-008",
+      "source_ids": [
+        "CHAT-072",
+        "CHAT-081",
+        "CHAT-084"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-009",
+      "source_ids": [
+        "CHAT-087",
+        "CHAT-088",
+        "CHAT-098"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-010",
+      "source_ids": [
+        "CHAT-074",
+        "CHAT-075",
+        "CHAT-076"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-011",
+      "source_ids": [
+        "CHAT-077",
+        "CHAT-082",
+        "CHAT-084"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-012",
+      "source_ids": [
+        "CHAT-078",
+        "CHAT-079"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-013",
+      "source_ids": [
+        "CHAT-080"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-014",
+      "source_ids": [
+        "CHAT-073",
+        "CHAT-085"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-015",
+      "source_ids": [
+        "CHAT-086",
+        "CHAT-039"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-016",
+      "source_ids": [
+        "CHAT-082",
+        "CHAT-083"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-017",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-055"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-018",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-053"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-019",
+      "source_ids": [
+        "CHAT-037",
+        "CHAT-054"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-020",
+      "source_ids": [
+        "CHAT-039"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-021",
+      "source_ids": [
+        "CHAT-040"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-022",
+      "source_ids": [
+        "CHAT-041",
+        "CHAT-047"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-023",
+      "source_ids": [
+        "CHAT-042"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-024",
+      "source_ids": [
+        "CHAT-043"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-025",
+      "source_ids": [
+        "CHAT-048",
+        "CHAT-049"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-026",
+      "source_ids": [
+        "CHAT-050",
+        "CHAT-061"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-027",
+      "source_ids": [
+        "CHAT-044",
+        "CHAT-054"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-028",
+      "source_ids": [
+        "CHAT-045",
+        "CHAT-061"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-029",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-052",
+        "CHAT-055"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-030",
+      "source_ids": [
+        "CHAT-036",
+        "CHAT-056"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-031",
+      "source_ids": [
+        "CHAT-053"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-032",
+      "source_ids": [
+        "CHAT-052"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-033",
+      "source_ids": [
+        "CHAT-046"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-034",
+      "source_ids": [
+        "CHAT-049",
+        "CHAT-048"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-035",
+      "source_ids": [
+        "CHAT-062",
+        "CHAT-063"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-036",
+      "source_ids": [
+        "CHAT-064",
+        "CHAT-103"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-037",
+      "source_ids": [
+        "CHAT-067",
+        "CHAT-068",
+        "CHAT-069"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-038",
+      "source_ids": [
+        "CHAT-070"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-039",
+      "source_ids": [
+        "CHAT-071",
+        "CHAT-060"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-040",
+      "source_ids": [
+        "CHAT-092",
+        "CHAT-093"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-041",
+      "source_ids": [
+        "CHAT-090",
+        "CHAT-091",
+        "CHAT-094"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-042",
+      "source_ids": [
+        "CHAT-094"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "FR-043",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-044",
+      "source_ids": [
+        "CHAT-098"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-045",
+      "source_ids": [
+        "CHAT-096"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-046",
+      "source_ids": [
+        "CHAT-099"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-047",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-111"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-048",
+      "source_ids": [
+        "CHAT-100",
+        "CHAT-101"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-049",
+      "source_ids": [
+        "CHAT-011",
+        "CHAT-107"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-050",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-110"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-051",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-109"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-052",
+      "source_ids": [
+        "CHAT-107"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-053",
+      "source_ids": [
+        "CHAT-105",
+        "CHAT-113"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-054",
+      "source_ids": [
+        "CHAT-108",
+        "CHAT-115"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-055",
+      "source_ids": [
+        "CHAT-114"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-056",
+      "source_ids": [
+        "CHAT-115"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-057",
+      "source_ids": [
+        "CHAT-112",
+        "CHAT-128"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-058",
+      "source_ids": [
+        "CHAT-117",
+        "CHAT-111"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-059",
+      "source_ids": [
+        "CHAT-118"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-060",
+      "source_ids": [
+        "CHAT-120"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-061",
+      "source_ids": [
+        "CHAT-119"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-062",
+      "source_ids": [
+        "CHAT-121"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-063",
+      "source_ids": [
+        "CHAT-122"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-064",
+      "source_ids": [
+        "CHAT-123"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-065",
+      "source_ids": [
+        "CHAT-123"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-066",
+      "source_ids": [
+        "CHAT-125"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-067",
+      "source_ids": [
+        "CHAT-126",
+        "CHAT-127"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-068",
+      "source_ids": [
+        "CHAT-129",
+        "CHAT-133",
+        "CHAT-134"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "FR-069",
+      "source_ids": [
+        "CHAT-134",
+        "CHAT-135",
+        "CHAT-136"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-070",
+      "source_ids": [
+        "CHAT-130",
+        "CHAT-131",
+        "CHAT-135"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-071",
+      "source_ids": [
+        "CHAT-132",
+        "CHAT-136"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-072",
+      "source_ids": [
+        "CHAT-138"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "FR-073",
+      "source_ids": [
+        "CHAT-149"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-074",
+      "source_ids": [
+        "CHAT-145",
+        "CHAT-150"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "FR-075",
+      "source_ids": [
+        "CHAT-144"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-076",
+      "source_ids": [
+        "CHAT-143"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "FR-077",
+      "source_ids": [
+        "CHAT-146",
+        "CHAT-167"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "FR-078",
+      "source_ids": [
+        "CHAT-137",
+        "CHAT-155"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "SIM-001",
+      "source_ids": [
+        "CHAT-083"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-002",
+      "source_ids": [
+        "CHAT-083",
+        "CHAT-084"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-003",
+      "source_ids": [
+        "CHAT-072",
+        "CHAT-082",
+        "CHAT-083"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-004",
+      "source_ids": [
+        "CHAT-074",
+        "CHAT-075",
+        "CHAT-076"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-005",
+      "source_ids": [
+        "CHAT-078",
+        "CHAT-079"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-006",
+      "source_ids": [
+        "CHAT-047"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-007",
+      "source_ids": [
+        "CHAT-047",
+        "CHAT-082"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-008",
+      "source_ids": [
+        "CHAT-035",
+        "CHAT-058"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-009",
+      "source_ids": [
+        "CHAT-037",
+        "CHAT-055"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-010",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-055"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-011",
+      "source_ids": [
+        "CHAT-051",
+        "CHAT-055"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-012",
+      "source_ids": [
+        "CHAT-055",
+        "CHAT-057"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-013",
+      "source_ids": [
+        "CHAT-052",
+        "CHAT-055"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-014",
+      "source_ids": [
+        "CHAT-054",
+        "CHAT-056"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "SIM-015",
+      "source_ids": [
+        "CHAT-045"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-016",
+      "source_ids": [
+        "CHAT-050",
+        "CHAT-061"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-017",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-089"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-018",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-048"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-019",
+      "source_ids": [
+        "CHAT-046",
+        "CHAT-048"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-020",
+      "source_ids": [
+        "CHAT-041",
+        "CHAT-089"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-021",
+      "source_ids": [
+        "CHAT-040"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-022",
+      "source_ids": [
+        "CHAT-039"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "SIM-023",
+      "source_ids": [
+        "CHAT-038",
+        "CHAT-033"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "SIM-024",
+      "source_ids": [
+        "CHAT-059",
+        "CHAT-033"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-025",
+      "source_ids": [
+        "CHAT-060"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-026",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-059"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-027",
+      "source_ids": [
+        "CHAT-068",
+        "CHAT-083"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "SIM-028",
+      "source_ids": [
+        "CHAT-069",
+        "CHAT-071"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "SIM-029",
+      "source_ids": [
+        "CHAT-063",
+        "CHAT-065"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-030",
+      "source_ids": [
+        "CHAT-064"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-031",
+      "source_ids": [
+        "CHAT-049",
+        "CHAT-048"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-032",
+      "source_ids": [
+        "CHAT-050"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-033",
+      "source_ids": [
+        "CHAT-053"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-034",
+      "source_ids": [
+        "CHAT-094",
+        "CHAT-083"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "SIM-035",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-036",
+      "source_ids": [
+        "CHAT-097",
+        "CHAT-059"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-037",
+      "source_ids": [
+        "CHAT-098"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-038",
+      "source_ids": [
+        "CHAT-096",
+        "CHAT-167"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-039",
+      "source_ids": [
+        "CHAT-099",
+        "CHAT-093"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-040",
+      "source_ids": [
+        "CHAT-100"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-041",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-110"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "SIM-042",
+      "source_ids": [
+        "CHAT-108",
+        "CHAT-109",
+        "CHAT-115"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-043",
+      "source_ids": [
+        "CHAT-109",
+        "CHAT-108"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "SIM-044",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-117"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "SIM-045",
+      "source_ids": [
+        "CHAT-134",
+        "CHAT-135",
+        "CHAT-068"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "NFR-001",
+      "source_ids": [
+        "CHAT-060",
+        "CHAT-111"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-002",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097",
+        "CHAT-099",
+        "CHAT-168"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-003",
+      "source_ids": [
+        "CHAT-012",
+        "CHAT-104"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-004",
+      "source_ids": [
+        "CHAT-012"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-005",
+      "source_ids": [
+        "CHAT-095",
+        "CHAT-097",
+        "CHAT-098",
+        "CHAT-099"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-006",
+      "source_ids": [
+        "CHAT-102"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "NFR-007",
+      "source_ids": [
+        "CHAT-144",
+        "CHAT-015"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "NFR-008",
+      "source_ids": [
+        "CHAT-106",
+        "CHAT-168"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-009",
+      "source_ids": [
+        "CHAT-108",
+        "CHAT-109"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-010",
+      "source_ids": [
+        "CHAT-068",
+        "CHAT-135",
+        "CHAT-164"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-011",
+      "source_ids": [
+        "CHAT-161",
+        "CHAT-084"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-012",
+      "source_ids": [
+        "CHAT-167",
+        "CHAT-146"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-013",
+      "source_ids": [
+        "CHAT-134",
+        "CHAT-155"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "NFR-014",
+      "source_ids": [
+        "CHAT-134"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "NFR-015",
+      "source_ids": [
+        "CHAT-163",
+        "CHAT-118"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "NFR-016",
+      "source_ids": [
+        "CHAT-119",
+        "CHAT-120",
+        "CHAT-163"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "NFR-017",
+      "source_ids": [
+        "CHAT-136",
+        "CHAT-163"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "NFR-018",
+      "source_ids": [
+        "CHAT-165"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "NFR-019",
+      "source_ids": [
+        "CHAT-030",
+        "CHAT-122"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-020",
+      "source_ids": [
+        "CHAT-018",
+        "CHAT-129"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "NFR-021",
+      "source_ids": [
+        "CHAT-150"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-022",
+      "source_ids": [
+        "CHAT-149",
+        "CHAT-150"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "NFR-023",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-133"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "NFR-024",
+      "source_ids": [
+        "CHAT-155",
+        "CHAT-146",
+        "CHAT-167"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-025",
+      "source_ids": [
+        "CHAT-006",
+        "CHAT-146"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-026",
+      "source_ids": [
+        "CHAT-107",
+        "CHAT-153"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-027",
+      "source_ids": [
+        "CHAT-164",
+        "CHAT-166"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "NFR-028",
+      "source_ids": [
+        "CHAT-136"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "NFR-029",
+      "source_ids": [
+        "CHAT-111",
+        "CHAT-116"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "NFR-030",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025",
+        "CHAT-165"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "NFR-031",
+      "source_ids": [
+        "CHAT-146",
+        "CHAT-147"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-001",
+      "source_ids": [
+        "CHAT-151",
+        "CHAT-153"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-002",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-153"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-003",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-162"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-004",
+      "source_ids": [
+        "CHAT-162",
+        "CHAT-161"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-005",
+      "source_ids": [
+        "CHAT-157"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-006",
+      "source_ids": [
+        "CHAT-158",
+        "CHAT-004"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-007",
+      "source_ids": [
+        "CHAT-154"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-008",
+      "source_ids": [
+        "CHAT-155"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-009",
+      "source_ids": [
+        "CHAT-155"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-010",
+      "source_ids": [
+        "CHAT-155",
+        "CHAT-106"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-011",
+      "source_ids": [
+        "CHAT-156"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-012",
+      "source_ids": [
+        "CHAT-159"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-013",
+      "source_ids": [
+        "CHAT-160"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-014",
+      "source_ids": [
+        "CHAT-161",
+        "CHAT-168"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-015",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-157"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-016",
+      "source_ids": [
+        "CHAT-137",
+        "CHAT-155"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-017",
+      "source_ids": [
+        "CHAT-137",
+        "CHAT-155"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "HLX-018",
+      "source_ids": [
+        "CHAT-161",
+        "CHAT-167"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "HLX-019",
+      "source_ids": [
+        "CHAT-152",
+        "CHAT-157"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "HLX-020",
+      "source_ids": [
+        "CHAT-157",
+        "CHAT-005"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "REL-001",
+      "source_ids": [
+        "CHAT-001",
+        "CHAT-151",
+        "CHAT-153"
+      ],
+      "target_release": "R0"
+    },
+    {
+      "requirement_id": "REL-002",
+      "source_ids": [
+        "CHAT-104",
+        "CHAT-044",
+        "CHAT-045",
+        "CHAT-106"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "REL-003",
+      "source_ids": [
+        "CHAT-141",
+        "CHAT-022",
+        "CHAT-105"
+      ],
+      "target_release": "R2"
+    },
+    {
+      "requirement_id": "REL-004",
+      "source_ids": [
+        "CHAT-023",
+        "CHAT-024",
+        "CHAT-142",
+        "CHAT-143",
+        "CHAT-144"
+      ],
+      "target_release": "R3"
+    },
+    {
+      "requirement_id": "REL-005",
+      "source_ids": [
+        "CHAT-117",
+        "CHAT-118",
+        "CHAT-120",
+        "CHAT-121",
+        "CHAT-129",
+        "CHAT-137"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "REL-006",
+      "source_ids": [
+        "CHAT-131",
+        "CHAT-132",
+        "CHAT-136",
+        "CHAT-123",
+        "CHAT-126"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "REL-007",
+      "source_ids": [
+        "CHAT-026",
+        "CHAT-062",
+        "CHAT-064",
+        "CHAT-050",
+        "CHAT-053"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "REL-008",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025",
+        "CHAT-165"
+      ],
+      "target_release": "R7"
+    },
+    {
+      "requirement_id": "REL-009",
+      "source_ids": [
+        "CHAT-003",
+        "CHAT-147"
+      ],
+      "target_release": "R6"
+    },
+    {
+      "requirement_id": "REL-010",
+      "source_ids": [
+        "CHAT-014",
+        "CHAT-144",
+        "CHAT-145"
+      ],
+      "target_release": "R1"
+    },
+    {
+      "requirement_id": "REL-011",
+      "source_ids": [
+        "CHAT-007",
+        "CHAT-025"
+      ],
+      "target_release": "R7"
+    },
+    {
+      "requirement_id": "REL-012",
+      "source_ids": [
+        "CHAT-136",
+        "CHAT-163"
+      ],
+      "target_release": "R5"
+    },
+    {
+      "requirement_id": "REL-013",
+      "source_ids": [
+        "CHAT-018",
+        "CHAT-128"
+      ],
+      "target_release": "R4"
+    },
+    {
+      "requirement_id": "REL-014",
+      "source_ids": [
+        "CHAT-160",
+        "CHAT-009"
+      ],
+      "target_release": "R1"
+    }
+  ]
+}
