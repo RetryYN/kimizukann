@@ -63,6 +63,37 @@
 - レビューの本文は helix-bus で受け取り、Claude が `gh pr review` で転記する（`scripts/pr-review.mjs` — H2 で実装）。転記時に内容を変えない
 - CODEOWNERS はオーナー（RetryYN）と Claude の運用アカウント（オーナー本人のアカウントで代行）
 
+### 3.5 マージ責任者（領域ごとに 1 名。「誰が merge ボタンを押すか」を固定）
+| 領域 | マージ責任者 | 条件（すべて満たしたら責任者が squash merge） | エスカレーション |
+|---|---|---|---|
+| `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | 保存則・hash・契約に触れる変更、golden 変更 → Claude |
+| `app/**`（Flutter） | **grok** | CI green ＋ composer または kimi の approve | FFI 契約に触れる → Claude |
+| `docs/design/basic/**`, `docs/contracts/**`（基本設計・契約） | **Claude** | README の審査列の approve ＋ grok の抜け穴審査 | 要件に矛盾 → RFC → オーナー |
+| `docs/design/detail/**`（詳細設計） | **kimi** | Claude のチェックリスト審査（§設計工程）approve | — |
+| `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | **Codex** | grok の抜け穴審査 approve ＋ 自己試験 green | required checks の変更 → Claude |
+| `docs/要件定義書*`, `docs/design/rfc/**` | **オーナー** | kimi ＋ 影響先全員の approve | — |
+| `docs/相談会/**`, `docs/design/basic/02_glossary.md`, README 類（記録・文書） | **gemini** | 記録は審査不要。glossary は kimi approve | — |
+| `docs/contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
+- 責任者は自分が writer の PR をマージしない（その領域の代理: crates→Claude、app→kimi、harness→grok、記録→Claude）
+- 責任者はマージ後 5 分以内に開発ログへ 1 行（`bus-ctl log` で自動化予定）と、関係者へ `[ID][merged] sha=… pr=#n` を直接 post する
+
+### 3.6 AI 間の直接ルーティング（Claude を経由しない）
+原則: **PR が状態の正本、helix-bus は通知**。誰かに何かをしてほしい時は、その相手に直接 post する。Claude には「エスカレーション」と「マージ責任者が Claude の PR」だけを送る。
+
+| 事象 | 誰が | 誰に | 何を |
+|---|---|---|---|
+| PR を Ready にした | writer | その領域の必須レビュアー（§3.3）＋ マージ責任者 | `[ID][review-request] pr=#n` |
+| レビュー完了 | reviewer | writer ＋ マージ責任者 | `[ID][review] verdict=… pr=#n`（本文は GitHub、bus は 1 行） |
+| 指摘に全部返信した | writer | reviewer | `[ID][re-request] pr=#n` |
+| 条件がそろった | マージ責任者 | （自分で merge）→ writer ＋ reviewer ＋ gemini（記録） | `[ID][merged] sha=… pr=#n` |
+| 判断に迷う・契約や要件に触れる | 誰でも | Claude | `[ID][escalate] pr=#n 論点=…` |
+| 設計章が完成した | 起草者 | README の審査者 ＋ Claude（BD の責任者） | `[BD-xx][review-request]` |
+| brief を出す | 領域のマージ責任者（コア: kimi、UI: grok、ハーネス: Codex） | writer | `[ID][brief]`（Claude は BD/契約の brief のみ） |
+| 環境・CI が壊れた | 気づいた人 | Codex | `[ENV][request]` |
+| 用語が無い・文言が要る | 誰でも | gemini | `[TERM][request]` |
+- Codex（ルーター）は 10 分ごとに `gh pr list` を見て、review-request が 30 分以上放置されていれば該当レビュアーに催促 post、条件がそろっているのに未マージなら責任者に催促 post する
+- Claude は日次で PR 一覧・開発ログ・trace を確認してオーナーに要約する（進行の中継はしない）
+
 ## 4. マージ後
 - squash merge のコミットメッセージは PR タイトル＋本文の `Refs:` 行
 - Claude が `docs/相談会/開発ログ.md` に `[ID] merged <sha> pr=#n reviewers=… ci=…` を追記（bus-ctl で自動化予定）
