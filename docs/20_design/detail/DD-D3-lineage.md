@@ -2,7 +2,7 @@
 
 - 版: 0.1（起草 cursor-kimi、2026-08-30）。上位正本: BD-04 §3（Lineage-in-cell 状態機械）、BD-05 §2/§3/§4、BD-06 §3（P3〜P9）、BD-07 §2/§3、BD-01 r4 §5（台帳二段モデル）
 - スコープ: 系統に作用する 5 phase（intake / maintenance / starvation_and_death / reproduction / emission）の**複数系統意味論**と台帳記録。格子への機械的一般化（走査ループ化）は D2（composer）が済ませている前提で、本 DD は振る舞いの新規定義を行う
-- 前提: D2（composer）マージ済みであること。台帳基盤（LedgerRecord・region 集約・digest）と grid 一般化は D2 が導入する（§7 のファイル分割）
+- 前提: D2（cursor-grok）マージ済みであること。台帳基盤（LedgerRecord・region 集約・digest）と grid 一般化は D2 が導入する（§11 のファイル分割）
 
 ## 1. 複数系統の同時存在（確定）
 
@@ -82,15 +82,15 @@
 
 - 全 7 phase 込みの予算は PB-01（床 6 ms / PC 0.5 ms、BD-09）。D3 時点では PC で PB-06（headless 2,000 tick ≤ 1.0 s）を維持すること。criterion ベンチは D2 のものを流用し、悪化時は cause を特定して報告
 
-## 11. ファイル分割（composer との衝突回避。確定）
+## 11. ファイル分割（TEAM-2core: 実装は cursor-grok が D2/D3 ともに担当。確定）
 
-| ファイル | writer | 内容 |
+| ファイル | 担当 PR | 内容 |
 |---|---|---|
-| `crates/sim-core/src/grid.rs`, `diffuse.rs`, `ledger.rs` | composer（D2） | grid 一般化・diffuse・台帳基盤（region 集約・digest） |
-| `crates/sim-core/src/lib.rs` | composer（D2） | SimCore 本体・tick_once。D3 は `mod lineage_phases;` 追加と phase 呼出の差替えのみ（D2 マージ後の姿に追従） |
-| `crates/sim-core/src/lineage_phases.rs` | **glm2（D3）** | intake / maintenance / starvation_and_death / reproduction / emission の複数系統意味論（本 DD） |
-| `crates/sim-core/tests/d3_*.rs` | **glm2（D3）** | §9 の UT/PT |
-| `crates/sim-core/tests/d2_*.rs`, `benches/` | composer（D2） | D2 のテスト・ベンチ |
+| `crates/sim-core/src/grid.rs`, `diffuse.rs`, `ledger.rs` | D2（cursor-grok） | grid 一般化・diffuse・台帳基盤（region 集約・digest） |
+| `crates/sim-core/src/lib.rs` | D2（cursor-grok） | SimCore 本体・tick_once。D3 は `mod lineage_phases;` 追加と phase 呼出の差替えのみ（D2 マージ後の姿に追従） |
+| `crates/sim-core/src/lineage_phases.rs` | **D3（cursor-grok）** | intake / maintenance / starvation_and_death / reproduction / emission の複数系統意味論（本 DD） |
+| `crates/sim-core/tests/d3_*.rs` | **D3（cursor-grok）** | §9 の UT/PT |
+| `crates/sim-core/tests/d2_*.rs`, `benches/` | D2（cursor-grok） | D2 のテスト・ベンチ |
 | `docs/**`, `clippy.toml`, golden | 触らない | golden 更新は Claude 承認・別 PR |
 
-- 依存順序: D3 実装は D2 マージ後に着手（ledger 基盤と grid 一般化に依存）。不明点は `[D3-lineage-001][question]` を cursor-kimi へ（NETWORK 規則: glm2→kimi=[question]）
+- 依存順序: D3 実装は D2 マージ後に着手（ledger 基盤と grid 一般化に依存）。同一実装者（grok）が D2 → D3 の順で担当するためファイル衝突は発生しない。不明点は `[D3-lineage-001][question]` を cursor-kimi へ（NETWORK 規則: grok→kimi=[question]）
