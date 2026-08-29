@@ -1,0 +1,135 @@
+name: rust
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable-x86_64-unknown-linux-gnu
+          components: rustfmt, clippy
+      - run: cargo fmt --manifest-path crates/Cargo.toml --all -- --check
+      - run: cargo clippy --manifest-path crates/Cargo.toml --workspace --all-targets -- -D warnings -D clippy::float_arithmetic
+
+  test:
+    name: test (${{ matrix.label }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: ubuntu
+            runner: ubuntu-latest
+            toolchain: stable-x86_64-unknown-linux-gnu
+          - label: windows
+            runner: windows-latest
+            toolchain: stable-x86_64-pc-windows-gnu
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - run: cargo test --manifest-path crates/Cargo.toml --workspace
+
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Verify all suite
+        run: cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all | tee report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verify-ubuntu
+          path: report.json
+          if-no-files-found: error
+
+  verify-windows:
+    name: verify-windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable-x86_64-pc-windows-gnu
+      - name: Verify all suite
+        shell: bash
+        run: cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all | tee report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verify-windows
+          path: report.json
+          if-no-files-found: error
+
+  determinism-xos:
+    name: determinism-xos
+    needs: [verify, verify-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: verify-ubuntu
+          path: artifacts/ubuntu
+      - uses: actions/download-artifact@v4
+        with:
+          name: verify-windows
+          path: artifacts/windows
+      - name: Compare state hashes
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          def hashes(path):
+              report = json.loads(Path(path).read_text())
+              values = report.get("state_hashes") or [report.get("state_hash")]
+              return sorted(value for value in values if value)
+          ubuntu = hashes("artifacts/ubuntu/report.json")
+          windows = hashes("artifacts/windows/report.json")
+          if not ubuntu or ubuntu != windows:
+              raise SystemExit(f"state hash mismatch: ubuntu={ubuntu} windows={windows}")
+          print(f"state_hash={ubuntu[0]}")
+          PY
+
+  gate-selftest:
+    name: gate-selftest
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: python scripts/gate_selftest.py
+
+  trace:
+    name: trace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/gen_trace.py --strict
+
+  schema:
+    name: schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON schemas
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in Path("docs/30_contracts/schema").glob("*.json"):
+              json.loads(path.read_text())
+              print(f"valid JSON: {path}")
+          PY
