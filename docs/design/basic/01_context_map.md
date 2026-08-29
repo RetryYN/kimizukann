@@ -20,11 +20,11 @@
         sim-core  sim-explain (types + DTO のみ。core に依存しない)
                ▲    ▲
                │    │
-             sim-ffi ──────► app (Flutter)   ※ ffi が core と explain を並列に呼ぶ
+             sim-ffi ◄────── app (Flutter)   ※ app は ffi にのみ依存。ffi が core と explain を並列に呼ぶ
                ▲
              sim-cli (Calibration。core 直呼びはせず ffi の Rust API を経由 → 経路を一本化)
 ```
-- 逆依存禁止。検査: `deny.toml`（bans）＋ `scripts/check_deps.py`（各 Cargo.toml の dependencies を上の許可表と照合。本 PR で追加、CI job `deps`）
+- 逆依存禁止。検査: `crates/deny.toml`（bans。`cargo deny --manifest-path crates/Cargo.toml check bans`）＋ `scripts/check_deps.py`（各 Cargo.toml の dependencies を上の許可表と照合）。CI job `deps` は `.github/workflows/deps.yml`（本 PR）。`check_deps.py` の TRANSITIONAL（sim-cli→sim-core 直依存）は **sim-ffi 新設 PR（ADR-0008 実装）で空にする**ことを期限とする
 - `sim-explain` は `sim-types` と DTO（`SnapshotView`, `LedgerView`）だけに依存。`&mut` を受ける API を持たない（型で読み取り専用を担保。F-01/F-03）
 - `sim-cli` は `sim-ffi` の Rust 側 API（`sim_ffi::api`）を経由し、UI と同じ経路で save バイト列・エラーを扱う（F-02）
 
@@ -57,7 +57,7 @@
 | 保存物 | 中身 | 所有 | hash 対象 | 書込 |
 |---|---|---|---|---|
 | **WorldSave** | 契約 §10 の項目（schema_version, model_version, config_hash, seed, prng_state×4, state_hash, 全セル）＋ **再計算不能なコア状態**: tick、Fixed の継続カウンタ、tick 0 順位（Reversal 用）、InflowEvent の消化位置 | SimCore が直列化、Presentation がファイルへ | ◯（カウンタ類も正規化に含める） | Presentation が一時ファイル→fsync→rename の原子書込。破損時は直前の正常 save に戻す |
-| **LedgerSave** | フロー台帳（region 単位）、スタンプ列、z 窓（10 tick 平均×20） | SimCore（台帳）／Explain（窓・スタンプ） | ✕（hash 外だが **ダイジェスト**を三経路 AT で比較） | WorldSave と同じトランザクションで保存。**再計算しない**（復帰後のイベント列一致のため） |
+| **LedgerSave** | フロー台帳（region 単位）、スタンプ列、z 窓（10 tick 平均×20） | SimCore（台帳）／Explain（窓・スタンプ） | ✕（hash 外だが **台帳ダイジェスト** = SHA-256(台帳エントリを tick, cell_index, lineage, reason, from, to, amount の順に LE 直列化 → スタンプを tick, kind, region_ids の順 → z 窓を pool, 系統, 値の順) を三経路 AT で比較） | WorldSave と同じトランザクションで保存。**再計算しない**（復帰後のイベント列一致のため） |
 | **SessionSave** | 速度、due tick、画面、ひとこと仮説 3 値、経過秒 | Presentation | ✕ | 別ファイル。無くても World/Ledger から再開可能（UX が落ちるだけ） |
 | カード・指標ログ | 生命史カード、ローカル指標 | Presentation | ✕ | 別ファイル |
 - 「save 完了を確認してから kill しても復帰できる」は AT-D12-RES で検証（BD-11 RES-01..04）

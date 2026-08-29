@@ -12,4 +12,4 @@
 
 ## 結果
 - 正規化順（v2）: tick, seed, width, height, model_version(UTF-8), PRNG 4 ストリーム state（LE u64×4×4）, **Fixed 継続カウンタ（u32）, tick 0 順位（u8×L）, inflow 消化位置（u32）**, セル row-major で nutrient, biomass[0..8], carcass, waste, energy[0..8], occupancy_peak（各 i64 LE）。三経路 AT は hash に加えて終了ラベルと台帳ダイジェストも比較する（grok F-14）
-- 順序変更は model_version の hash 部（`hash=sha256-v1`）を bump
+- 現行は `hash=sha256-v2`。正規化順の変更は必ず hash 部を bump（v1 は D1 実装、v2 は本 ADR 改定時点で未実装。D2 の DD で切替）

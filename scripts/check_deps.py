@@ -9,7 +9,7 @@ ALLOWED = {
     'kimizukann-sim-ffi': {'kimizukann-sim-types', 'kimizukann-sim-core', 'kimizukann-sim-explain'},
     'kimizukann-sim-cli': {'kimizukann-sim-types', 'kimizukann-sim-ffi'},
 }
-# 移行期間: sim-ffi 新設まで sim-cli の sim-core 直依存を許す（ADR-0008 の実装で削除）
+# 移行期間: sim-ffi 新設 PR（ADR-0008 実装）で TRANSITIONAL を空にする。それ以降に残っていれば設計違反
 TRANSITIONAL = {'kimizukann-sim-cli': {'kimizukann-sim-core'}}
 
 bad = []
