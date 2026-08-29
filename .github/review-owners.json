@@ -1,17 +1,15 @@
 {
   "version": 1,
   "rules": [
-    {
-      "paths": ["crates/**/tests/**", "docs/20_design/basic/08_*.md"],
-      "allOf": ["kimi", "claude"]
-    },
+    {"paths": ["crates/**/tests/**"], "anyOf": ["kimi", "claude"]},
+    {"paths": ["docs/20_design/basic/08_*.md"], "allOf": ["kimi", "claude"]},
     {
       "paths": ["crates/**"],
       "allOf": ["kimi"],
       "writers": ["grok"]
     },
     {
-      "paths": ["docs/20_design/basic/**", "docs/30_contracts/**"],
+      "paths": ["docs/20_design/basic/**"],
       "allOf": ["grok"]
     },
     {
@@ -32,7 +30,11 @@
     },
     {"paths": [".github/**", ".githooks/**", "scripts/**"], "allOf": ["grok"]},
     {"paths": ["docs/10_requirements/**", "docs/20_design/rfc/**"], "allOf": ["owner"]},
-    {"paths": ["docs/20_design/basic/02_glossary.md"], "allOf": ["kimi"]},
+    {
+      "paths": ["docs/20_design/basic/02_glossary.md"],
+      "allOf": ["grok"],
+      "exclusive": true
+    },
     {"paths": ["docs/30_contracts/**"], "allOf": ["claude"]},
     {"paths": ["docs/40_process/**", "docs/50_records/**", "README*"], "allOf": ["claude"]},
     {"paths": ["docs/calib/**"], "allOf": ["grok"]},
