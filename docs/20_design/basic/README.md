@@ -5,7 +5,7 @@
 | 章 | ファイル | 内容 | 起草 | 審査 | 完成条件 |
 |---|---|---|---|---|---|
 | BD-01 | `01_context_map.md` | 境界づけられたコンテキスト（SimCore / Calibration / Presentation / Distribution）、依存方向、腐敗防止層（FFI） | Claude | grok | 依存方向が CI（cargo-deny + 自作チェック）で検査可能 |
-| BD-02 | `02_glossary.md` | ユビキタス言語: 語 / 定義 / 型 / 単位 / 値域 / 出典 REQ | gemini | kimi | 要件定義書・契約・コードの識別子が全て載る。未登録語 0 |
+| BD-02 | `02_glossary.md` | ユビキタス言語: 語 / 定義 / 型 / 単位 / 値域 / 出典 REQ | kimi（2026-08-30 まで gemini） | grok | 要件定義書・契約・コードの識別子が全て載る。未登録語 0 |
 | BD-03 | `03_domain_model.md` | 集約（World/Cell/Ledger/Rng/Termination/Save）、値オブジェクト、**不変条件を式で**、違反時の挙動 | kimi | Claude | 各不変条件に property test の雛形（入力生成・assert）が付く |
 | BD-04 | `04_state_machines.md` | Run / Cell 占有 / Lineage-in-cell の状態遷移表（状態×イベント→次状態・ガード・アクション） | kimi | grok | 全状態×全イベントが表に埋まり、生成テストが書ける |
 | BD-05 | `05_contract.md` | 既存 `docs/30_contracts/simulation_contract.md` を本章として再編。公開 API（Rust シグネチャ）、7 操作 FFI（C ABI・バッファ規約）、schema、事前/事後条件、semver 規則 | kimi | Claude | `cargo public-api` の出力と一致。各 pub 項目に REQ 参照 |
@@ -15,7 +15,7 @@
 | BD-09 | `09_performance_budget.md` | 段階ごとの予算（REQ-NFR-01/02）、計測方法（criterion / 実機）、基準端末（OPEN-03 の決定を待つ） | Claude | kimi | 予算値が CI しきい値になる |
 | BD-10 | `10_persistence.md` | SaveEnvelope、schema_version / model_version の bump 規則、migration 方針とテスト | kimi | Claude | 旧 save 読込テストの設計がある |
 | BD-11 | `11_ui_flow.md` | 一巡の画面遷移（REQ-UI-01）、スケジューラ規則（REQ-UI-03 の 7 要素）、FFI 呼出順、中断復帰 | grok | kimi | 遷移が表で書かれ、AT-D12 に対応 |
-| BD-12 | `12_events_and_explainer.md` | ドメインイベント一覧、フロー台帳レコード、転換点スコア、理由コード→レバー写像 | kimi | gemini（文言） | REQ-EVT/EXP の全件が対応 |
+| BD-12 | `12_events_and_explainer.md` | ドメインイベント一覧、フロー台帳レコード、転換点スコア、理由コード→レバー写像 | kimi | grok（構造）。文言規約は BD-02 §文体（gemini 起草 PR #17、以後 kimi） | REQ-EVT/EXP の全件が対応 |
 | ADR | `../adr/NNNN-*.md` | 既存決定の記録（i64 固定小数点 / xoshiro / SHA-256 / GNU toolchain / Android 1 本 / Flutter） | Claude | — | 既存決定を網羅 |
 | trace | `../trace.md` | REQ → BD 章 → AT → DD → UT の対応表 | Claude | CI | P0 で AT 無し = 0 |
 
