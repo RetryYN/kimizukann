@@ -6,7 +6,11 @@
       "allOf": ["grok"],
       "oneNonWriter": true
     },
-    {"paths": ["crates/**"], "allOf": ["kimi"]},
+    {
+      "paths": ["crates/**"],
+      "allOf": ["kimi"],
+      "writers": ["composer", "glm2"]
+    },
     {
       "paths": ["docs/20_design/basic/**", "docs/30_contracts/**"],
       "allOf": ["grok"]

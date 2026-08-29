@@ -90,6 +90,7 @@ def canonical_identity(value: str) -> str:
         "cursor-grok": "grok",
         "cursor-glm": "composer",
         "cursor-composer": "composer",
+        "cursor-glm2": "glm2",
         "cursor-gemini": "gemini",
         "retryyn": "owner",
         "owner": "owner",
@@ -160,10 +161,14 @@ def normalize_rule(raw: dict[str, Any]) -> dict[str, Any]:
     paths = raw.get("paths", raw.get("glob", []))
     if isinstance(paths, str):
         paths = [paths]
+    writers = raw.get("writers", raw.get("writer", []))
+    if isinstance(writers, str):
+        writers = [writers]
     return {
         "paths": [str(path).replace("\\", "/") for path in paths],
         "all": [canonical_identity(str(v)) for v in raw.get("allOf", raw.get("all", []))],
         "any": [canonical_identity(str(v)) for v in raw.get("anyOf", raw.get("any", []))],
+        "writers": [canonical_identity(str(v)) for v in writers],
         "one_non_writer": bool(raw.get("oneNonWriter", raw.get("one_non_writer", False))),
         "exclusive": bool(raw.get("exclusive", False)),
     }
