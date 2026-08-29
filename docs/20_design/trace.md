@@ -8,12 +8,12 @@
 | REQ-GOAL-01 | P0 | — | INSP | — | — |
 | REQ-GOAL-02 | P0 | D0 | INSP（ADR） | 01_context_map.md | — |
 | REQ-GOAL-03 | P0 | D7 | → REQ-ACC-04 | 08_acceptance_tests.md, 12_events_and_explainer.md | — |
-| REQ-SCOPE-01 | P0 | D5 | AT（schema + 参照検査） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md | — |
+| REQ-SCOPE-01 | P0 | D5 | AT（schema + 参照検査） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-SCOPE-02 | P0 | D4 | AT | 02_glossary.md, 08_acceptance_tests.md | — |
 | REQ-SCOPE-09 | P0 | D4/D12 | INSP（プリセット定義に型ラベル）+ USER | — | — |
 | REQ-SCOPE-03 | P0 | D12 | AT（config schema）+USER | 02_glossary.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 11_ui_flow.md | — |
-| REQ-SCOPE-04 | P0 | D4 | AT（ReasonCode 網羅） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 08_acceptance_tests.md | — |
-| REQ-SCOPE-05 | P0 | D4 | AT（use_carcass 系統の存在） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md | — |
+| REQ-SCOPE-04 | P0 | D4 | AT（ReasonCode 網羅） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
+| REQ-SCOPE-05 | P0 | D4 | AT（use_carcass 系統の存在） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-SCOPE-06 | P0 | D7 | AT | 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
 | REQ-SCOPE-07 | P0 | D12 | → REQ-UI-01 | 02_glossary.md | — |
 | REQ-SCOPE-08 | P0 | D12 | AT+USER | 02_glossary.md, 08_acceptance_tests.md | — |
@@ -35,21 +35,21 @@
 | REQ-CON-06 | P1 | — | INSP | — | — |
 | REQ-CON-07 | P0 | — | INSP | — | — |
 | REQ-SIM-01 | P0 | D0 | UT（型）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 10_persistence.md | — |
-| REQ-SIM-02 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
+| REQ-SIM-02 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-SIM-03a | P0 | D2 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
 | REQ-SIM-03b | P0 | D4 | UT + AT（空き家が発生する seed が存在） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md | — |
-| REQ-SIM-04 | P0 | D1 | UT（順序）+ mutation 自己試験 | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md | — |
-| REQ-SIM-05 | P0 | D1 | UT（property: 全変換で保存）+ AT | 0001-fixed-point-i64.md, 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
-| REQ-SIM-06 | P0 | D1/D2 | AT（1 セル・64×64） | 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
+| REQ-SIM-04 | P0 | D1 | UT（順序）+ mutation 自己試験 | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
+| REQ-SIM-05 | P0 | D1 | UT（property: 全変換で保存）+ AT | 0001-fixed-point-i64.md, 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D3-lineage.md | — |
+| REQ-SIM-06 | P0 | D1/D2 | AT（1 セル・64×64） | 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-SIM-07 | P0 | D5 | AT | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-SIM-08 | P0 | D1/D3 | UT + property（0 ≤ energy ≤ 1） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md | — |
-| REQ-SIM-09 | P0 | D1 | UT | 02_glossary.md, 04_state_machines.md, 07_determinism_model.md | — |
+| REQ-SIM-08 | P0 | D1/D3 | UT + property（0 ≤ energy ≤ 1） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, DD-D3-lineage.md | — |
+| REQ-SIM-09 | P0 | D1 | UT | 02_glossary.md, 04_state_machines.md, 07_determinism_model.md, DD-D3-lineage.md | — |
 | REQ-SIM-10 | P0 | D2 | AT（対称性）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-SIM-11 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
-| REQ-SIM-12 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
-| REQ-SIM-13 | P0 | D1 | property + UT（上限・上限+1） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md | — |
+| REQ-SIM-11 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, DD-D3-lineage.md | — |
+| REQ-SIM-12 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, DD-D3-lineage.md | — |
+| REQ-SIM-13 | P0 | D1 | property + UT（上限・上限+1） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, DD-D3-lineage.md | — |
 | REQ-SIM-14 | P0 | D2/D6 | INSP（numeric-model）+ AT（D6 煙試験で panic 0） | 03_domain_model.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
-| REQ-GEN-01 | P0 | D0 | AT（config schema additionalProperties=false） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md | — |
+| REQ-GEN-01 | P0 | D0 | AT（config schema additionalProperties=false） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-GEN-02 | P0 | D12 | INSP + USER | 02_glossary.md, 05_contract.md, 11_ui_flow.md | — |
 | REQ-GEN-03 | P0 | D4 | INSP（config golden） | 02_glossary.md | — |
 | REQ-GEN-04 | P0 | D4 | UT（プリセット検査） | 06_numeric_model.md | — |
@@ -65,7 +65,7 @@
 | REQ-DET-02 | P0 | D1/D8 | AT（代表 tick + ランダム tick 数点） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-DET-03 | P0 | D2/D12 | AT（CI xos）+ MEAS（実機） | 0001-fixed-point-i64.md, 0005-toolchain-gnu-ci-primary.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-04a | P0 | D0 | UT（既知ベクトル） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 10_persistence.md | — |
-| REQ-DET-04b | P0 | D2 | UT（消費回数カウント） | 02_glossary.md, 05_contract.md, 07_determinism_model.md | — |
+| REQ-DET-04b | P0 | D2 | UT（消費回数カウント） | 02_glossary.md, 05_contract.md, 07_determinism_model.md, DD-D3-lineage.md | — |
 | REQ-DET-04c | P0 | D2 | UT + AT（三経路） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-04d | P0 | D0〜 | INSP（clippy disallowed_types / disallowed_methods） | 07_determinism_model.md | — |
 | REQ-DET-05 | P0 | D1 | UT（golden） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
@@ -82,7 +82,7 @@
 | REQ-END-05 | P0 | D7 | AT（D7 分布） | 08_acceptance_tests.md | — |
 | REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md, 12_events_and_explainer.md | — |
-| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 12_events_and_explainer.md | — |
+| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 12_events_and_explainer.md, DD-D3-lineage.md | — |
 | REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
 | REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
 | REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | 12_events_and_explainer.md | — |

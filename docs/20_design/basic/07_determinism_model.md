@@ -26,7 +26,7 @@
 | ストリーム | 用途 | 使用 phase / 処理 | 確定度 | 参照 |
 |---|---|---|---|---|
 | movement | 生体量の近傍拡散の tie-break・移動先抽選 | diffuse（D2 で導入） | 初期仮説（D2 で確定） | REQ-SIM-10 |
-| reproduction | 繁殖の成立抽選・ばらつき | reproduction（D3 で導入） | 初期仮説（D3 で確定） | REQ-SIM-12 |
+| reproduction | 繁殖の成立抽選（ガード成立 (cell, lineage) ごとに 1 語、`u / 2^64 < p_repro` で成立判定。p_repro = 1.0 は初期仮説） | reproduction（D3 で導入） | 確定（DD-D3 §5。構造は確定、p_repro の値は D3 較正で確定） | REQ-SIM-12 |
 | mutation | 初期配置の離散アレル分布（ばらつきレバー）専用。検証版で変異の計算侵入はなく、tick 中の消費は常に 0 | create 時の初期配置のみ | 初期仮説（D4 で確定） | REQ-GEN-08, REQ-OUT-01 |
 | interaction | 初期配置の位置抽選（配置レバーのランダム配置）専用。tick 中の消費は常に 0 | create 時の初期配置のみ | 初期仮説（D4 で確定） | REQ-SCOPE-03 |
 
@@ -44,7 +44,7 @@
 | intake | 0 | 0 | 0 | 0 | 逐次処理・按分なし（REQ-SIM-11） |
 | maintenance | 0 | 0 | 0 | 0 | 決定的課金 |
 | starvation_and_death | 0 | 0 | 0 | 0 | 決定的移行（REQ-SIM-09） |
-| reproduction | 0 | 0 | 0 | 0 | D1 は決定的（energy 余剰の一定割合）。抽選導入後は「繁殖ガード成立 (cell, lineage) ごとに 1 回」（D3 で確定） |
+| reproduction | 0 | ガード成立 (cell, lineage) ごとに 1 回 | 0 | 0 | D3 で抽選導入（DD-D3 §5）。ガード `energy > 2×cost` は状態のみの関数で、乱数値に依らず消費回数が決まる。ガード不成立なら消費 0 |
 | emission | 0 | 0 | 0 | 0 | 決定的排出 |
 | occupancy | 0 | 0 | 0 | 0 | 決定的更新（REQ-SIM-03a） |
 | create（初期配置） | 0 | 0 | 配置セル × 系統ごとに 1 回（アレル抽選） | 配置セル × 系統ごとに 1 回（位置抽選） | ばらつきレバー・ランダム配置（D4 で確定）。tick 進行中は全ストリーム 0 |
