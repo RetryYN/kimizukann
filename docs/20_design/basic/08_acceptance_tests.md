@@ -90,7 +90,7 @@ D3 は AT なし（REQ-SIM-02/08/11/12 は UT・property で担保）。REQ-DET-
 | AT-ID | REQ | 入力 | 期待 | 判定 | 参照 |
 |---|---|---|---|---|---|
 | AT-D8-01 | REQ-DET-02 | ランダム tick 数点（CI が seed から決定的に選択）で save→load→残り | 一気実行と最終 hash がビット一致 | hash 一致 | BD-05 §10 |
-| AT-D8-02 | REQ-DET-06 | SaveEnvelope の正規・破損・版不一致の各 save | 必須 7 フィールド保持、checksum/schema_version/model_version 不一致をエラー | schema 検査 + エラー検査 | BD-05 §12, §13 |
+| AT-D8-02 | REQ-DET-06 | SaveEnvelope の正規・破損・版不一致の各 save | 必須 12 フィールド保持（BD-10 §2）、checksum / schema_version / model_version / state_hash 不一致の 4 経路をそれぞれ専用エラーで拒否 | schema 検査 + エラー検査 | BD-05 §12, §13, BD-10 §2 |
 | AT-D8-03 | REQ-EVT-02 | 100 seed の転換点検出 | 検出 ≥1 件の seed が 90 本以上（空転率 ≤10%）かつ保存 32 件到達 seed 0 本（満杯率 0%）（初期仮説。OPEN-04 の D8 較正で確定） | 分布判定 | BD-12 |
 | AT-D8-04 | REQ-EVT-05 | 同一 seed を検出 on / off で実行 | state hash が一致（検出は表示専用） | hash 一致 | BD-07 §2, BD-12 |
 | AT-D8-05 | REQ-NFR-06 | 旧 schema_version の save | 移行規則どおり読込またはエラー（migration 試験） | schema 検査 | BD-10 |

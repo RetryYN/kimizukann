@@ -107,7 +107,7 @@ inflow の適用位置: `InflowEvent` は tick 先頭（diffuse 直前）に該�
 | `PrngState { seed, movement, reproduction, mutation, interaction }` | struct | REQ-DET-04a, REQ-DET-05 |
 | `StateHash(pub [u8; 32])` | struct | REQ-DET-05 |
 | `Thresholds`（フィールドは下表に分離） | struct | REQ-END-02, REQ-END-03, REQ-END-04a, REQ-SIM-02, REQ-SIM-03 |
-| `SaveEnvelope { schema_version, model_version, config_hash, seed, prng, state_hash, state }` | struct | REQ-DET-06 |
+| `SaveEnvelope { schema_version, model_version, config_hash, config, seed, prng_state, state_hash, ledger_hash, generation, state, ledger, checksum }` | struct（必須 12 フィールド。構造の正本は BD-10 §2） | REQ-DET-06 |
 | `MassCoefficients { intake_to_biomass, intake_to_waste, starvation_to_carcass, death_to_carcass }` | struct | REQ-SIM-05 |
 | `LedgerEntry { tick: u32, cell_index: u32, lineage: u8, from_pool, to_pool, amount, reason }` | struct（発生時粒度。ダイジェストは region 集約後の LedgerRecord、BD-01 r4。sim-types への反映は D2 実装タスク） | REQ-SIM-05, REQ-EVT-04 |
 | `MassLedger { entries }` / `EnergyLedger { entries }` | struct | REQ-SIM-05, REQ-SCOPE-04 |
@@ -169,11 +169,11 @@ FFI は 7 操作（create / load / step / snapshot / explain / save / destroy）
 | 操作 | 入力 | 出力 | バッファ | PRNG 消費 | hash への影響 |
 |---|---|---|---|---|---|
 | `create(config_json, seed)` | config UTF-8、u64 | handle または err | — | 初期化（SplitMix64）のみ | 初期状態を定める |
-| `load(save_bytes)` | WorldSave | handle または err（checksum / schema_version / model_version 不一致） | 呼出側バッファ | 0（状態を復元） | 復元した状態 |
+| `load(save_bytes)` | SaveEnvelope（WorldSave + LedgerSave 同梱。BD-10 §2） | handle または err（checksum / schema_version / model_version / state_hash 不一致） | 呼出側バッファ | 0（状態を復元） | 復元した状態 |
 | `step(handle, n)` | u32 | tick 後の終了ラベル（Option）または err | — | 各 phase の割当分のみ（BD-07 §3） | 唯一 hash を進める操作 |
 | `snapshot(handle, out)` | — | 固定レイアウト（§12.4） | 固定長・呼出側確保 | 0 | なし |
 | `explain(handle, query, out)` | query JSON（event_id 等） | JSON | 可変長: 呼出側バッファ、不足時 `required_len` | 0 | なし（純関数、台帳は読み取りビュー） |
-| `save(handle, out)` | — | WorldSave バイト列 | 可変長: 同上 | 0 | なし |
+| `save(handle, out)` | — | SaveEnvelope バイト列（WorldSave + LedgerSave。BD-10 §2） | 可変長: 同上 | 0 | なし |
 | `destroy(handle)` | — | ok | — | 0 | — |
 
 - 「Presentation → core の入力」は上表の入力列が全て。第 8 操作・未知フィールドは FFI が拒否する。確定。参照: REQ-CON-01, REQ-OUT-05
@@ -192,6 +192,7 @@ typedef enum KzError {
   KZ_ERR_BUFFER = 4,         // 容量不足。out_required_len に必要バイト数を返す
   KZ_ERR_BUSY = 5,           // 再入（操作中の同一 handle 呼出）
   KZ_ERR_NUMERIC = 6,        // NumericError（負値・i64/i128 範囲外）
+  KZ_ERR_STATE_HASH = 7,     // load 後の state_hash / ledger_hash 再計算が不一致（BD-10 §2。semver minor で追加）
 } KzError;
 ```
 
@@ -205,8 +206,9 @@ typedef enum KzError {
 // create: config JSON（UTF-8）と seed から run を生成（Prepared）。参照: REQ-CON-01, REQ-SCOPE-01
 int32_t kz_create(const uint8_t* config_json, uintptr_t config_len, uint64_t seed, KzSim** out_handle);
 
-// load: WorldSave バイト列から run を復元。checksum・schema_version・model_version を検証し、
-// 不一致は KZ_ERR_CHECKSUM / KZ_ERR_SCHEMA / KZ_ERR_MODEL_VERSION。参照: REQ-DET-06, REQ-CON-08
+// load: SaveEnvelope（WorldSave + LedgerSave 同梱、BD-10 §2）バイト列から run を復元。
+// checksum・schema_version・model_version・state_hash/ledger_hash をこの順で検証し、
+// 不一致は KZ_ERR_CHECKSUM / KZ_ERR_SCHEMA / KZ_ERR_MODEL_VERSION / KZ_ERR_STATE_HASH。参照: REQ-DET-06, REQ-CON-08
 int32_t kz_load(const uint8_t* save_bytes, uintptr_t save_len, KzSim** out_handle);
 
 // step: n tick 進める。終了していれば out_label にラベルを返す（無ければ *out_has_label = 0）。
@@ -220,7 +222,7 @@ int32_t kz_snapshot(const KzSim* handle, uint8_t* buf, uintptr_t cap, uintptr_t*
 int32_t kz_explain(const KzSim* handle, const uint8_t* query_json, uintptr_t query_len,
                    uint8_t* buf, uintptr_t cap, uintptr_t* out_required_len);
 
-// save: WorldSave をバッファへ。状態不変。参照: REQ-DET-06
+// save: SaveEnvelope（WorldSave + LedgerSave 同梱、BD-10 §2）をバッファへ。状態不変。参照: REQ-DET-06
 int32_t kz_save(const KzSim* handle, uint8_t* buf, uintptr_t cap, uintptr_t* out_required_len);
 
 // destroy: ハンドルを解放。解放後に呼出側が触れないこと（use-after-destroy は未定義）。参照: REQ-CON-01
@@ -238,11 +240,11 @@ void kz_destroy(KzSim* handle);
 | 操作 | 事前条件 | 事後条件 | 参照 |
 |---|---|---|---|
 | kz_create | config_json は config.schema.json 適合の UTF-8 JSON。out_handle は非 null | KZ_OK なら out_handle に Prepared の run（tick = 0）。エラー時は out_handle 不変 | REQ-SCOPE-01, REQ-CON-01 |
-| kz_load | save_bytes は save.schema.json 適合 | KZ_OK なら保存時の tick・状態・PRNG・カウンタ類（fixed_streak / tick0_ranking / inflow_cursor）を持つ run。不一致は KZ_ERR_CHECKSUM / KZ_ERR_SCHEMA / KZ_ERR_MODEL_VERSION で run を作らない | REQ-DET-06, REQ-CON-08 |
+| kz_load | save_bytes は save.schema.json 適合 | KZ_OK なら保存時の tick・状態・PRNG・カウンタ類（fixed_streak / tick0_ranking / inflow_cursor）・台帳を持つ run。不一致は KZ_ERR_CHECKSUM / KZ_ERR_SCHEMA / KZ_ERR_MODEL_VERSION / KZ_ERR_STATE_HASH で run を作らない（検証順は BD-10 §2） | REQ-DET-06, REQ-CON-08 |
 | kz_step | handle は Prepared / Running / Terminated。n ≥ 1。同一 handle の操作中でない | KZ_OK なら tick が n 増加（Terminated では不変・既存ラベルを返す）。終了条件成立時は out_label にラベル。KZ_ERR_NUMERIC 時は状態不変 | REQ-SIM-04, REQ-SIM-13, REQ-END-01 |
 | kz_snapshot | handle は Destroyed 以外・操作中でない | 状態・PRNG・hash 不変。cap 不足時は KZ_ERR_BUFFER と out_required_len | REQ-VIS-04, REQ-CON-08 |
 | kz_explain | handle は Destroyed 以外・操作中でない。query は JSON | 状態不変。出力は 4 段構造（事実→解釈→不明→次の一手）の JSON | REQ-EXP-01, REQ-EXP-05 |
-| kz_save | handle は Destroyed 以外・操作中でない | 状態不変。出力は save.schema.json 適合の WorldSave | REQ-DET-06 |
+| kz_save | handle は Destroyed 以外・操作中でない | 状態不変。出力は save.schema.json 適合の SaveEnvelope（WorldSave + LedgerSave 同梱、BD-10 §2） | REQ-DET-06 |
 | kz_destroy | handle は非 null・未 destroy・操作中でない | メモリ解放。handle は再利用不可 | REQ-CON-01 |
 
 ## 13. schema
@@ -253,7 +255,7 @@ void kz_destroy(KzSim* handle);
 |---|---|---|---|
 | config | `config.schema.json` | schema_version / model_version / seed / grid / lineages / inflow。lineages[].id は 0..=7 の整数 | REQ-SCOPE-01, REQ-GEN-01, REQ-SIM-07 |
 | result | `result.schema.json` | schema_version / model_version / config_hash / seed / ticks / termination_label / state_hash / events / invariants | REQ-END-01, REQ-OPS-01 |
-| save | `save.schema.json` | schema_version / model_version / config_hash / seed / prng_state / state_hash / state（state は WorldSave: tick・全セル・fixed_streak・tick0_ranking・inflow_cursor を含む。BD-01 r2 §5） | REQ-DET-06 |
+| save | `save.schema.json` | SaveEnvelope 必須 12 フィールド: schema_version / model_version / config_hash / config / seed / prng_state / state_hash / ledger_hash / generation / state / ledger / checksum（構造の正本は BD-10 §2） | REQ-DET-06 |
 
 ## 14. semver 規則
 
