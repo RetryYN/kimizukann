@@ -5,7 +5,7 @@
   "type": "object",
   "required": ["schema_version", "model_version", "config_hash", "seed", "ticks", "termination_label", "state_hash"],
   "properties": {
-    "schema_version": {"type": "string"},
+    "schema_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"},
     "model_version": {"type": "string"},
     "config_hash": {"type": "string"},
     "seed": {"type": "integer", "minimum": 0},
