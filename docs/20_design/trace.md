@@ -26,7 +26,7 @@
 | REQ-USER-02 | P0 | 配布 | INSP | — | — |
 | REQ-USER-03 | P0 | D12 | USER | — | — |
 | REQ-USER-04 | P1 | — | INSP | — | — |
-| REQ-CON-01 | P0 | D0/D12 | INSP + AT（public-api） | 0004-rust-flutter-android.md, 01_context_map.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 11_ui_flow.md | — |
+| REQ-CON-01 | P0 | D0/D12 | INSP + AT（public-api） | 0004-rust-flutter-android.md, 01_context_map.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-CON-08 | P0 | D12 | UT（容量不足・不一致ケース） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-CON-02 | P0 | D0〜 | UT + INSP（clippy: f32/f64 禁止 lint） | 0001-fixed-point-i64.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
 | REQ-CON-03 | P0 | 配布 | INSP | 0004-rust-flutter-android.md | — |
@@ -64,7 +64,7 @@
 | REQ-DET-01 | P0 | D1 | AT | 0003-state-hash-sha256.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-02 | P0 | D1/D8 | AT（代表 tick + ランダム tick 数点） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-DET-03 | P0 | D2/D12 | AT（CI xos）+ MEAS（実機） | 0001-fixed-point-i64.md, 0005-toolchain-gnu-ci-primary.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-DET-04a | P0 | D0 | UT（既知ベクトル） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md | — |
+| REQ-DET-04a | P0 | D0 | UT（既知ベクトル） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 10_persistence.md | — |
 | REQ-DET-04b | P0 | D2 | UT（消費回数カウント） | 02_glossary.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-DET-04c | P0 | D2 | UT + AT（三経路） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-04d | P0 | D0〜 | INSP（clippy disallowed_types / disallowed_methods） | 07_determinism_model.md | — |
@@ -80,7 +80,7 @@
 | REQ-END-04b | P0 | D4 | UT（同率ケース含む） | 02_glossary.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-END-04c | P0 | D4 | UT（同時成立ケース） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-END-05 | P0 | D7 | AT（D7 分布） | 08_acceptance_tests.md | — |
-| REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md, 08_acceptance_tests.md, 10_persistence.md | — |
+| REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md, 08_acceptance_tests.md | — |
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md | — |
 | REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md | — |
 | REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
@@ -98,7 +98,7 @@
 | REQ-UI-05 | P0 | D12 | AT | 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-UI-06 | P0 | D12 | UT（判定）+ INSP | 02_glossary.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-UI-07 | P0 | D12 | AT（schema）+ USER | 02_glossary.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
-| REQ-UI-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 11_ui_flow.md | — |
+| REQ-UI-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-UI-09 | P1 | D12 | UT + INSP | 11_ui_flow.md | — |
 | REQ-VIS-01 | P0 | D10 | INSP + USER（質問 1） | 05_contract.md | — |
 | REQ-VIS-02 | P0 | D12 | USER（質問 1 で 5/8 以上） | — | — |
