@@ -14,7 +14,7 @@
 |---|---|---|---|---|
 | World | `WorldState` | `tick: u32`、`GridState`、`Vec<LineageParams>` | 1 run の全状態を所有し、7 phase の固定順適用を保証する | REQ-SIM-01, REQ-SIM-04 |
 | Cell | `CellState` | `nutrient / biomass[L] / carcass / waste / energy[L] / occupancy_peak`（L ≤ 8）の 6 状態のみ | セル内の物質・エネルギー量を保持する。6 状態以外を持たない | REQ-SIM-01 |
-| Ledger | `MassLedger` / `EnergyLedger` | 追記のみの `Vec<LedgerEntry { from_pool, to_pool, amount, reason }>` | 全変換を理由コード付きで記録し、負値・未記録残差を禁止する | REQ-SIM-05, REQ-SCOPE-04 |
+| Ledger | `MassLedger` / `EnergyLedger` | 追記のみの `Vec<LedgerEntry { tick, cell_index, lineage, from_pool, to_pool, amount, reason }>`（フィールドは BD-05 §3） | 全変換を理由コード付きで記録し、負値・未記録残差を禁止する | REQ-SIM-05, REQ-SCOPE-04 |
 | Rng | `PrngState` | `seed: Seed` + 4 ストリーム（movement / reproduction / mutation / interaction）の内部状態 | 用途別乱数供給。SplitMix64 で seed から 4 ストリームを導出し、各ストリームは xoshiro256**（確定） | REQ-DET-04a |
 | Termination | `TerminationRule` / `Thresholds` / `TerminationLabel` | 5 ラベル、判定タイミング（EveryTick / AtTimeLimit）、優先度 | 終了条件の判定とラベル確定。判定理由を保存する | REQ-END-01, REQ-END-04c |
 | Save | `SaveEnvelope` / `StateSnapshot` / `StateHash` | `schema_version / model_version / config_hash / seed / prng_state / state_hash / state` | 永続化と再開。load 時に checksum・schema_version・model_version を検証する | REQ-DET-06, REQ-CON-08 |
@@ -196,7 +196,7 @@
 
 ### INV-11 台帳完全性
 
-- 式: 全変換が `LedgerEntry { from_pool, to_pool, amount, reason }` を 1 件以上生成し、amount > 0、reason ∈ ReasonCode。未記録の残差・負値エントリは存在しない
+- 式: 全変換が `LedgerEntry { tick, cell_index, lineage, from_pool, to_pool, amount, reason }` を 1 件以上生成し、amount > 0、reason ∈ ReasonCode。未記録の残差・負値エントリは存在しない
 - 違反時: 検査型。Ledger 走査で `from 側減量合計 = to 側増量合計 + 余り戻し` を検証する
 - 参照: REQ-SIM-05, REQ-SCOPE-04
 

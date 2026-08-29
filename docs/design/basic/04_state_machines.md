@@ -1,6 +1,6 @@
 # BD-04 状態機械
 
-- 版: 0.1（起草 cursor-kimi、2026-08-30）
+- 版: 0.1.1（起草 cursor-kimi、2026-08-30。PR #1 レビュー反映: Terminated × step を冪等返却に変更＝旧 ADR 候補 2 を撤回）
 - 入力: `docs/要件定義書_検証版_v0.2.md`（sign-off 済）、`docs/contracts/simulation_contract.md` v0.1（契約 §n で参照）
 - 完成条件: 全状態 × 全イベントが表に埋まり、生成テストが書ける
 - 数値は「確定 / 初期仮説（Dn で確定）」を明記する。集約・不変条件は BD-03、公開 API・FFI は BD-05 を参照
@@ -26,7 +26,7 @@
 |---|---|---|---|---|---|---|---|---|
 | Prepared | —（create は無状態から Prepared を生成する初期イベント） | → Running / 7 phase を n 回適用し tick += n。step 内で終了条件成立時は Terminated へ直接遷移（T1） | → Prepared / SaveEnvelope を生成（状態不変） | —（load は常に新規 Run を生成し、既存 Run には適用しない。ADR 候補 1） | → Prepared / 固定レイアウトバッファへコピーアウト（状態不変。REQ-VIS-04） | → Prepared / 4 段説明を生成（状態不変。REQ-EXP-01） | → Destroyed / メモリ解放 | → Terminated(label) / tick 0 でも全系統生体量 < ε なら Extinct が成立しうる（REQ-END-02） |
 | Running | —（二重 create は行わない） | → Running / 同上。終了条件成立時は Terminated へ（T1） | → Running / SaveEnvelope を生成（状態不変。REQ-DET-02 の三経路の中継点） | —（同上） | → Running / 同上 | → Running / 同上 | → Destroyed / メモリ解放 | → Terminated(label) / ラベル確定・判定理由を保存（REQ-END-04c） |
-| Terminated(label) | — | Err / 終了済み Run への step は拒否（ADR 候補 2） | → Terminated / 結果の SaveEnvelope を生成（状態不変） | —（同上） | → Terminated / 終了時描画をコピーアウト | → Terminated / 絶滅時を含め原因候補と再実験入口を返す（REQ-EXP-05） | → Destroyed / メモリ解放 | —（終了後に再判定しない。冪等） |
+| Terminated(label) | — | → Terminated / 状態不変・既存ラベルを返す（冪等。BD-05 §12.3。旧 ADR 候補 2 の Err 案は撤回） | → Terminated / 結果の SaveEnvelope を生成（状態不変） | —（同上） | → Terminated / 終了時描画をコピーアウト | → Terminated / 絶滅時を含め原因候補と再実験入口を返す（REQ-EXP-05） | → Destroyed / メモリ解放 | —（終了後に再判定しない。冪等） |
 | Destroyed | — | Err / use-after-destroy 禁止 | Err / 同上 | — | Err / 同上 | Err / 同上 | —（二重 destroy は行わない） | —（到達不能） |
 
 - T1（step 内の終了判定ガード。確定）: 各 tick の 7 phase 完了後に、Extinct（毎 tick）→ Fixed（毎 tick）を判定し即終了。上限 tick 到達時は Coexist → Reversal を判定し、いずれも不成立なら TimeLimit。同時成立時は優先順を適用する。参照: REQ-END-02, REQ-END-03, REQ-END-04a, REQ-END-04b, REQ-END-04c
@@ -129,5 +129,5 @@
 ## 4. ADR 候補（REQ に無い設計判断）
 
 - ADR 候補 1: `load` は既存 Run への適用を持たず、常に新規 Run を生成する（ハンドルの再定義を防ぐ）。参照: REQ-CON-01, REQ-DET-06
-- ADR 候補 2: Terminated への `step` は Err とする（終了後の状態改変を防ぐ）。参照: REQ-END-01
+- ADR 候補 2: ~~Terminated への `step` は Err とする~~ → BD-05 §12（BD-01 r2 §3 との整合）で「状態不変・既存ラベルを冪等に返す」に確定。§1.2 の表も更新済み。参照: REQ-END-01, REQ-CON-01
 - ADR 候補 3: Starving は tick を跨ぐ状態とし、回復判定を starvation_and_death に限定する（phase 順の決定性を優先）。参照: REQ-SIM-04
