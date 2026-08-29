@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 kimizukann-sim-core = { path = "../sim-core" }
 kimizukann-sim-types = { path = "../sim-types" }
+serde_json = "1"
