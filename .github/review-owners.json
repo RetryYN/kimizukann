@@ -9,7 +9,7 @@
       "writers": ["grok"]
     },
     {
-      "paths": ["docs/20_design/basic/**"],
+      "paths": ["docs/20_design/basic/**", "docs/30_contracts/**"],
       "allOf": ["grok"]
     },
     {
@@ -21,7 +21,7 @@
       "paths": ["docs/20_design/adr/**", "docs/20_design/basic/05_contract.md", "docs/20_design/basic/07_determinism_model.md"],
       "allOf": ["claude"]
     },
-    {"paths": ["docs/20_design/detail/**"], "allOf": ["kimi"]},
+    {"paths": ["docs/20_design/detail/**"], "allOf": ["grok"]},
     {
       "paths": ["app/**"],
       "allOf": ["kimi", "claude"],
@@ -35,8 +35,8 @@
       "allOf": ["grok"],
       "exclusive": true
     },
-    {"paths": ["docs/30_contracts/**"], "allOf": ["claude"]},
-    {"paths": ["docs/40_process/**", "docs/50_records/**", "README*"], "allOf": ["claude"]},
+    {"paths": ["docs/40_process/**"], "allOf": ["grok"]},
+    {"paths": ["docs/50_records/**", "README*"], "anyOf": ["claude", "grok"]},
     {"paths": ["docs/calib/**"], "allOf": ["grok"]},
     {"paths": ["docs/dist/**"], "allOf": ["grok"]}
   ]
