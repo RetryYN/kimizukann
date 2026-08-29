@@ -71,18 +71,17 @@
 |---|---|---|---|
 | `crates/**`（コア実装・テスト） | **kimi** | CI green ＋ 契約審査 approve（kimi 自身が reviewer の場合は grok の approve） ＋ writer が全指摘に返信 | **契約本文（05_contract / docs/30_contracts）・golden・hash 正規化順** を変える PR のみ Claude |
 | `app/**`（Flutter） | **grok** | CI green ＋ composer または kimi の approve | FFI 契約に触れる → Claude |
-| `docs/20_design/basic/**`, `docs/30_contracts/**`（基本設計・契約） | **Claude** | README の審査列の approve ＋ grok の抜け穴審査 | 要件に矛盾 → RFC → オーナー |
+| `docs/20_design/basic/**`, `docs/30_contracts/**`（基本設計・契約。`02_glossary.md` も含む: writer=kimi、審査=grok） | **Claude** | README の審査列の approve ＋ grok の抜け穴審査 | 要件に矛盾 → RFC → オーナー |
 | `docs/20_design/detail/**`（詳細設計） | **kimi** | Claude のチェックリスト審査（§設計工程）approve | — |
 | `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | **Codex** | grok の抜け穴審査 approve ＋ 自己試験 green | required checks の変更 → Claude |
 | `docs/10_requirements/要件定義書*`, `docs/20_design/rfc/**` | **オーナー** | kimi ＋ 影響先全員の approve | — |
 | `docs/50_records/**`（議事録・レビュー記録・開発ログ）, README 類 | **Claude** | 記録は審査不要。ただし `docs/50_records/briefs/**` は brief 発行者の領域責任者が審査 | — |
-| `docs/20_design/basic/02_glossary.md` | **kimi** | grok approve | — |
 | `docs/20_design/adr/**`, `docs/40_process/GitHub運用ルール.md`, `docs/40_process/第5回_*`（体制・規則） | **Claude** | grok の抜け穴審査 | 役割・規則の変更はオーナーに日次報告 |
 | `docs/calib/**`（較正 manifest） | **kimi** | grok（分布の読み） | 代表史の置換 → オーナー |
 | `docs/dist/**`（配布） | **Codex** | grok | 署名鍵・配布先 → オーナー |
 | `docs/30_contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
 
-複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex ＞ composer/glm2 で最上位の責任者がマージする（分割できるなら分割を求める）。
+複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex で最上位の責任者がマージする（composer / glm2 は writer 専任でマージ領域を持たない。identity: composer=`cursor-glm`、glm2=`cursor-glm2`。取り違え注意）（分割できるなら分割を求める）。
 - 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）。app で grok が writer の場合のレビュアーは composer、マージは kimi
 - identity 注: composer（Composer 2.5）は helix-bus 上では `cursor-glm` の identity を使う（改名事故の回避のため据え置き）
 - `gh pr merge --admin` 等の保護バイパスは禁止（条件がそろわないなら merge しない。設定不備は Codex に `[ENV]`）
