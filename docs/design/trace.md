@@ -11,17 +11,17 @@
 | REQ-SCOPE-01 | P0 | D5 | AT（schema + 参照検査） | 02_glossary.md, 05_contract.md | — |
 | REQ-SCOPE-02 | P0 | D4 | AT | 02_glossary.md | — |
 | REQ-SCOPE-09 | P0 | D4/D12 | INSP（プリセット定義に型ラベル）+ USER | — | — |
-| REQ-SCOPE-03 | P0 | D12 | AT（config schema）+USER | 02_glossary.md, 11_ui_flow.md | — |
+| REQ-SCOPE-03 | P0 | D12 | AT（config schema）+USER | 02_glossary.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
 | REQ-SCOPE-04 | P0 | D4 | AT（ReasonCode 網羅） | 02_glossary.md, 03_domain_model.md, 05_contract.md | — |
-| REQ-SCOPE-05 | P0 | D4 | AT（use_carcass 系統の存在） | 02_glossary.md, 05_contract.md, 07_determinism_model.md | — |
+| REQ-SCOPE-05 | P0 | D4 | AT（use_carcass 系統の存在） | 02_glossary.md, 05_contract.md | — |
 | REQ-SCOPE-06 | P0 | D7 | AT | 03_domain_model.md, 05_contract.md, 06_numeric_model.md | — |
 | REQ-SCOPE-07 | P0 | D12 | → REQ-UI-01 | 02_glossary.md | — |
 | REQ-SCOPE-08 | P0 | D12 | AT+USER | 02_glossary.md | — |
-| REQ-OUT-01 | P0 | D6 | INSP + AT（系統数不変） | 02_glossary.md, 03_domain_model.md, 07_determinism_model.md | — |
+| REQ-OUT-01 | P0 | D6 | INSP + AT（系統数不変） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-OUT-02 | P0 | D12 | INSP + AT（権限なし） | — | — |
 | REQ-OUT-03 | P0 | — | INSP | 02_glossary.md | — |
 | REQ-OUT-04 | P0 | D10 | AT | 01_context_map.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md | — |
-| REQ-OUT-05 | P0 | D12 | AT（ネット権限なし・依存なし） | 01_context_map.md, 11_ui_flow.md | — |
+| REQ-OUT-05 | P0 | D12 | AT（ネット権限なし・依存なし） | 01_context_map.md, 05_contract.md, 11_ui_flow.md | — |
 | REQ-USER-01 | P0 | 配布 | INSP（募集リスト） | — | — |
 | REQ-USER-02 | P0 | 配布 | INSP | — | — |
 | REQ-USER-03 | P0 | D12 | USER | — | — |
@@ -37,7 +37,7 @@
 | REQ-SIM-01 | P0 | D0 | UT（型）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md | — |
 | REQ-SIM-02 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md | — |
 | REQ-SIM-03a | P0 | D2 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
-| REQ-SIM-03b | P0 | D4 | UT + AT（空き家が発生する seed が存在） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md | — |
+| REQ-SIM-03b | P0 | D4 | UT + AT（空き家が発生する seed が存在） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-SIM-04 | P0 | D1 | UT（順序）+ mutation 自己試験 | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-SIM-05 | P0 | D1 | UT（property: 全変換で保存）+ AT | 0001-fixed-point-i64.md, 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md | — |
 | REQ-SIM-06 | P0 | D1/D2 | AT（1 セル・64×64） | 0006-remainder-to-primary-output.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md | — |
@@ -56,7 +56,7 @@
 | REQ-GEN-05 | P0 | D7 | AT（D7 分布判定） | — | — |
 | REQ-GEN-06 | P0 | D7 | AT | 02_glossary.md | — |
 | REQ-GEN-07 | P1 | D7 | AT | — | — |
-| REQ-GEN-08 | P1 | D4/D12 | UT（上限・上限+1）+ INSP | 02_glossary.md, 03_domain_model.md, 07_determinism_model.md, 11_ui_flow.md | — |
+| REQ-GEN-08 | P1 | D4/D12 | UT（上限・上限+1）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
 | REQ-ENV-01 | P0 | D5 | AT（schema） | 02_glossary.md, 05_contract.md | — |
 | REQ-ENV-02 | P0 | D5 | AT（4 config が schema 通過、load→save→load 同一） | 02_glossary.md, 11_ui_flow.md | — |
 | REQ-ENV-03 | P0 | D5 | UT | 02_glossary.md | — |
@@ -82,7 +82,7 @@
 | REQ-END-05 | P0 | D7 | AT（D7 分布） | — | — |
 | REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md | — |
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md | — |
-| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 02_glossary.md, 03_domain_model.md | — |
+| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 02_glossary.md, 03_domain_model.md, 05_contract.md | — |
 | REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 01_context_map.md, 03_domain_model.md, 07_determinism_model.md | — |
 | REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 04_state_machines.md, 05_contract.md | — |
 | REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | — | — |
@@ -92,7 +92,7 @@
 | REQ-EXP-06 | P1 | D9 | INSP（文言リント） | 11_ui_flow.md | — |
 | REQ-UI-01 | P0 | D12 | USER + AT（画面遷移テスト） | 02_glossary.md, 11_ui_flow.md, README.md | — |
 | REQ-UI-02 | P0 | D12 | INSP（文言チェックリスト） | 11_ui_flow.md | — |
-| REQ-UI-03 | P0 | D12 | AT（模擬 30〜120 Hz フレーム列。7 要素それぞれを独立ケースにする） | 04_state_machines.md, 11_ui_flow.md, README.md | — |
+| REQ-UI-03 | P0 | D12 | AT（模擬 30〜120 Hz フレーム列。7 要素それぞれを独立ケースにする） | 04_state_machines.md, 05_contract.md, 11_ui_flow.md, README.md | — |
 | REQ-UI-04a | P0 | D12 | MEAS（実機） | 11_ui_flow.md | — |
 | REQ-UI-04b | P0 | D12 | MEAS（実機） | 11_ui_flow.md | — |
 | REQ-UI-05 | P0 | D12 | AT | 11_ui_flow.md | — |
@@ -100,7 +100,7 @@
 | REQ-UI-07 | P0 | D12 | AT（schema）+ USER | 02_glossary.md, 11_ui_flow.md | — |
 | REQ-UI-08 | P0 | D12 | AT + USER | 11_ui_flow.md | — |
 | REQ-UI-09 | P1 | D12 | UT + INSP | 11_ui_flow.md | — |
-| REQ-VIS-01 | P0 | D10 | INSP + USER（質問 1） | — | — |
+| REQ-VIS-01 | P0 | D10 | INSP + USER（質問 1） | 05_contract.md | — |
 | REQ-VIS-02 | P0 | D12 | USER（質問 1 で 5/8 以上） | — | — |
 | REQ-VIS-03 | P1 | D10 | AT（REQ-OUT-04）+ INSP | 07_determinism_model.md | — |
 | REQ-VIS-04 | P0 | D10 | INSP + AT（非干渉 hash） | 01_context_map.md, 02_glossary.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
@@ -113,7 +113,7 @@
 | REQ-OPS-06 | P0 | 配布 | INSP | — | — |
 | REQ-OPS-07 | P1 | 配布 | INSP | — | — |
 | REQ-NFR-01 | P1 | D2/D4 | MEAS（criterion、CI でしきい値） | 06_numeric_model.md, README.md | — |
-| REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md | — |
+| REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md, 05_contract.md | — |
 | REQ-NFR-03 | P2 | D7 | MEAS | — | — |
 | REQ-NFR-04 | P0 | D12 | AT（manifest 権限） | 01_context_map.md | — |
 | REQ-NFR-05 | P0 | D12 | INSP | — | — |
