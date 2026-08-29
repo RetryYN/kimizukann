@@ -4,3 +4,6 @@ node_modules/
 .venv/
 dist/
 __pycache__/
+.tmp-helix-bus/
+target/
+artifacts/

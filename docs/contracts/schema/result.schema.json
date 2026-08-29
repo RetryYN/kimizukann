@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kimizukann/result.schema.json",
+  "title": "Kimizukann Simulation Result",
+  "type": "object",
+  "required": ["schema_version", "model_version", "config_hash", "seed", "ticks", "termination_label", "state_hash"],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "model_version": {"type": "string"},
+    "config_hash": {"type": "string"},
+    "seed": {"type": "integer", "minimum": 0},
+    "ticks": {"type": "integer", "minimum": 0},
+    "termination_label": {"enum": ["Extinct", "Fixed", "Coexist", "Reversal", "TimeLimit"]},
+    "state_hash": {"type": "string", "pattern": "^[0-9a-fA-F]+$"},
+    "events": {"type": "array", "items": {"type": "object"}},
+    "invariants": {"type": "object"}
+  },
+  "additionalProperties": false
+}
