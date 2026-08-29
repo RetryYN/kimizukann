@@ -61,6 +61,7 @@ name = "kimizukann-sim-cli"
 version = "0.1.0"
 dependencies = [
  "kimizukann-sim-core",
+ "kimizukann-sim-types",
 ]
 
 [[package]]
