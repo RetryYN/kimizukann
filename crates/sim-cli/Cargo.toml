@@ -7,3 +7,4 @@ edition = "2021"
 kimizukann-sim-core = { path = "../sim-core" }
 kimizukann-sim-types = { path = "../sim-types" }
 serde_json = "1"
+sha2 = "0.10"

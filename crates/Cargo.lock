@@ -69,6 +69,7 @@ dependencies = [
  "kimizukann-sim-core",
  "kimizukann-sim-types",
  "serde_json",
+ "sha2",
 ]
 
 [[package]]

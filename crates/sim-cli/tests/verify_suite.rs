@@ -5,7 +5,11 @@ fn run(suite: &str) -> serde_json::Value {
         .args(["verify", "--suite", suite])
         .output()
         .expect("sim-cli must start");
-    assert!(output.status.success(), "stderr: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     serde_json::from_slice(&output.stdout).expect("verify output must be JSON")
 }
 
@@ -15,7 +19,9 @@ fn quick_and_all_are_supported_and_emit_state_hash() {
         let report = run(suite);
         assert_eq!(report["suite"], suite);
         assert_eq!(report["status"], "pass");
-        assert!(report["state_hash"].as_str().is_some_and(|value| value.len() == 64));
+        assert!(report["state_hash"]
+            .as_str()
+            .is_some_and(|value| value.len() == 64));
     }
 }
 
