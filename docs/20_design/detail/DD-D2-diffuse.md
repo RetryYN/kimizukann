@@ -23,7 +23,7 @@
 - `pool < Σ送出` は丸め方向（ゼロ方向）により発生しない。発生したら `NumericError`（状態不変）。参照: REQ-SIM-13
 - coeff > scale（1.0 超の拡散率）は config 検証で拒否（config schema の range。DD-D5 で確定）
 
-## 4. UT 設計（DD 列。実装は composer）
+## 4. UT 設計（DD 列。実装は cursor-grok）
 
 | UT-ID | 内容 | 期待 | 参照 |
 |---|---|---|---|
@@ -42,7 +42,7 @@
 | AT-D2-01 | 64×64 閉鎖系 2,000 tick の総質量厳密一致 | `verify --suite D2` に conservation_64x64 が無いと fail |
 | AT-D2-02 | 左右反転 config で鏡像一致 | 同上（symmetry ケース） |
 | AT-D2-03 | CI ubuntu / windows で hash 一致 | xos ジョブ（Codex と連携） |
-| AT-D1-06 拡張 | 64×64 代表 config の golden hash を新規 commit（Claude 承認） | golden 未存在で fail |
+| AT-D1-06 拡張 | 64×64 代表 config の golden hash を新規 commit（**Claude 承認後に別 PR**。実装 PR には golden を含めない） | golden 未存在で fail |
 
 ## 6. 性能
 
