@@ -1,6 +1,6 @@
 # GitHub 運用ルール v1.0
 
-対象: RetryYN/kimizukann。AI チーム（Claude / Codex / kimi / grok / composer / glm2）とオーナー。
+対象: RetryYN/kimizukann。AI チーム（Claude / Codex / kimi / grok）とオーナー。
 原則: **main には PR 経由でしか入らない。PR は CI green ＋ 必要レビュー票（§3.8）＋ マージ責任者（§3.5）の判断がそろって初めてマージできる。** AI の自己申告はマージ条件にならない。
 
 ## 1. ブランチ
@@ -81,7 +81,7 @@
 | `docs/dist/**`（配布） | **Codex** | grok | 署名鍵・配布先 → オーナー |
 | `docs/30_contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
 
-複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex で最上位の責任者がマージする（composer / glm2 は writer 専任でマージ領域を持たない。identity: composer=`cursor-glm`、glm2=`cursor-glm2`。取り違え注意）（分割できるなら分割を求める）。
+複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex で最上位の責任者がマージする（2026-08-30: 実装は grok。crates のマージ責任者 kimi、app は grok が writer のためマージは kimi 代理）（分割できるなら分割を求める）。
 - 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）。app で grok が writer の場合のレビュアーは composer、マージは kimi
 - identity 注: composer（Composer 2.5）は helix-bus 上では `cursor-glm` の identity を使う（改名事故の回避のため据え置き）
 - `gh pr merge --admin` 等の保護バイパスは禁止（条件がそろわないなら merge しない。設定不備は Codex に `[ENV]`）
