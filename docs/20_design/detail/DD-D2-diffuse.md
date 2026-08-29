@@ -14,7 +14,7 @@
 1. **計算パス**: 全セルを row-major に走査し、セル・プール・近傍（北・東・南・西の固定順、境界では存在する近傍のみ）ごとに送出量 `out = floor(pool × coeff / scale)` を i128 中間・ゼロ方向丸めで計算し、送出バッファに蓄積する。読み取りは tick 開始時の状態から行う（in-place 更新禁止。in-place だと後続セルの送出量が先行セルの移転で変わり、物理的に非対称になる）
 2. **適用パス**: 全送出を加算し、送り元からは `Σ送出` を減じる。残余（`pool − Σ送出`）は送り元に残る（INV-03、余りを捨てない）
 3. ビット幅: 最大中間値は P1（2×10^14 × 5×10^4 = 10^19、64 bit、i128）と P2（送出合計 + 残余 ≤ 2×10^14、48 bit）。BD-06 §3 の証明表どおり。参照: REQ-SIM-13, REQ-SIM-14
-- 台帳: Diffusion の LedgerEntry は `from_cell → to_cell` ごとに生成する（reason = Diffusion）。**審査案件（論点 D2-Q1）**: 生エントリは最大 4,096 セル × 4 近傍 × 4 pool × 2,000 tick ≈ 1.3 億件で常駐メモリ 32 MB（REQ-NFR-02）を超える。提案: コア内で tick 終了ごとに region 単位（BD-12 §1）へオンライン集約し、セル単位エントリは保持しない。台帳ダイジェスト（BD-01 r3 §5 が正本）の入力が集約レコードになるため、BD-03/BD-05 の「全変換が LedgerEntry を生成」との整合をレビューで確認すること。矛盾と判定されたら RFC で正本を直してから実装する
+- 台帳: Diffusion の LedgerEntry は `from_cell → to_cell` ごとに生成する（reason = Diffusion）。**論点 D2-Q1 は claude 判定で採用・確定（2026-08-30）**: 生エントリは最大 4,096 セル × 4 近傍 × 4 pool × 2,000 tick ≈ 1.3 億件で常駐メモリ 32 MB（REQ-NFR-02）を超えるため、コア内で tick 終了ごとに region 単位（BD-12 §1）へオンライン集約し、セル単位エントリは保持しない。BD-03/BD-05 の「全変換が LedgerEntry を生成」は **region 粒度で生成する** と読む（BD-01 r4 §5 の二段モデル: 発生時 cell_index 粒度・digest/LedgerSave は region 集約 LedgerRecord と整合）。集約は tick 終了時に決定的順序（tick→region_id 昇順→lineage→reason→from→to、BD-01 r4 §5 のソート順）で行う（digest 安定性）
 
 ## 3. 境界値・エラー
 
