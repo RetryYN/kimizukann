@@ -111,7 +111,7 @@
 | REQ-OPS-04 | P0 | — | INSP（カンバン） | — | — |
 | REQ-OPS-05 | P0 | 配布 | INSP + AT（権限リスト） | 0004-rust-flutter-android.md, 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-OPS-06 | P0 | 配布 | INSP | — | — |
-| REQ-OPS-07 | P1 | 配布 | INSP | — | — |
+| REQ-OPS-07 | P1 | 配布 | INSP | 09_performance_budget.md | — |
 | REQ-NFR-01 | P1 | D2/D4 | MEAS（criterion、CI でしきい値） | 06_numeric_model.md, 09_performance_budget.md, README.md | — |
 | REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md, 05_contract.md, 09_performance_budget.md, 10_persistence.md | — |
 | REQ-NFR-03 | P2 | D7 | MEAS | 09_performance_budget.md | — |
