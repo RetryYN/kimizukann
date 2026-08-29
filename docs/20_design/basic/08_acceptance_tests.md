@@ -50,13 +50,13 @@ D3 は AT なし（REQ-SIM-02/08/11/12 は UT・property で担保）。REQ-DET-
 | AT-ID | REQ | 入力 | 期待 | 判定 | 参照 |
 |---|---|---|---|---|---|
 | AT-D4-01 | REQ-SCOPE-02 | 4 系統プリセット | アオシキ／シロナミ／アカバエ／クロシデの 4 系統が特徴・代償付きで定義済み | schema 検査 + INSP 補助 | BD-03 §1 |
-| AT-D4-02 | REQ-SCOPE-04 | 代表 seed の 2,000 tick | ReasonCode 全 7 種が台帳に 1 回以上出現 | 台帳集計 | BD-03 §1.1, BD-05 §3 |
+| AT-D4-02 | REQ-SCOPE-04 | ReasonCode 網羅 fixture 群（各 ReasonCode に到達する最小 config の集合。Diffusion は D2 格子 fixture と共有） | fixture 群の和集合で全 7 種が台帳に 1 回以上出現。単一 seed での全種出現は D4 で代表 seed 選定時に検証し、到達不能なら REQ-SCOPE-04 を RFC 改訂する | 台帳集計 | BD-03 §1.1, BD-05 §3 |
 | AT-D4-03 | REQ-SCOPE-05 | 4 系統プリセット | `use_carcass` 系統が 1 以上存在 | schema 検査 | BD-03 §1 |
 | AT-D4-04 | REQ-SIM-03b | 空き家発生が確認済みの代表 seed | 空き家条件（occupancy_peak > 0.3 ∧ biomass_sum < ε ∧ nutrient > θ）を満たすセルが 1 回以上出現し、判定が状態を変えない | 観測ログ + hash 一致 | BD-03, BD-05 §2 |
 | AT-D4-05 | REQ-END-01 | 終了ラベル enum の schema | Extinct/Fixed/Coexist/Reversal/TimeLimit の 5 種のみ | schema 検査 | BD-04 §1, BD-05 §13 |
 | AT-D4-06 | REQ-END-02 | 全系統 < ε（ε = Fixed 100 = 1e-4 × 初期総生体量）に収束する config | Extinct で即終了 | 終了ラベル | BD-04 §1, BD-06 P12 |
-| AT-D4-07 | REQ-END-03 | 1 系統が 70% 以上を 200 tick 継続する config | Fixed で即終了（199 tick では非終了） | 終了ラベル + 境界 | BD-04 §1 |
-| AT-D4-08 | REQ-END-04a | 上限 tick 時に 2 系統が各 15% 以上の config | Coexist（上限前は非終了） | 終了ラベル | BD-04 §1 |
+| AT-D4-07 | REQ-END-03 | 1 系統が 70% 以上を 200 tick 継続する config（到達 config は D4 の境界値 UT で構成し本 AT が引用。D4 持ち越し） | Fixed で即終了（199 tick では非終了） | 終了ラベル + 境界 | BD-04 §1 |
+| AT-D4-08 | REQ-END-04a | 上限 tick 時に 2 系統が各 15% 以上の config（同上: D4 の境界値 UT で構成。D4 持ち越し） | Coexist（上限前は非終了） | 終了ラベル | BD-04 §1 |
 
 ## 5. D5（4 環境・流入）
 
@@ -83,7 +83,7 @@ D3 は AT なし（REQ-SIM-02/08/11/12 は UT・property で担保）。REQ-DET-
 | AT-D7-03 | REQ-GEN-06 | 同上 | 各系統が 1 位になる環境が 1 つ以上 | 分布判定 | BD-03 |
 | AT-D7-04 | REQ-END-05 | 100 seed × center_rich | A 型（共存）≥10%、B 型（アオシキ中央固定）5〜20%、C 型（全滅）≥5%（初期仮説） | 分布判定 | BD-04 §1 |
 | AT-D7-05 | REQ-OPS-02b | D7 較正実行 | AT-D7-02/03/04 を機械判定し manifest に config hash・分布・変更理由を保存 | JSON + manifest 検査 | 本章 §1 |
-| AT-D7-06 | REQ-ACC-04, REQ-GOAL-03 | D7 の 100 seed 結果 | REQ-GEN-05/06 合格・REQ-END-05 帯内・3 種の出来事（優勢枯渇衰退／死骸・空きニッチ逆転／seed 分岐）が各 1 本以上 | 分布判定（ゲート総合） | BD-03, BD-12 |
+| AT-D7-06 | REQ-ACC-04, REQ-GOAL-03 | D7 の 100 seed 結果（台帳・終了ラベル・10 tick 平均の時系列） | REQ-GEN-05/06 合格・REQ-END-05 帯内・出来事 3 種が各 1 本以上。機械定義: (a) 優勢枯渇衰退 = シェア ≥50% の系統がピークから 50% 以上減少し、減少区間の主 ReasonCode が Starvation/Maintenance かつ占有 region の nutrient < θ、(b) 死骸・空きニッチ逆転 = Reversal ラベルかつ当該系統の台帳に carcass 由来 Intake または空き家条件セルでの増殖、(c) seed 分岐 = 同条件別 seed 群で Extinct/Fixed/Coexist が各 1 本以上 | 分布判定（ゲート総合） | BD-03, BD-12 |
 
 ## 8. D8（保存・転換点）
 
@@ -91,7 +91,7 @@ D3 は AT なし（REQ-SIM-02/08/11/12 は UT・property で担保）。REQ-DET-
 |---|---|---|---|---|---|
 | AT-D8-01 | REQ-DET-02 | ランダム tick 数点（CI が seed から決定的に選択）で save→load→残り | 一気実行と最終 hash がビット一致 | hash 一致 | BD-05 §10 |
 | AT-D8-02 | REQ-DET-06 | SaveEnvelope の正規・破損・版不一致の各 save | 必須 7 フィールド保持、checksum/schema_version/model_version 不一致をエラー | schema 検査 + エラー検査 | BD-05 §12, §13 |
-| AT-D8-03 | REQ-EVT-02 | 100 seed の転換点検出 | 検出 0 件（空転）でも保存上限超過（満杯）でもない seed 分布 | 分布判定 | BD-12 |
+| AT-D8-03 | REQ-EVT-02 | 100 seed の転換点検出 | 検出 ≥1 件の seed が 90 本以上（空転率 ≤10%）かつ保存 32 件到達 seed 0 本（満杯率 0%）（初期仮説。OPEN-04 の D8 較正で確定） | 分布判定 | BD-12 |
 | AT-D8-04 | REQ-EVT-05 | 同一 seed を検出 on / off で実行 | state hash が一致（検出は表示専用） | hash 一致 | BD-07 §2, BD-12 |
 | AT-D8-05 | REQ-NFR-06 | 旧 schema_version の save | 移行規則どおり読込またはエラー（migration 試験） | schema 検査 | BD-10 |
 

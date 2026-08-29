@@ -68,7 +68,7 @@
 | REQ-DET-04b | P0 | D2 | UT（消費回数カウント） | 02_glossary.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-DET-04c | P0 | D2 | UT + AT（三経路） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-04d | P0 | D0〜 | INSP（clippy disallowed_types / disallowed_methods） | 07_determinism_model.md | — |
-| REQ-DET-05 | P0 | D1 | UT（golden） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
+| REQ-DET-05 | P0 | D1 | UT（golden） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-06 | P0 | D8 | AT（schema）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 11_ui_flow.md | — |
 | REQ-DET-07 | P0 | D12 | AT | 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 11_ui_flow.md | — |
 | REQ-DET-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 11_ui_flow.md | — |
