@@ -63,7 +63,7 @@ def read_json(path: str | None) -> Any | None:
 
 
 def section(body: str, title: str) -> str:
-    pattern = re.compile(rf"(?ms)^##\s+{re.escape(title)}(?:\s*[（(].*)?$\n?(.*?)(?=^##\s+|\Z)")
+    pattern = re.compile(rf"(?ms)^##\s+{re.escape(title)}(?:\s*[（(][^\r\n]*)?\s*$\n?(.*?)(?=^##\s+|\Z)")
     match = pattern.search(body)
     return match.group(1) if match else ""
 
