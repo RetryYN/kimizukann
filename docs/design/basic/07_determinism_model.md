@@ -65,6 +65,8 @@ FFI 操作ごとの消費回数（BD-05 §12.1 と一致。確定）:
 | save | 0 | 0 | 0 | 0 | 読み取りのみ |
 | destroy | 0 | 0 | 0 | 0 | — |
 
+- `step(n)` が途中で終了（Terminated 遷移）した場合、残り tick 分の乱数は消費しない（消費は実際に実行した tick のみ）。確定。参照: REQ-DET-04b
+
 ## 4. 禁止構造と lint 設定
 
 状態更新経路で反復順序が不定な構造と浮動小数点を使わない。確定。参照: REQ-DET-04d, REQ-CON-02
@@ -73,7 +75,7 @@ FFI 操作ごとの消費回数（BD-05 §12.1 と一致。確定）:
 
 | 禁止対象 | 理由 | 代替 | 参照 |
 |---|---|---|---|
-| `std::collections::HashMap` / `HashSet` | 反復順序が実行ごとに不定 | `BTreeMap` / `BTreeSet` または `Vec` | REQ-DET-04d |
+| `std::collections::HashMap` / `HashSet`（`hashbrown` / `rustc_hash::FxHashMap` 等の亜種を含む） | 反復順序が実行ごとに不定 | `BTreeMap` / `BTreeSet` または `Vec` | REQ-DET-04d |
 | `f32` / `f64`（sim-types / sim-core の状態更新経路） | 丸めがプラットフォーム依存になりうる | `Fixed`（i64 固定小数点） | REQ-CON-02 |
 | wall clock・`SystemTime` / `Instant` | 時刻依存は再現性を壊す | `step(n)` のみ | REQ-CON-05 |
 | スレッド乱数・`rand::thread_rng` | seed 非依存の乱数 | `PrngState` の 4 ストリーム | REQ-DET-04a |
@@ -91,12 +93,15 @@ disallowed-types = [
   "std::collections::hash_map::RandomState",
   "hashbrown::HashMap",
   "hashbrown::HashSet",
+  "rustc_hash::FxHashMap",
+  "rustc_hash::FxHashSet",
   "rand::rngs::OsRng",
 ]
 # wall clock・スレッド乱数・OS 乱数の禁止。参照: REQ-CON-05, REQ-DET-04a
 disallowed-methods = [
   { path = "std::time::SystemTime::now" },
   { path = "std::time::Instant::now" },
+  { path = "std::time::Instant::elapsed" },
   { path = "rand::thread_rng" },
   { path = "rand::rngs::OsRng::fill_bytes" },
   { path = "getrandom::getrandom" },
@@ -108,6 +113,8 @@ crate レベル（`crates/sim-types/src/lib.rs`、`crates/sim-core/src/lib.rs` �
 ```rust
 #![deny(clippy::float_arithmetic)] // 状態更新経路の浮動小数点演算を禁止。参照: REQ-CON-02
 ```
+
+- `clippy.toml` はワークスペースルートに置くため全 crate に自動適用される。将来新設する `sim-ffi` / `sim-cli` / `sim-explain` にも同じく適用され、各 crate の `lib.rs` / `main.rs` 先頭にも同じ `#![deny(clippy::float_arithmetic)]` を付ける（crate 作成 PR のレビュー条件）。確定。参照: REQ-DET-04d, REQ-CON-02
 
 - CI の `lint` job は `cargo fmt --check` + `cargo clippy --workspace -- -D warnings` + 上記設定を実行する。確定。参照: REQ-DET-04d, REQ-CON-02
 - 解析 crate（転換点スコア等）は `float_arithmetic` の対象外とし、コアへの逆流が無いことを INSP で検査する。確定。参照: REQ-CON-02, REQ-EVT-01

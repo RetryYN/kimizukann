@@ -44,6 +44,7 @@
 | P2 | diffuse | 4 近傍への送出合計 + 残余 | 4 × 10^13 + 残余 | ≤ 2×10^14 | 48 | i64 | 送り元の減少量 = 送出合計 + 残余（INV-03） |
 | P3 | intake | intake 倍率 × base_intake | 4×10^6 × 10^9 | 4×10^15 | 52 | i128 | 除算後 ≤ 4×10^9 |
 | P4 | intake | take × coefficient（biomass/waste 配分） | 2×10^14 × 10^6 | 2×10^20 | 68 | i128 | **全 phase 最大**。除算後 ≤ 2×10^14 |
+| P4b | intake | energy 加算: take × energy 係数（1.0）→ 飽和クランプ前の中間値 | 2×10^14 × 10^6 | 2×10^20 | 68 | i128 | 除算後を 10^6 にクランプ（N7、INV-05 と両立）。溢出分は熱散逸としてエネルギー台帳に記録（BD-05 §3） |
 | P5 | maintenance | base_maintenance × maintenance_cost 倍率 | 10^9 × 4×10^6 | 4×10^15 | 52 | i128 | 除算後 ≤ 4×10^9 |
 | P6 | maintenance | cost × toxin_multiplier（toxin_sensitive かつ waste > θ_w） | 4×10^9 × 1.4×10^6 | 5.6×10^15 | 53 | i128 | 除算後 ≤ 5.6×10^9 |
 | P7 | starvation_and_death | loss = min(biomass, cost − energy) | 2×10^14 | 2×10^14（乗算なし） | 48 | i64 | 減算のみ。cost − energy は cost ≤ 5.6×10^9 で非負を検査 |

@@ -6,12 +6,15 @@ disallowed-types = [
   "std::collections::hash_map::RandomState",
   "hashbrown::HashMap",
   "hashbrown::HashSet",
+  "rustc_hash::FxHashMap",
+  "rustc_hash::FxHashSet",
   "rand::rngs::OsRng",
 ]
 # wall clock・スレッド乱数・OS 乱数の禁止。参照: REQ-CON-05, REQ-DET-04a
 disallowed-methods = [
   { path = "std::time::SystemTime::now" },
   { path = "std::time::Instant::now" },
+  { path = "std::time::Instant::elapsed" },
   { path = "rand::thread_rng" },
   { path = "rand::rngs::OsRng::fill_bytes" },
   { path = "getrandom::getrandom" },

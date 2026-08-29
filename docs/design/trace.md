@@ -62,7 +62,7 @@
 | REQ-ENV-03 | P0 | D5 | UT | 02_glossary.md | — |
 | REQ-ENV-04 | P1 | D5/D7 | AT（schema） | — | — |
 | REQ-DET-01 | P0 | D1 | AT | 0003-state-hash-sha256.md, 07_determinism_model.md | — |
-| REQ-DET-02 | P0 | D1/D8 | AT（代表 tick + ランダム tick 数点） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
+| REQ-DET-02 | P0 | D1/D8 | AT（代表 tick + ランダム tick 数点） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
 | REQ-DET-03 | P0 | D2/D12 | AT（CI xos）+ MEAS（実機） | 0001-fixed-point-i64.md, 0005-toolchain-gnu-ci-primary.md, 07_determinism_model.md | — |
 | REQ-DET-04a | P0 | D0 | UT（既知ベクトル） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-DET-04b | P0 | D2 | UT（消費回数カウント） | 02_glossary.md, 05_contract.md, 07_determinism_model.md | — |
@@ -70,20 +70,20 @@
 | REQ-DET-04d | P0 | D0〜 | INSP（clippy disallowed_types / disallowed_methods） | 07_determinism_model.md | — |
 | REQ-DET-05 | P0 | D1 | UT（golden） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md | — |
 | REQ-DET-06 | P0 | D8 | AT（schema）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 11_ui_flow.md | — |
-| REQ-DET-07 | P0 | D12 | AT | 01_context_map.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
+| REQ-DET-07 | P0 | D12 | AT | 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md | — |
 | REQ-DET-08 | P0 | D12 | AT + USER | 11_ui_flow.md | — |
 | REQ-DET-09 | P0 | D11 | AT（reference_scenarios の model_version 照合） | 02_glossary.md, 05_contract.md | — |
 | REQ-END-01 | P0 | D4 | AT（schema enum） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-END-02 | P0 | D4 | UT + AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md | — |
-| REQ-END-03 | P0 | D4 | UT + AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md | — |
+| REQ-END-03 | P0 | D4 | UT + AT | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-END-04a | P0 | D4 | UT（最小例）+ AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-END-04b | P0 | D4 | UT（同率ケース含む） | 02_glossary.md, 04_state_machines.md, 05_contract.md | — |
 | REQ-END-04c | P0 | D4 | UT（同時成立ケース） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-END-05 | P0 | D7 | AT（D7 分布） | — | — |
 | REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md | — |
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md | — |
-| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 02_glossary.md, 03_domain_model.md, 05_contract.md | — |
-| REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 01_context_map.md, 03_domain_model.md, 07_determinism_model.md | — |
+| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md | — |
+| REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md | — |
 | REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 04_state_machines.md, 05_contract.md | — |
 | REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | — | — |
 | REQ-EXP-03 | P0 | D9 | INSP + UT | 02_glossary.md, 05_contract.md | — |
@@ -92,7 +92,7 @@
 | REQ-EXP-06 | P1 | D9 | INSP（文言リント） | 11_ui_flow.md | — |
 | REQ-UI-01 | P0 | D12 | USER + AT（画面遷移テスト） | 02_glossary.md, 11_ui_flow.md, README.md | — |
 | REQ-UI-02 | P0 | D12 | INSP（文言チェックリスト） | 11_ui_flow.md | — |
-| REQ-UI-03 | P0 | D12 | AT（模擬 30〜120 Hz フレーム列。7 要素それぞれを独立ケースにする） | 04_state_machines.md, 05_contract.md, 11_ui_flow.md, README.md | — |
+| REQ-UI-03 | P0 | D12 | AT（模擬 30〜120 Hz フレーム列。7 要素それぞれを独立ケースにする） | 01_context_map.md, 04_state_machines.md, 05_contract.md, 11_ui_flow.md, README.md | — |
 | REQ-UI-04a | P0 | D12 | MEAS（実機） | 11_ui_flow.md | — |
 | REQ-UI-04b | P0 | D12 | MEAS（実機） | 11_ui_flow.md | — |
 | REQ-UI-05 | P0 | D12 | AT | 11_ui_flow.md | — |
@@ -109,7 +109,7 @@
 | REQ-OPS-02b | P0 | D7 | AT | — | — |
 | REQ-OPS-03 | P0 | D7 | INSP（較正ログ） | — | — |
 | REQ-OPS-04 | P0 | — | INSP（カンバン） | — | — |
-| REQ-OPS-05 | P0 | 配布 | INSP + AT（権限リスト） | 0004-rust-flutter-android.md | — |
+| REQ-OPS-05 | P0 | 配布 | INSP + AT（権限リスト） | 0004-rust-flutter-android.md, 01_context_map.md | — |
 | REQ-OPS-06 | P0 | 配布 | INSP | — | — |
 | REQ-OPS-07 | P1 | 配布 | INSP | — | — |
 | REQ-NFR-01 | P1 | D2/D4 | MEAS（criterion、CI でしきい値） | 06_numeric_model.md, README.md | — |
