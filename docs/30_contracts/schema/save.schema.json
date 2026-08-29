@@ -2,11 +2,112 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "kimizukann/save.schema.json",
   "type": "object",
-  "required": ["schema_version", "model_version", "config_hash", "seed", "prng_state", "state_hash", "state"],
+  "required": ["schema_version", "model_version", "config_hash", "config", "seed", "prng_state", "state_hash", "ledger_hash", "generation", "state", "ledger", "checksum"],
   "properties": {
-    "schema_version": {"type": "string"}, "model_version": {"type": "string"}, "config_hash": {"type": "string"},
-    "seed": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
-    "prng_state": {"type": "object", "required": ["movement", "reproduction", "mutation", "interaction"], "properties": {"movement": {"type": "integer"}, "reproduction": {"type": "integer"}, "mutation": {"type": "integer"}, "interaction": {"type": "integer"}}, "additionalProperties": false},
-    "state_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"}, "state": {"type": "object"}
-  }, "additionalProperties": false
+    "schema_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"},
+    "model_version": {"type": "string"},
+    "config_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "config": {"type": "object", "description": "config JSON 本体（正規化形式）。config_hash の入力"},
+    "seed": {"type": "string", "pattern": "^(0|[1-9][0-9]{0,19})$", "description": "u64 の 10 進文字列"},
+    "prng_state": {
+      "type": "object",
+      "required": ["movement", "reproduction", "mutation", "interaction"],
+      "properties": {
+        "movement": {"$ref": "#/$defs/stream"}, "reproduction": {"$ref": "#/$defs/stream"},
+        "mutation": {"$ref": "#/$defs/stream"}, "interaction": {"$ref": "#/$defs/stream"}
+      },
+      "additionalProperties": false
+    },
+    "state_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "ledger_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$", "description": "台帳ダイジェスト（BD-01 r3 §5 の定義）"},
+    "generation": {"type": "string", "pattern": "^(0|[1-9][0-9]{0,19})$", "description": "単調増加 u64 の 10 進文字列。2 世代ローテーションの最新判定用"},
+    "state": {
+      "type": "object",
+      "required": ["tick", "cells", "fixed_streak", "tick0_ranking", "inflow_cursor"],
+      "properties": {
+        "tick": {"type": "integer", "minimum": 0},
+        "cells": {
+          "type": "array",
+          "description": "row-major。件数 = config.grid の width × height（load 時に検証）",
+          "items": {
+            "type": "object",
+            "required": ["nutrient", "biomass", "carcass", "waste", "energy", "occupancy_peak"],
+            "properties": {
+              "nutrient": {"type": "integer"}, "carcass": {"type": "integer"}, "waste": {"type": "integer"}, "occupancy_peak": {"type": "integer"},
+              "biomass": {"type": "array", "items": {"type": "integer"}, "minItems": 8, "maxItems": 8},
+              "energy": {"type": "array", "items": {"type": "integer"}, "minItems": 8, "maxItems": 8}
+            },
+            "additionalProperties": false
+          }
+        },
+        "fixed_streak": {"type": "integer", "minimum": 0},
+        "tick0_ranking": {"type": "array", "items": {"type": "integer", "minimum": 0, "maximum": 7}, "minItems": 8, "maxItems": 8},
+        "inflow_cursor": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "ledger": {
+      "type": "object",
+      "required": ["records", "stamps", "z_windows"],
+      "properties": {
+        "records": {
+          "type": "array",
+          "description": "region 単位に集約したフロー台帳レコード（LedgerRecord、BD-01 r4 §5）。tick→region_id→lineage→reason→from→to の順にソート済み",
+          "items": {
+            "type": "object",
+            "required": ["tick", "region_id", "lineage", "reason", "from_pool", "to_pool", "amount"],
+            "properties": {
+              "tick": {"type": "integer", "minimum": 0},
+              "region_id": {"type": "integer", "minimum": 0, "maximum": 15},
+              "lineage": {"type": "integer", "minimum": 0, "maximum": 255, "description": "系統なしは 255"},
+              "reason": {"enum": ["Intake", "Maintenance", "Starvation", "Death", "Reproduction", "Emission", "Diffusion"]},
+              "from_pool": {"enum": ["Nutrient", "Biomass", "Carcass", "Waste"]},
+              "to_pool": {"enum": ["Nutrient", "Biomass", "Carcass", "Waste"]},
+              "amount": {"type": "integer", "exclusiveMinimum": 0, "description": "集約後の和（i64 Fixed）"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "stamps": {
+          "type": "array",
+          "description": "スタンプ列。tick, kind, region_ids の順（kind の語彙は BD-12 §2 の転換点 7 種別）",
+          "items": {
+            "type": "object",
+            "required": ["tick", "kind", "region_ids"],
+            "properties": {
+              "tick": {"type": "integer", "minimum": 0},
+              "kind": {"type": "string"},
+              "region_ids": {"type": "array", "items": {"type": "integer", "minimum": 0, "maximum": 15}}
+            },
+            "additionalProperties": false
+          }
+        },
+        "z_windows": {
+          "type": "array",
+          "description": "10 tick 平均 × 20 の窓。pool, 系統, 値の順。値は i64 Fixed の平均（f64 z-score は保存しない）",
+          "items": {
+            "type": "object",
+            "required": ["pool", "lineage", "values"],
+            "properties": {
+              "pool": {"enum": ["Nutrient", "Biomass", "Carcass", "Waste"]},
+              "lineage": {"type": "integer", "minimum": 0, "maximum": 255},
+              "values": {"type": "array", "items": {"type": "integer"}, "maxItems": 20}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "checksum": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$", "description": "checksum 自身を除く全フィールドの正規化バイト列の SHA-256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stream": {
+      "type": "array",
+      "description": "xoshiro256** の状態 [u64; 4]。各語は 10 進文字列",
+      "items": {"type": "string", "pattern": "^(0|[1-9][0-9]{0,19})$"},
+      "minItems": 4, "maxItems": 4
+    }
+  }
 }
