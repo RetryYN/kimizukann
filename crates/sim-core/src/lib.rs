@@ -1,8 +1,8 @@
 //! D1 one-cell closed-system core.
 
 use kimizukann_sim_types::{
-    CellState, ConversionRule, Fixed, GridState, InvariantReport, LineageParams, Pool, Seed,
-    StateHash, Thresholds, WorldState, FIXED_SCALE,
+    CellState, ConversionRule, Fixed, GridState, InvariantReport, LineageParams, NumericError,
+    Pool, Seed, StateHash, Thresholds, TickPhase, WorldState, FIXED_SCALE,
 };
 use sha2::{Digest, Sha256};
 
@@ -100,6 +100,8 @@ pub struct SimCore {
     pub rng: [Xoshiro256StarStar; 4],
     pub thresholds: Thresholds,
     pub model_version: String,
+    /// Nutrient / carcass / waste / unused. Initial hypothesis 0.05 / neighbor / tick.
+    pub diffusion_coefficients: [Fixed; 4],
 }
 
 impl SimCore {
@@ -166,7 +168,87 @@ impl SimCore {
                 vacant_nutrient_threshold: 100_000,
             },
             model_version: "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
+            diffusion_coefficients: [50_000; 4],
         })
+    }
+
+    pub fn try_grid(
+        width: u16,
+        height: u16,
+        seed: u64,
+        cells: Vec<CellState>,
+        lineages: Vec<LineageParams>,
+    ) -> Result<Self, String> {
+        if width == 0 || height == 0 {
+            return Err("grid dimension is 0".into());
+        }
+        let expected = (width as usize)
+            .checked_mul(height as usize)
+            .ok_or("grid overflow")?;
+        if cells.len() != expected {
+            return Err("cells len != width*height".into());
+        }
+        let mut core = Self::try_one_cell(seed, 0, 0, lineages)?;
+        core.state.grid = GridState {
+            width,
+            height,
+            cells,
+        };
+        core.initial_mass = core.total_mass();
+        Ok(core)
+    }
+
+    pub fn total_mass(&self) -> Fixed {
+        self.state
+            .grid
+            .cells
+            .iter()
+            .map(|c| c.nutrient + c.biomass.iter().sum::<Fixed>() + c.carcass + c.waste)
+            .sum()
+    }
+
+    pub fn apply_phase(&mut self, phase: TickPhase) -> Result<(), String> {
+        match phase {
+            TickPhase::Diffuse => self.diffuse(),
+            TickPhase::Intake => self.intake(),
+            TickPhase::Maintenance => self.maintenance(),
+            TickPhase::StarvationAndDeath => self.starvation_and_death(),
+            TickPhase::Reproduction => self.reproduction(),
+            TickPhase::Emission => self.emission(),
+            TickPhase::Occupancy => self.occupancy(),
+        }
+    }
+
+    /// NESW. Filled in the grid-generalization commit; stub returns no neighbors.
+    pub fn neighbor_indices(_width: u16, _height: u16, _index: usize) -> [Option<usize>; 4] {
+        [None; 4]
+    }
+
+    /// Static 4x4 tiles. 64x64 -> 16x16 cells per tile, id = (row/16)*4 + (col/16).
+    pub fn static_region_id(width: u16, height: u16, index: usize) -> u8 {
+        let w = width as usize;
+        let h = height as usize;
+        if w == 0 || h == 0 {
+            return 0;
+        }
+        let x = index % w;
+        let y = index / w;
+        let tile_w = (w / 4).max(1);
+        let tile_h = (h / 4).max(1);
+        let col = (x / tile_w).min(3);
+        let row = (y / tile_h).min(3);
+        (row * 4 + col) as u8
+    }
+
+    pub fn outflow_amount(pool: Fixed, coeff: Fixed) -> Result<Fixed, NumericError> {
+        let v = (pool as i128)
+            .checked_mul(coeff as i128)
+            .ok_or(NumericError::OverflowI128)?;
+        i64::try_from(v / FIXED_SCALE as i128).map_err(|_| NumericError::OverflowI64)
+    }
+
+    pub fn verify_suite_d2() -> (bool, bool) {
+        (false, false)
     }
 
     pub fn step(&mut self, ticks: u32) -> Result<(), String> {

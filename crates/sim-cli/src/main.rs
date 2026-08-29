@@ -24,9 +24,25 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.get(1).map(String::as_str) != Some("verify")
         || args.get(2).map(String::as_str) != Some("--suite")
-        || args.get(3).map(String::as_str) != Some("week1")
+        || args.get(3).is_none()
     {
-        eprintln!("usage: sim-cli verify --suite week1");
+        eprintln!("usage: sim-cli verify --suite week1|D2");
+        std::process::exit(2);
+    }
+    let suite = args[3].as_str();
+    if suite == "D2" || suite == "d2" {
+        let (conservation, symmetry) = SimCore::verify_suite_d2();
+        let ok = conservation && symmetry;
+        println!(
+            "{{\"suite\":\"D2\",\"conservation_64x64\":{},\"symmetry\":{},\"status\":\"{}\"}}",
+            conservation,
+            symmetry,
+            if ok { "pass" } else { "fail" }
+        );
+        std::process::exit(if ok { 0 } else { 1 });
+    }
+    if suite != "week1" {
+        eprintln!("usage: sim-cli verify --suite week1|D2");
         std::process::exit(2);
     }
     let mut a = SimCore::one_cell(7, 10 * FIXED_SCALE, 2 * FIXED_SCALE, vec![lineage(0)]);
