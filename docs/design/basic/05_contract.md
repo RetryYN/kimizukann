@@ -16,11 +16,19 @@
 
 各 tick は固定順 7 phase を一度だけ実行する: diffuse → intake → maintenance → starvation_and_death → reproduction → emission → occupancy。走査順はセル row-major、系統 ID 昇順、近傍は北・東・南・西の固定順。順序の入替は契約違反。確定。参照: REQ-SIM-04, REQ-DET-04c
 
+inflow の適用位置: `InflowEvent` は tick 先頭（diffuse 直前）に該当プールへ加算する。7 phase には含めない。同 tick 複数件は config 配列の出現順。確定。参照: REQ-SIM-07, REQ-DET-04c
+
 ## 3. 物質・エネルギー二重台帳（契約 §3 吸収）
 
 物質台帳は `nutrient + Σbiomass + carcass + waste` を追跡する。流入は `Vec<InflowEvent { tick, pool, amount }>`（閉鎖系は空 Vec）。エネルギー台帳は系統ごとに摂取加算・維持/移動/繁殖への配分・熱散逸を追跡し、熱散逸は物質を減らさない。全変換は `LedgerEntry { from_pool, to_pool, amount, reason }` を通し、負値と未記録残差を禁止する。確定。参照: REQ-SIM-05, REQ-SIM-07, REQ-SCOPE-04
 
-`LedgerEntry` は tick・cell_index・lineage を持たない。転換点・説明器が必要とする時刻・位置・系統の情報は集約側（LedgerAggregator。BD-12）が tick 処理中に region 単位のレコードへ畳み込んで保持し、セル単位の全 tick 履歴は保存しない。これにより転換点の region_ids（REQ-EVT-04）と保存 ≤ 5 MB（REQ-NFR-02）を両立する。確定。参照: REQ-EVT-04, REQ-NFR-02
+`LedgerEntry` は `tick: u32, cell_index: u32, lineage: u8（系統なしは 255）, from_pool, to_pool, amount, reason` を持つ（BD-01 r3 の台帳ダイジェスト定義に合わせる）。確定。参照: REQ-SIM-05, REQ-EVT-04
+
+エネルギー台帳の補則: intake の energy 加算は 1.0（Fixed では 10^6）で飽和し、溢出分は熱散逸としてエネルギー台帳に記録する。熱散逸は物質を減らさない。確定。参照: REQ-SIM-08
+
+**台帳ダイジェスト**（state hash 外だが三経路 AT で比較。BD-01 r3 §5 と一致）: `SHA-256(台帳エントリを tick, cell_index, lineage, reason, from, to, amount の順に LE 直列化 → スタンプを tick, kind, region_ids の順 → z 窓を pool, 系統, 値の順)`。確定。参照: REQ-DET-02, REQ-EVT-04
+
+保存（LedgerSave）には region 単位に集約したレコード・スタンプ列・z 窓のみを含め、セル単位の全 tick 履歴は保存しない。これにより転換点の region_ids（REQ-EVT-04）と保存 ≤ 5 MB（REQ-NFR-02）を両立する。確定。参照: REQ-EVT-04, REQ-NFR-02
 
 ## 4. 質量係数表（契約 §4 吸収）
 
@@ -101,7 +109,7 @@
 | `Thresholds`（フィールドは下表に分離） | struct | REQ-END-02, REQ-END-03, REQ-END-04a, REQ-SIM-02, REQ-SIM-03 |
 | `SaveEnvelope { schema_version, model_version, config_hash, seed, prng, state_hash, state }` | struct | REQ-DET-06 |
 | `MassCoefficients { intake_to_biomass, intake_to_waste, starvation_to_carcass, death_to_carcass }` | struct | REQ-SIM-05 |
-| `LedgerEntry { from_pool, to_pool, amount, reason }` | struct | REQ-SIM-05 |
+| `LedgerEntry { tick: u32, cell_index: u32, lineage: u8, from_pool, to_pool, amount, reason }` | struct（tick/cell_index/lineage は台帳ダイジェスト用。BD-01 r3。sim-types への反映は D2 実装タスク） | REQ-SIM-05, REQ-EVT-04 |
 | `MassLedger { entries }` / `EnergyLedger { entries }` | struct | REQ-SIM-05, REQ-SCOPE-04 |
 | `InvariantReport { mass_ok, energy_ok, non_negative, message }` | struct | REQ-SIM-06, REQ-OPS-01 |
 | `RoundingMode { TowardZero }` | enum | REQ-CON-02 |

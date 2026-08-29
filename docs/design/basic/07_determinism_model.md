@@ -14,7 +14,7 @@
 | S1 | セル | row-major（`index = y × width + x`、index 昇順） | REQ-DET-04c |
 | S2 | 系統 | ID 昇順（按分しない逐次処理） | REQ-SIM-11, REQ-DET-04c |
 | S3 | 近傍 | 北・東・南・西の固定順 | REQ-SIM-10 |
-| S4 | inflow 適用 | tick 昇順・同 tick は config 配列の出現順 | REQ-SIM-07 |
+| S4 | inflow 適用 | tick 先頭（diffuse 直前）に適用し、7 phase には含めない。tick 昇順・同 tick は config 配列の出現順 | REQ-SIM-07, REQ-DET-04c |
 | S5 | 終了判定 | 優先順 Extinct > Fixed > Coexist > Reversal > TimeLimit | REQ-END-04c |
 | S6 | 並列化 | seed 内は単一スレッド。seed 間バッチのみ並列。並列化しても同一結果になる決定的リダクションのみ許可 | REQ-DET-04c |
 
@@ -53,6 +53,18 @@
 - 消費回数の UT: 各ストリームに消費カウンタを付け、代表 config で `step(1)` 前後のカウンタ差分が本表と一致することを検査する。表の更新（D2/D3/D4 での確定）は UT の期待値更新を伴う。確定。参照: REQ-DET-04b
 - 表に無い乱数消費は禁止。新たな消費は本表の RFC 改訂を伴う。確定。参照: REQ-DET-04b
 
+FFI 操作ごとの消費回数（BD-05 §12.1 と一致。確定）:
+
+| FFI 操作 | movement | reproduction | mutation | interaction | 備考 |
+|---|---:|---:|---:|---:|---|
+| create | 0 | 0 | 初期配置のアレル抽選分（§3 create 行） | 初期配置の位置抽選分（§3 create 行） | SplitMix64 による 4 ストリーム初期化は消費に含めない |
+| load | 0 | 0 | 0 | 0 | PRNG 状態を復元するのみ |
+| step(n) | phase 割当分 × n | 同左 | 0 | 0 | 唯一ストリームを進める操作 |
+| snapshot | 0 | 0 | 0 | 0 | 読み取りのみ |
+| explain | 0 | 0 | 0 | 0 | 純関数 |
+| save | 0 | 0 | 0 | 0 | 読み取りのみ |
+| destroy | 0 | 0 | 0 | 0 | — |
+
 ## 4. 禁止構造と lint 設定
 
 状態更新経路で反復順序が不定な構造と浮動小数点を使わない。確定。参照: REQ-DET-04d, REQ-CON-02
@@ -69,20 +81,25 @@
 
 ### 4.2 lint 設定（CI の `lint` job で強制）
 
-`clippy.toml`（リポジトリルート）:
+`clippy.toml`（リポジトリルートに本 PR で追加。依存経由の穿過も塞ぐ）:
 
 ```toml
-# 反復順序が不定な構造の禁止。参照: REQ-DET-04d
+# 反復順序が不定な構造の禁止。hashbrown 経由の穿過も塞ぐ。参照: REQ-DET-04d
 disallowed-types = [
   "std::collections::HashMap",
   "std::collections::HashSet",
   "std::collections::hash_map::RandomState",
+  "hashbrown::HashMap",
+  "hashbrown::HashSet",
+  "rand::rngs::OsRng",
 ]
-# wall clock・スレッド乱数の禁止。参照: REQ-CON-05, REQ-DET-04a
+# wall clock・スレッド乱数・OS 乱数の禁止。参照: REQ-CON-05, REQ-DET-04a
 disallowed-methods = [
   { path = "std::time::SystemTime::now" },
   { path = "std::time::Instant::now" },
   { path = "rand::thread_rng" },
+  { path = "rand::rngs::OsRng::fill_bytes" },
+  { path = "getrandom::getrandom" },
 ]
 ```
 
