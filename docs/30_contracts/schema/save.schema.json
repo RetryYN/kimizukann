@@ -2,11 +2,36 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "kimizukann/save.schema.json",
   "type": "object",
-  "required": ["schema_version", "model_version", "config_hash", "seed", "prng_state", "state_hash", "state"],
+  "required": ["schema_version", "model_version", "config_hash", "seed", "prng_state", "state_hash", "state", "checksum"],
   "properties": {
     "schema_version": {"type": "string"}, "model_version": {"type": "string"}, "config_hash": {"type": "string"},
     "seed": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
     "prng_state": {"type": "object", "required": ["movement", "reproduction", "mutation", "interaction"], "properties": {"movement": {"type": "integer"}, "reproduction": {"type": "integer"}, "mutation": {"type": "integer"}, "interaction": {"type": "integer"}}, "additionalProperties": false},
-    "state_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"}, "state": {"type": "object"}
+    "state_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"},
+    "state": {
+      "type": "object",
+      "required": ["tick", "cells", "fixed_streak", "tick0_ranking", "inflow_cursor"],
+      "properties": {
+        "tick": {"type": "integer", "minimum": 0},
+        "cells": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["nutrient", "biomass", "carcass", "waste", "energy", "occupancy_peak"],
+            "properties": {
+              "nutrient": {"type": "integer"}, "carcass": {"type": "integer"}, "waste": {"type": "integer"}, "occupancy_peak": {"type": "integer"},
+              "biomass": {"type": "array", "items": {"type": "integer"}, "minItems": 8, "maxItems": 8},
+              "energy": {"type": "array", "items": {"type": "integer"}, "minItems": 8, "maxItems": 8}
+            },
+            "additionalProperties": false
+          }
+        },
+        "fixed_streak": {"type": "integer", "minimum": 0},
+        "tick0_ranking": {"type": "array", "items": {"type": "integer", "minimum": 0, "maximum": 7}, "minItems": 8, "maxItems": 8},
+        "inflow_cursor": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "checksum": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"}
   }, "additionalProperties": false
 }
