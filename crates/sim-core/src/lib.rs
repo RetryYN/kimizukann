@@ -100,7 +100,6 @@ pub struct SimCore {
     pub rng: [Xoshiro256StarStar; 4],
     pub thresholds: Thresholds,
     pub model_version: String,
-    /// Nutrient / carcass / waste / unused. Initial hypothesis 0.05 / neighbor / tick.
     pub diffusion_coefficients: [Fixed; 4],
 }
 
@@ -210,21 +209,26 @@ impl SimCore {
     pub fn apply_phase(&mut self, phase: TickPhase) -> Result<(), String> {
         match phase {
             TickPhase::Diffuse => self.diffuse(),
-            TickPhase::Intake => self.intake(),
-            TickPhase::Maintenance => self.maintenance(),
-            TickPhase::StarvationAndDeath => self.starvation_and_death(),
-            TickPhase::Reproduction => self.reproduction(),
-            TickPhase::Emission => self.emission(),
-            TickPhase::Occupancy => self.occupancy(),
+            _ => Err("apply_phase: only Diffuse in D2-A".into()),
         }
     }
 
-    /// NESW. Filled in the grid-generalization commit; stub returns no neighbors.
-    pub fn neighbor_indices(_width: u16, _height: u16, _index: usize) -> [Option<usize>; 4] {
-        [None; 4]
+    pub fn neighbor_indices(width: u16, height: u16, index: usize) -> [Option<usize>; 4] {
+        let w = width as usize;
+        let h = height as usize;
+        if w == 0 || index >= w.saturating_mul(h) {
+            return [None; 4];
+        }
+        let x = index % w;
+        let y = index / w;
+        [
+            if y > 0 { Some(index - w) } else { None },
+            if x + 1 < w { Some(index + 1) } else { None },
+            if y + 1 < h { Some(index + w) } else { None },
+            if x > 0 { Some(index - 1) } else { None },
+        ]
     }
 
-    /// Static 4x4 tiles. 64x64 -> 16x16 cells per tile, id = (row/16)*4 + (col/16).
     pub fn static_region_id(width: u16, height: u16, index: usize) -> u8 {
         let w = width as usize;
         let h = height as usize;
@@ -274,8 +278,9 @@ impl SimCore {
         Ok(())
     }
     fn intake(&mut self) -> Result<(), String> {
-        let cell = &mut self.state.grid.cells[0];
-        for lineage in &self.state.lineages {
+        let lineages = self.state.lineages.clone();
+        for cell in &mut self.state.grid.cells {
+        for lineage in &lineages {
             let id = lineage.id as usize;
             if !lineage.tags.use_nutrient || cell.nutrient <= 0 {
                 continue;
@@ -298,11 +303,13 @@ impl SimCore {
             cell.waste = fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
             cell.energy[id] = cell.energy[id].saturating_add(to_biomass).min(FIXED_SCALE);
         }
+        }
         Ok(())
     }
     fn maintenance(&mut self) -> Result<(), String> {
-        let cell = &mut self.state.grid.cells[0];
-        for lineage in &self.state.lineages {
+        let lineages = self.state.lineages.clone();
+        for cell in &mut self.state.grid.cells {
+        for lineage in &lineages {
             let id = lineage.id as usize;
             let mut cost = fixed::mul(
                 self.thresholds.base_maintenance,
@@ -320,11 +327,13 @@ impl SimCore {
                 cell.energy[id] = 0;
             }
         }
+        }
         Ok(())
     }
     fn starvation_and_death(&mut self) -> Result<(), String> {
-        let cell = &mut self.state.grid.cells[0];
-        for lineage in &self.state.lineages {
+        let lineages = self.state.lineages.clone();
+        for cell in &mut self.state.grid.cells {
+        for lineage in &lineages {
             let id = lineage.id as usize;
             let cost = fixed::mul(
                 self.thresholds.base_maintenance,
@@ -344,11 +353,13 @@ impl SimCore {
                     fixed::add(cell.carcass, loss).map_err(|e| format!("death: {e:?}"))?;
             }
         }
+        }
         Ok(())
     }
     fn reproduction(&mut self) -> Result<(), String> {
-        let cell = &mut self.state.grid.cells[0];
-        for lineage in &self.state.lineages {
+        let lineages = self.state.lineages.clone();
+        for cell in &mut self.state.grid.cells {
+        for lineage in &lineages {
             let id = lineage.id as usize;
             let cost = fixed::mul(
                 self.thresholds.base_maintenance,
@@ -365,42 +376,53 @@ impl SimCore {
                     .map_err(|e| format!("reproduction: {e:?}"))?;
             }
         }
+        }
         Ok(())
     }
     fn emission(&mut self) -> Result<(), String> {
-        let cell = &mut self.state.grid.cells[0];
-        for lineage in &self.state.lineages {
+        let lineages = self.state.lineages.clone();
+        for cell in &mut self.state.grid.cells {
+        for lineage in &lineages {
             let id = lineage.id as usize;
             let amount = cell.biomass[id].min(lineage.waste_emission.max(0));
             cell.biomass[id] -= amount;
             cell.waste = fixed::add(cell.waste, amount).map_err(|e| format!("emission: {e:?}"))?;
         }
+        }
         Ok(())
     }
     fn occupancy(&mut self) -> Result<(), String> {
-        let cell = &mut self.state.grid.cells[0];
+        let threshold = self.thresholds.occupancy_threshold;
+        for cell in &mut self.state.grid.cells {
         let biomass: Fixed = cell.biomass.iter().sum();
-        if biomass >= self.thresholds.occupancy_threshold {
+        if biomass >= threshold {
             cell.occupancy_peak = FIXED_SCALE;
         } else {
             cell.occupancy_peak = fixed::mul(cell.occupancy_peak, 995_000)
                 .map_err(|e| format!("occupancy: {e:?}"))?;
         }
+        }
         Ok(())
     }
 
     pub fn invariant_report(&self) -> InvariantReport {
-        let cell = &self.state.grid.cells[0];
-        let biomass: Fixed = cell.biomass.iter().sum();
-        let mass = cell.nutrient + biomass + cell.carcass + cell.waste;
-        let non_negative = cell.nutrient >= 0
-            && cell.carcass >= 0
-            && cell.waste >= 0
-            && cell.biomass.iter().all(|v| *v >= 0)
-            && cell.energy.iter().all(|v| *v >= 0 && *v <= FIXED_SCALE);
+        let mass = self.total_mass();
+        let non_negative = self.state.grid.cells.iter().all(|c| {
+            c.nutrient >= 0
+                && c.carcass >= 0
+                && c.waste >= 0
+                && c.biomass.iter().all(|v| *v >= 0)
+                && c.energy.iter().all(|v| *v >= 0 && *v <= FIXED_SCALE)
+        });
+        let energy_ok = self
+            .state
+            .grid
+            .cells
+            .iter()
+            .all(|c| c.energy.iter().all(|v| *v >= 0 && *v <= FIXED_SCALE));
         InvariantReport {
             mass_ok: mass == self.initial_mass,
-            energy_ok: cell.energy.iter().all(|v| *v >= 0 && *v <= FIXED_SCALE),
+            energy_ok,
             non_negative,
             message: format!("mass={mass} initial={}", self.initial_mass),
         }

@@ -1,6 +1,3 @@
-//! Red UT-D2-01..07 + AT-D2-01/02 until PR-B diffuse.
-//! Refs: REQ-SIM-10, REQ-SIM-05, REQ-SIM-13, DD-D2
-
 use kimizukann_sim_core::SimCore;
 use kimizukann_sim_types::{
     CellState, Fixed, LineageParams, MechanismTags, TickPhase, TraitVector, FIXED_SCALE,
@@ -134,19 +131,10 @@ fn ut_d2_07_remainder_on_source() {
 
 #[test]
 fn at_d2_01_02_verify_keys() {
+    assert_eq!(SimCore::static_region_id(64, 64, 0), 0);
+    assert_eq!(SimCore::static_region_id(64, 64, 16), 1);
+    assert_eq!(SimCore::static_region_id(64, 64, 16 * 64), 4);
+    assert_eq!(SimCore::static_region_id(64, 64, 64 * 64 - 1), 15);
     let (c, sy) = SimCore::verify_suite_d2();
     assert!(c && sy, "conservation_64x64/symmetry");
-}
-
-#[test]
-fn static_tile_ids_64() {
-    assert_eq!(
-        [
-            SimCore::static_region_id(64, 64, 0),
-            SimCore::static_region_id(64, 64, 16),
-            SimCore::static_region_id(64, 64, 16 * 64),
-            SimCore::static_region_id(64, 64, 64 * 64 - 1)
-        ],
-        [0, 1, 4, 15]
-    );
 }
