@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+cargo fmt --manifest-path crates/Cargo.toml --all -- --check
+cargo clippy --manifest-path crates/Cargo.toml --workspace --all-targets -- -D warnings
+cargo test --manifest-path crates/Cargo.toml --workspace
+cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite quick

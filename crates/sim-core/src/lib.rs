@@ -148,7 +148,7 @@ impl SimCore {
             seed: Seed(seed),
             initial_mass,
             rng: [
-                Xoshiro256StarStar::from_seed(seed ^ 0),
+                Xoshiro256StarStar::from_seed(seed),
                 Xoshiro256StarStar::from_seed(seed ^ 1),
                 Xoshiro256StarStar::from_seed(seed ^ 2),
                 Xoshiro256StarStar::from_seed(seed ^ 3),

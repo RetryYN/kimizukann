@@ -1,0 +1,18 @@
+{
+  "schema_version": "golden-v1",
+  "case": "d1-one-cell-week1",
+  "model_version": "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1",
+  "config": {
+    "seed": 7,
+    "grid": "one-cell",
+    "nutrient": 10000000,
+    "biomass": 2000000,
+    "lineage_preset": "d1-lineage-0",
+    "ticks": 2000
+  },
+  "seed": 7,
+  "ticks": 2000,
+  "state_hash": "f228e49780cc47bde13e47dbc918930013c594c541337c14722d6ff1f777d53e",
+  "regeneration": "Regenerate after the sha256-v2 fields (fixed_streak, tick0_ranking, inflow_cursor) are implemented and Claude approves a separate PR.",
+  "known_gap": "Current D1 hash is sha256-v1; AT-D1-06 v2 bit-for-bit parity is not yet implemented."
+}
