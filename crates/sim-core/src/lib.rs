@@ -1,13 +1,13 @@
 //! D1 one-cell closed-system core.
 
 use kimizukann_sim_types::{
-    CellState, Fixed, GridState, InvariantReport, LineageParams, Seed, StateHash, Thresholds,
-    WorldState, FIXED_SCALE,
+    CellState, ConversionRule, Fixed, GridState, InvariantReport, LineageParams, Pool, Seed,
+    StateHash, Thresholds, WorldState, FIXED_SCALE,
 };
 use sha2::{Digest, Sha256};
 
 pub mod fixed {
-    use kimizukann_sim_types::{Fixed, NumericError, FIXED_SCALE};
+    use kimizukann_sim_types::{ConversionRule, Fixed, NumericError, Pool, FIXED_SCALE};
 
     pub fn add(a: Fixed, b: Fixed) -> Result<Fixed, NumericError> {
         a.checked_add(b).ok_or(NumericError::OverflowI64)
@@ -35,8 +35,27 @@ pub mod fixed {
         i64::try_from(v / b as i128).map_err(|_| NumericError::OverflowI64)
     }
     pub fn split_output(input: Fixed, coefficient: Fixed) -> Result<(Fixed, Fixed), NumericError> {
-        let out = mul(input, coefficient)?;
-        Ok((out, input - out))
+        let rule = ConversionRule {
+            from: Pool::Nutrient,
+            to: Pool::Biomass,
+            coefficient,
+            remainder_to: Pool::Biomass,
+        };
+        split_output_with_rule(input, &rule, FIXED_SCALE - coefficient)
+    }
+    pub fn split_output_with_rule(
+        input: Fixed,
+        rule: &ConversionRule,
+        waste_coefficient: Fixed,
+    ) -> Result<(Fixed, Fixed), NumericError> {
+        let primary = mul(input, rule.coefficient)?;
+        let secondary = mul(input, waste_coefficient)?;
+        let remainder = input - primary - secondary;
+        match rule.remainder_to {
+            Pool::Biomass => Ok((primary + remainder, secondary)),
+            Pool::Waste => Ok((primary, secondary + remainder)),
+            _ => Ok((primary, secondary)),
+        }
     }
 }
 
@@ -134,6 +153,8 @@ impl SimCore {
                 Xoshiro256StarStar::from_seed(seed ^ 3),
             ],
             thresholds: Thresholds {
+                base_intake: 100_000,
+                base_maintenance: 10_000,
                 epsilon: 1,
                 fixed_share: 700_000,
                 fixed_ticks: 200,
@@ -178,10 +199,17 @@ impl SimCore {
                 continue;
             }
             let amount = cell.nutrient.min(
-                fixed::mul(100_000, lineage.traits.intake).map_err(|e| format!("intake: {e:?}"))?,
+                fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
+                    .map_err(|e| format!("intake: {e:?}"))?,
             );
-            let (to_biomass, to_waste) =
-                fixed::split_output(amount, 700_000).map_err(|e| format!("intake: {e:?}"))?;
+            let rule = ConversionRule {
+                from: Pool::Nutrient,
+                to: Pool::Biomass,
+                coefficient: 700_000,
+                remainder_to: Pool::Biomass,
+            };
+            let (to_biomass, to_waste) = fixed::split_output_with_rule(amount, &rule, 300_000)
+                .map_err(|e| format!("intake: {e:?}"))?;
             cell.nutrient -= amount;
             cell.biomass[id] =
                 fixed::add(cell.biomass[id], to_biomass).map_err(|e| format!("biomass: {e:?}"))?;
@@ -194,8 +222,11 @@ impl SimCore {
         let cell = &mut self.state.grid.cells[0];
         for lineage in &self.state.lineages {
             let id = lineage.id as usize;
-            let mut cost = fixed::mul(10_000, lineage.traits.maintenance_cost)
-                .map_err(|e| format!("cost: {e:?}"))?;
+            let mut cost = fixed::mul(
+                self.thresholds.base_maintenance,
+                lineage.traits.maintenance_cost,
+            )
+            .map_err(|e| format!("cost: {e:?}"))?;
             if lineage.tags.toxin_sensitive && cell.waste > self.thresholds.waste_toxic_threshold {
                 cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
                     .map_err(|e| format!("toxin: {e:?}"))?;
@@ -213,8 +244,11 @@ impl SimCore {
         let cell = &mut self.state.grid.cells[0];
         for lineage in &self.state.lineages {
             let id = lineage.id as usize;
-            let cost = fixed::mul(10_000, lineage.traits.maintenance_cost)
-                .map_err(|e| format!("cost: {e:?}"))?;
+            let cost = fixed::mul(
+                self.thresholds.base_maintenance,
+                lineage.traits.maintenance_cost,
+            )
+            .map_err(|e| format!("cost: {e:?}"))?;
             if cell.energy[id] < cost && cell.biomass[id] > 0 {
                 let loss = cell.biomass[id].min(cost - cell.energy[id]);
                 cell.biomass[id] -= loss;
@@ -234,8 +268,11 @@ impl SimCore {
         let cell = &mut self.state.grid.cells[0];
         for lineage in &self.state.lineages {
             let id = lineage.id as usize;
-            let cost = fixed::mul(10_000, lineage.traits.maintenance_cost)
-                .map_err(|e| format!("cost: {e:?}"))?;
+            let cost = fixed::mul(
+                self.thresholds.base_maintenance,
+                lineage.traits.maintenance_cost,
+            )
+            .map_err(|e| format!("cost: {e:?}"))?;
             let threshold = fixed::mul(cost * 2, lineage.traits.reproduction)
                 .map_err(|e| format!("reproduction: {e:?}"))?;
             if cell.energy[id] > threshold && cell.nutrient > 0 {
@@ -340,7 +377,7 @@ mod tests {
     #[test]
     fn fixed_rounding_and_remainder() {
         assert_eq!(fixed::mul(3, 500_000).unwrap(), 1);
-        assert_eq!(fixed::split_output(3, 500_000).unwrap(), (1, 2));
+        assert_eq!(fixed::split_output(3, 500_000).unwrap(), (2, 0));
     }
     #[test]
     fn conservation_and_nonnegative() {

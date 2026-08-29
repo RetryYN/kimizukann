@@ -110,6 +110,8 @@ pub struct StateHash(pub [u8; 32]);
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Thresholds {
+    pub base_intake: Fixed,
+    pub base_maintenance: Fixed,
     pub epsilon: Fixed,
     pub fixed_share: Fixed,
     pub fixed_ticks: u32,

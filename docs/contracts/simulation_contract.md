@@ -63,6 +63,8 @@ PRNGの実装詳細は `SplitMix64 → xoshiro256**`（4ストリーム、`prng=
 
 ## 7. 機構タグ・系統定数・適応ベクトル
 
+D1: energy→質量係数 1.0（intake の energy 加算・reproduction とも）、D3 で確定。
+
 機構タグは5ビット `use_nutrient / use_carcass / use_waste / toxin_sensitive / density_bonus` とする。札の5軸は `movement / intake / conversion / maintenance_cost / reproduction` の固定倍率で、維持コストは小さいほど有利。系統定数は `mortality_threshold` と `waste_emission` の2つだけを許す。タグと定数はプリセット固定で、プレイヤーは札のベクトルだけ選ぶ。
 
 対応するRust型名: `MechanismTags`, `TraitVector`, `LineageParams`, `Substrate`
