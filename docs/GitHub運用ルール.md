@@ -1,7 +1,7 @@
 # GitHub 運用ルール v1.0
 
 対象: RetryYN/kimizukann。AI チーム（Claude / Codex / kimi / grok / gemini / composer）とオーナー。
-原則: **main には PR 経由でしか入らない。PR は CI green ＋ 必要レビュー ＋ ゲート承認がそろって初めてマージできる。** AI の自己申告はマージ条件にならない。
+原則: **main には PR 経由でしか入らない。PR は CI green ＋ 必要レビュー票（§3.8）＋ マージ責任者（§3.5）の判断がそろって初めてマージできる。** AI の自己申告はマージ条件にならない。
 
 ## 1. ブランチ
 | ブランチ | 用途 | 規則 |
@@ -40,19 +40,19 @@
 | `schema` | docs/contracts/schema/*.json のコンパイルと configs の検証 |
 
 ### 3.3 レビュー
-| 変更の種類 | 必須レビュアー | ゲート（最終承認） |
+| 変更の種類 | 必須レビュアー | マージ責任者 |
 |---|---|---|
-| `crates/**`（実装） | kimi（契約逸脱・保存則・hash） | Claude |
-| `crates/**/tests/**`, `docs/design/basic/08_*`（受入テスト） | writer 以外の 1 名 ＋ grok（抜け穴） | Claude |
-| `docs/design/basic/**`, `docs/contracts/**`（基本設計・契約） | README の審査列に従う ＋ grok | Claude |
-| `docs/design/detail/**`（詳細設計） | kimi | Claude |
+| `crates/**`（実装） | kimi（契約逸脱・保存則・hash） | kimi（§3.5） |
+| `crates/**/tests/**`, `docs/design/basic/08_*`（受入テスト） | writer 以外の 1 名 ＋ grok（抜け穴） | kimi（§3.5） |
+| `docs/design/basic/**`, `docs/contracts/**`（基本設計・契約） | README の審査列に従う ＋ grok | Claude（§3.5） |
+| `docs/design/detail/**`（詳細設計） | kimi | kimi（§3.5） |
 | `docs/要件定義書*`, `docs/design/rfc/**` | kimi ＋ 影響先の担当全員 | **オーナー** |
-| `docs/contracts/golden/**` | — | **Claude のみ**（golden 更新権限） |
-| `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | grok（抜け穴） | Claude |
-| `app/**`（Flutter） | grok または composer（writer 以外） | Claude |
+| `docs/contracts/golden/**` | — | Claude（§3.5、golden 更新権限） |
+| `.github/**`, `.githooks/**`, `scripts/**`（ハーネス） | grok（抜け穴） | Codex（§3.5） |
+| `app/**`（Flutter） | grok または composer（writer 以外） | grok（§3.5） |
 
 - レビューは **GitHub の Review 機能**で行い、コメントは `file:line` に付ける。helix-bus は通知用、判断の記録は PR に残す
-- レビュー結果は `Approve / Request changes` のみ。Comment だけで放置しない
+- 単一アカウントのため GitHub の Approve / Request changes は使えない（自分の PR 扱いで 422）。レビュー結果は **本文に `verdict: approve | request-changes` を書いた COMMENT ＋ §3.8 の署名票**が正規手順。verdict の無いコメントはレビューとして数えない
 - reviewer は PR 本文の「検証手順」を **自分で実行**してから approve する（CI の URL を見るだけは不可）。実行できない場合はその旨を書き、Claude が代行
 - 指摘は `severity: blocker | major | minor | nit` を付ける。blocker/major が 1 つでもあれば Request changes
 - writer は指摘ごとに「修正 commit hash」または「反論」を返信。全部解決したら re-request review
@@ -77,11 +77,13 @@
 | `docs/design/adr/**`, `docs/GitHub運用ルール.md`, `docs/相談会/第5回_*`（体制・規則） | **Claude** | grok の抜け穴審査 | 役割・規則の変更はオーナーに日次報告 |
 | `docs/calib/**`（較正 manifest） | **kimi** | grok（分布の読み） | 代表史の置換 → オーナー |
 | `docs/dist/**`（配布） | **Codex** | grok | 署名鍵・配布先 → オーナー |
+| `docs/contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
 
 複数領域にまたがる PR の tie-break: 優先順 オーナー ＞ Claude ＞ kimi ＞ grok ＞ Codex ＞ gemini で最上位の責任者がマージする（分割できるなら分割を求める）。
-| `docs/contracts/golden/**` | **Claude** | 変更理由と再現手順が PR にある | — |
-- 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）
-- 責任者はマージ後 5 分以内に開発ログへ 1 行（`bus-ctl log` で自動化予定）と、関係者へ `[ID][merged] sha=… pr=#n` を直接 post する
+- 責任者は自分が writer の PR をマージしない（代理: crates→Claude、app→kimi、基本設計/契約/規則→kimi、golden→オーナー、harness→grok、記録→Claude）。app で grok が writer の場合のレビュアーは composer、マージは kimi
+- identity 注: composer（Composer 2.5）は helix-bus 上では `cursor-glm` の identity を使う（改名事故の回避のため据え置き）
+- `gh pr merge --admin` 等の保護バイパスは禁止（条件がそろわないなら merge しない。設定不備は Codex に `[ENV]`）
+- 責任者はマージ後、関係者へ `[ID][merged] sha=… pr=#n` を直接 post する（開発ログは §4 のとおり gemini が記録）
 
 ### 3.6 AI 間の直接ルーティング（Claude を経由しない）
 原則: **PR が状態の正本、helix-bus は通知**。誰かに何かをしてほしい時は、その相手に直接 post する。Claude には「エスカレーション」と「マージ責任者が Claude の PR」だけを送る。
@@ -97,7 +99,7 @@
 | brief を出す | 領域のマージ責任者（コア: kimi、UI: grok、ハーネス: Codex） | writer | `[ID][brief]`（Claude は BD/契約の brief のみ） |
 | 環境・CI が壊れた | 気づいた人 | Codex | `[ENV][request]` |
 | 用語が無い・文言が要る | 誰でも | gemini | `[TERM][request]` |
-- Codex（ルーター）は 10 分ごとに `gh pr list --json number,isDraft,reviewRequests,reviews,updatedAt,labels` を見る。観測対象は **GitHub の Ready 時刻（`ready_for_review` イベント）とラベル**: writer は Ready にする時に `needs-review:<name>` ラベルを付け、reviewer は本文投稿後に外す。ラベルが 30 分以上残っていれば該当レビュアーへ催促 post、`ready-to-merge` ラベル（全 approve 後に reviewer が付ける）が 30 分残っていれば責任者へ催促
+- Codex（ルーター）は 10 分ごとに `gh pr list --json number,isDraft,reviewRequests,reviews,updatedAt,labels` を見る。観測対象は **GitHub の Ready 時刻（`ready_for_review` イベント）とラベル**: writer は Ready にする時に `needs-review:<name>` ラベルを付け、reviewer は本文投稿後に外す。ラベルが 30 分以上残っていれば該当レビュアーへ催促 post、`ready-to-merge` ラベル（必須レビュアー全員の `verdict: approve` COMMENT／署名票がそろった時点で **最後の reviewer が付ける**。§3.8 の review-gate が green ならラベルは自動付与）が 30 分残っていれば責任者へ催促
 - Claude は日次で PR 一覧・開発ログ・trace を確認してオーナーに要約する（進行の中継はしない）
 
 ### 3.7 リミット管理（予算と上限）
@@ -144,7 +146,7 @@ GitHub の Review approve は使わない（単一アカウント）。代わり
 
 ## 4. マージ後
 - squash merge のコミットメッセージは PR タイトル＋本文の `Refs:` 行
-- Claude が `docs/相談会/開発ログ.md` に `[ID] merged <sha> pr=#n reviewers=… ci=…` を追記（bus-ctl で自動化予定）
+- gemini が `[merged]` を受けて `docs/相談会/開発ログ.md` に `[ID] merged <sha> pr=#n reviewers=… ci=…` を追記（記録 PR は審査不要、§3.5）
 - golden や model_version が変わった PR は CHANGELOG.md に 1 行
 
 ## 5. リリース（D12 以降）
@@ -162,8 +164,8 @@ GitHub の Review approve は使わない（単一アカウント）。代わり
 
 ## 7. オーナーが GitHub で設定するもの（1 回だけ）
 Settings → Branches → Add rule `main`:
-- [x] Require a pull request before merging → Required approvals: **1**、Dismiss stale approvals、Require review from Code Owners
-- [x] Require status checks to pass → 上記 3.2 の check を全部（最初は `lint`, `test`, `verify` だけで可。H1/H2 完了後に追加）
+- [x] Require a pull request before merging → Required approvals: **0**（単一アカウントのため。承認は §3.8 の `review-gate` check が代替）、Code Owners は使わない
+- [x] Require status checks to pass → `lint`, `test (ubuntu)`, `test (windows)`, `verify`, `pr-lint`, `review-gate`（H0/H2 マージ後に Codex が設定。それまでは空）
 - [x] Require conversation resolution before merging
 - [x] Require linear history（squash のみ）
 - [x] Do not allow bypassing the above settings（オーナー自身も含む）
