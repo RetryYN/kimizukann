@@ -1,8 +1,8 @@
 //! D1 one-cell closed-system core.
 
 use kimizukann_sim_types::{
-    CellState, Fixed, GridState, InvariantReport, LineageParams, Seed, StateHash, WorldState,
-    FIXED_SCALE,
+    CellState, Fixed, GridState, InvariantReport, LineageParams, Seed, StateHash, Thresholds,
+    WorldState, FIXED_SCALE,
 };
 use sha2::{Digest, Sha256};
 
@@ -68,6 +68,9 @@ impl Xoshiro256StarStar {
         self.state[3] = self.state[3].rotate_left(45);
         result
     }
+    pub fn words(&self) -> [u64; 4] {
+        self.state
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -76,6 +79,8 @@ pub struct SimCore {
     pub seed: Seed,
     initial_mass: Fixed,
     pub rng: [Xoshiro256StarStar; 4],
+    pub thresholds: Thresholds,
+    pub model_version: String,
 }
 
 impl SimCore {
@@ -85,6 +90,18 @@ impl SimCore {
         biomass: Fixed,
         lineages: Vec<LineageParams>,
     ) -> Self {
+        Self::try_one_cell(seed, nutrient, biomass, lineages).expect("invalid lineages")
+    }
+    pub fn try_one_cell(
+        seed: u64,
+        nutrient: Fixed,
+        biomass: Fixed,
+        mut lineages: Vec<LineageParams>,
+    ) -> Result<Self, String> {
+        lineages.sort_by_key(|l| l.id);
+        if lineages.windows(2).any(|w| w[0].id == w[1].id) {
+            return Err("duplicate lineage id".into());
+        }
         let mut cell = CellState {
             nutrient,
             biomass: [0; 8],
@@ -106,7 +123,7 @@ impl SimCore {
             },
             lineages,
         };
-        Self {
+        Ok(Self {
             state,
             seed: Seed(seed),
             initial_mass,
@@ -116,7 +133,19 @@ impl SimCore {
                 Xoshiro256StarStar::from_seed(seed ^ 2),
                 Xoshiro256StarStar::from_seed(seed ^ 3),
             ],
-        }
+            thresholds: Thresholds {
+                epsilon: 1,
+                fixed_share: 700_000,
+                fixed_ticks: 200,
+                coexist_share: 150_000,
+                max_ticks: 2_000,
+                waste_toxic_threshold: 100_000,
+                toxin_maintenance_multiplier: 1_400_000,
+                occupancy_threshold: FIXED_SCALE,
+                vacant_nutrient_threshold: 100_000,
+            },
+            model_version: "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
+        })
     }
 
     pub fn step(&mut self, ticks: u32) -> Result<(), String> {
@@ -148,7 +177,9 @@ impl SimCore {
             if !lineage.tags.use_nutrient || cell.nutrient <= 0 {
                 continue;
             }
-            let amount = cell.nutrient.min(100_000);
+            let amount = cell.nutrient.min(
+                fixed::mul(100_000, lineage.traits.intake).map_err(|e| format!("intake: {e:?}"))?,
+            );
             let (to_biomass, to_waste) =
                 fixed::split_output(amount, 700_000).map_err(|e| format!("intake: {e:?}"))?;
             cell.nutrient -= amount;
@@ -163,9 +194,11 @@ impl SimCore {
         let cell = &mut self.state.grid.cells[0];
         for lineage in &self.state.lineages {
             let id = lineage.id as usize;
-            let mut cost = 10_000i64;
-            if lineage.tags.toxin_sensitive && cell.waste > 100_000 {
-                cost = cost * 14 / 10;
+            let mut cost = fixed::mul(10_000, lineage.traits.maintenance_cost)
+                .map_err(|e| format!("cost: {e:?}"))?;
+            if lineage.tags.toxin_sensitive && cell.waste > self.thresholds.waste_toxic_threshold {
+                cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
+                    .map_err(|e| format!("toxin: {e:?}"))?;
             }
             let cost = cost.max(1);
             if cell.energy[id] >= cost {
@@ -180,9 +213,10 @@ impl SimCore {
         let cell = &mut self.state.grid.cells[0];
         for lineage in &self.state.lineages {
             let id = lineage.id as usize;
-            let cost = 10_000i64;
-            if cell.energy[id] == 0 && cell.biomass[id] > 0 {
-                let loss = cell.biomass[id].min(cost);
+            let cost = fixed::mul(10_000, lineage.traits.maintenance_cost)
+                .map_err(|e| format!("cost: {e:?}"))?;
+            if cell.energy[id] < cost && cell.biomass[id] > 0 {
+                let loss = cell.biomass[id].min(cost - cell.energy[id]);
                 cell.biomass[id] -= loss;
                 cell.carcass =
                     fixed::add(cell.carcass, loss).map_err(|e| format!("carcass: {e:?}"))?;
@@ -200,9 +234,12 @@ impl SimCore {
         let cell = &mut self.state.grid.cells[0];
         for lineage in &self.state.lineages {
             let id = lineage.id as usize;
-            let cost = 10_000i64;
-            if cell.energy[id] > cost * 2 && cell.nutrient > 0 {
-                let gain = ((cell.energy[id] - cost * 2) / 2).min(cell.nutrient);
+            let cost = fixed::mul(10_000, lineage.traits.maintenance_cost)
+                .map_err(|e| format!("cost: {e:?}"))?;
+            let threshold = fixed::mul(cost * 2, lineage.traits.reproduction)
+                .map_err(|e| format!("reproduction: {e:?}"))?;
+            if cell.energy[id] > threshold && cell.nutrient > 0 {
+                let gain = ((cell.energy[id] - threshold) / 2).min(cell.nutrient);
                 cell.energy[id] -= gain;
                 cell.nutrient -= gain;
                 cell.biomass[id] = fixed::add(cell.biomass[id], gain)
@@ -224,7 +261,7 @@ impl SimCore {
     fn occupancy(&mut self) -> Result<(), String> {
         let cell = &mut self.state.grid.cells[0];
         let biomass: Fixed = cell.biomass.iter().sum();
-        if biomass >= FIXED_SCALE {
+        if biomass >= self.thresholds.occupancy_threshold {
             cell.occupancy_peak = FIXED_SCALE;
         } else {
             cell.occupancy_peak = fixed::mul(cell.occupancy_peak, 995_000)
@@ -256,6 +293,12 @@ impl SimCore {
         h.update(self.seed.0.to_le_bytes());
         h.update(self.state.grid.width.to_le_bytes());
         h.update(self.state.grid.height.to_le_bytes());
+        h.update(self.model_version.as_bytes());
+        for stream in &self.rng {
+            for word in stream.words() {
+                h.update(word.to_le_bytes());
+            }
+        }
         for c in &self.state.grid.cells {
             h.update(c.nutrient.to_le_bytes());
             for v in c.biomass {
@@ -316,7 +359,7 @@ mod tests {
     #[test]
     fn hash_golden() {
         let s = SimCore::one_cell(7, 10 * FIXED_SCALE, 2 * FIXED_SCALE, vec![lineage()]);
-        let expected = "07f8b153b1a579dc322055d132a777ee9456a7685b75b5ef24f0cb75a436688c";
+        let expected = "453b41f19db8e3010258c3f8ed964b475333b06b0c27859ab9105be3ddcb6a0a";
         let actual: String = s
             .state_hash()
             .0
