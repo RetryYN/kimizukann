@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kimizukann/save.schema.json",
+  "type": "object",
+  "required": ["schema_version", "model_version", "config_hash", "seed", "prng_state", "state_hash", "state"],
+  "properties": {
+    "schema_version": {"type": "string"}, "model_version": {"type": "string"}, "config_hash": {"type": "string"},
+    "seed": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "prng_state": {"type": "object", "required": ["movement", "reproduction", "mutation", "interaction"], "properties": {"movement": {"type": "integer"}, "reproduction": {"type": "integer"}, "mutation": {"type": "integer"}, "interaction": {"type": "integer"}}, "additionalProperties": false},
+    "state_hash": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$"}, "state": {"type": "object"}
+  }, "additionalProperties": false
+}

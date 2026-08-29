@@ -4,7 +4,7 @@
 
 ## 1. 状態
 
-1セルは `nutrient: Fixed`、`biomass[L]: Fixed`、`carcass: Fixed`、`waste: Fixed`、`energy[L]: Fixed`、`occupancy_peak: Fixed` を持つ。環境は `GridState`、系統設定は `LineageParams`、全体は `WorldState` が所有する。`L` は最大8系統。
+1セルは `nutrient: Fixed`、`biomass[L]: Fixed`、`carcass: Fixed`、`waste: Fixed`、`energy[L]: Fixed`、`occupancy_peak: Fixed` を持つ。全体状態は `tick: u32` も持つ。環境は `GridState`、系統設定は `LineageParams`、全体は `WorldState` が所有する。`L` は最大8系統。
 
 対応するRust型名: `CellState`, `GridState`, `WorldState`, `LineageParams`, `Fixed`
 
@@ -15,15 +15,16 @@
 1. `diffuse`: 栄養、死骸、老廃物を4近傍へ移す
 2. `intake`: 系統が利用可能なプールを取り、生体量とenergyへ変換する
 3. `maintenance`: 維持コストをenergyから課金する。毒性閾値超過時は倍率を適用する
-4. `starvation`: energy不足分を生体量から死骸へ移す
+4. `starvation_and_death`: energy不足分を生体量から死骸へ移し、`biomass < mortality_threshold` のセル系統は全量を死骸へ移す
 5. `reproduction`: energy余剰と繁殖係数に基づき生体量を増やす
 6. `emission`: 代謝残差を老廃物へ置く。全変換残差を捨てない
+7. `occupancy`: `biomass_sum >= theta_occ` なら `occupancy_peak=1.0`、それ以外は `occupancy_peak *= 0.995`。空き家は `occupancy_peak > 0.3 ∧ biomass_sum < epsilon ∧ nutrient > theta`（`theta` は初期栄養中央値の10%）。
 
 対応するRust型名: `SimCore::step`, `TickPhase`
 
 ## 3. 物質・エネルギー二重台帳
 
-物質台帳は `nutrient + biomass_sum + carcass + waste` を追跡する。閉鎖系では外部流入・流出を0とし、プリセット流入は `inflow_tick_mask` の期待値として明示する。エネルギー台帳は系統ごとに、摂取加算、維持・移動・繁殖への配分、熱散逸を追跡する。熱散逸は物質を減らさない。
+物質台帳は `nutrient + biomass_sum + carcass + waste` を追跡する。閉鎖系では外部流入・流出を0とし、流入は `Vec<InflowEvent { tick, pool, amount }>` で表す（閉鎖系は空Vec）。エネルギー台帳は系統ごとに、摂取加算、維持・移動・繁殖への配分、熱散逸を追跡する。熱散逸は物質を減らさない。
 
 全変換は `LedgerEntry { from_pool, to_pool, amount, reason }` を通し、負値と未記録の残差を禁止する。
 
@@ -33,12 +34,12 @@
 
 係数は入力質量に対する出力質量の割合で、合計1.0（固定小数点では1_000_000）とする。余りは同一変換の指定先へ戻し、捨てない。
 
-| 変換 | 出力 | 係数 |
+| 変換 | 出力 | 係数 | 余り戻し先 |
 |---|---|---:|
-| 摂取 | biomass | 0.70 |
-| 摂取 | waste | 0.30 |
-| biomass維持不足 | carcass | 1.00 |
-| biomass死亡 | carcass | 1.00 |
+| 摂取 | biomass | 0.70 | biomass（主出力） |
+| 摂取 | waste | 0.30 | biomass（主出力） |
+| biomass維持不足 | carcass | 1.00 | carcass（主出力） |
+| biomass死亡 | carcass | 1.00 | carcass（主出力） |
 
 係数はD3までに実測で更新し、configのhashへ含める。エネルギー係数は物質係数と別の無次元値である。
 
@@ -54,9 +55,11 @@
 
 ## 6. PRNG・用途別ストリーム・走査順
 
-PRNGアルゴリズムとバージョンを固定し、seedから用途別ストリーム（`movement`, `reproduction`, `mutation`, `interaction`）を導出する。表示用サンプリングはコア乱数を消費しない。seed内の計算は単一スレッド、seed間のバッチだけ並列化する。HashMapの反復順へ依存しない。
+PRNGは `SplitMix64` でseedから4ストリームの初期状態を導出し、各ストリームは `xoshiro256**` を使う。バージョン文字列は `prng=xoshiro256ss-v1` とする。seedから用途別ストリーム（`movement`, `reproduction`, `mutation`, `interaction`）を導出する。表示用サンプリングはコア乱数を消費しない。seed内の計算は単一スレッド、seed間のバッチだけ並列化する。HashMapの反復順へ依存しない。
 
 対応するRust型名: `Seed`, `PrngState`, `RandomStream`, `ScanOrder`
+
+PRNGの実装詳細は `SplitMix64 → xoshiro256**`（4ストリーム、`prng=xoshiro256ss-v1`）を初期確定値とする。
 
 ## 7. 機構タグ・系統定数・適応ベクトル
 
@@ -64,23 +67,25 @@ PRNGアルゴリズムとバージョンを固定し、seedから用途別スト
 
 対応するRust型名: `MechanismTags`, `TraitVector`, `LineageParams`, `Substrate`
 
+拡散係数は環境レコードから取得し、初期仮説は各プール0.05/近傍/tick。movement軸は生体量の近傍拡散率としてD2で確定する（D0ではopen issue）。摂取は系統ID昇順で逐次処理し、1tick上限は`intake倍率 × 基準摂取量`（D3で確定）。繁殖は`energy > 維持コスト × 2`を初期仮説とし、余剰の一定割合を生体量へ移す（D3で確定）。
+
 ## 8. 終了ラベルと閾値
 
-検証版の初期仮説は次のとおり。優先順は全滅、固定、共存、逆転、上限とする。
+検証版の初期仮説は次のとおり。`Extinct` と `Fixed` は毎tick判定して即終了し、`Coexist` と `Reversal` は上限到達時のみ判定する。優先順は全滅、固定、（上限時）共存、逆転、上限とする。
 
 - `Extinct`: 全系統の生体量が `epsilon` 未満
 - `Fixed`: 1系統が総生体量の70%以上を200 tick継続
 - `Coexist`: 2系統以上が各15%以上
-- `Reversal`: 終了時1位がtick 0の順位で3位以下
+- `Reversal`: 終了時1位がtick 0の順位で3位以下（同率順位は生体量降順、系統ID昇順）
 - `TimeLimit`: 2,000 tick到達
 
-`epsilon = 1e-4 × 初期総生体量`。同時成立時は優先順を適用し、判定理由を保存する。
+`epsilon = 1e-4 × 初期総生体量`、`theta_w` はD3で確定する初期仮説、`theta_occ` はD2で確定する初期仮説、`toxin_maintenance_multiplier = 1.4`。`Coexist` は上限時の瞬間条件（2系統以上が各15%以上）でよい。同時成立時は優先順を適用し、判定理由を保存する。
 
 対応するRust型名: `TerminationLabel`, `TerminationRule`, `Thresholds`
 
 ## 9. 保存則テスト定義
 
-閉鎖系では各tickおよび最終状態で、物質4プールの総量が初期総量と一致することを要求する。流入プリセットでは、初期総量＋期待流入量と一致することを要求する。全プールは非負であること。energyは系統別予算の負値を禁止し、熱散逸を含むエネルギー予算の差分を台帳化する。
+閉鎖系では各tickおよび最終状態で、物質4プールの総量が初期総量と一致することを要求する。流入プリセットでは、初期総量＋`Σ inflow.amount`と一致することを要求する。全プールは非負であること。energyは系統別予算の負値を禁止し、熱散逸を含むエネルギー予算の差分を台帳化する。
 
 必須テスト: 1セル2,000 tick、64×64拡散2,000 tick、一様場不変、境界流出なし、係数合計、残余非消失、starvationのcarcass移動。
 
@@ -88,7 +93,7 @@ PRNGアルゴリズムとバージョンを固定し、seedから用途別スト
 
 ## 10. 三経路一致・state hash
 
-同じmodel_version、config、seedについて、`step(2000)`、`step(1)`を2,000回、tick 1,000でsave/loadして再開、の三経路は同じ正規化state hashと終了ラベルを返す。正規化はセルrow-major、系統昇順、固定小数点のi64バイト列、PRNG状態、model_versionを含み、描画用トークン・UI・ログ時刻を除く。
+同じmodel_version、config、seedについて、`step(2000)`、`step(1)`を2,000回、tick 1,000でsave/loadして再開、の三経路は同じ正規化state hashと終了ラベルを返す。hash関数はSHA-256（`hash=sha256-v1`）。正規化はセルrow-major、系統昇順、固定小数点のi64バイト列、PRNG状態、model_versionを含み、描画用トークン・UI・ログ時刻を除く。
 
 速度変更、描画間引き、トークンの有無、seed間の並列数はhashを変えてはならない。保存には`schema_version / model_version / config_hash / seed / prng_state / state_hash`を含める。
 
@@ -100,7 +105,7 @@ PRNGアルゴリズムとバージョンを固定し、seedから用途別スト
 |---|---|
 | 1 状態 | `CellState`, `GridState`, `WorldState`, `LineageParams`, `Fixed` |
 | 2 tick順序 | `SimCore::step`, `TickPhase` |
-| 3 二重台帳 | `MassLedger`, `EnergyLedger`, `LedgerEntry`, `Pool`, `ReasonCode` |
+| 3 二重台帳 | `MassLedger`, `EnergyLedger`, `LedgerEntry`, `Pool`, `ReasonCode`, `InflowEvent` |
 | 4 質量係数 | `MassCoefficients`, `ConversionRule` |
 | 5 固定小数点 | `Fixed`, `RoundingMode`, `NumericError` |
 | 6 PRNG | `Seed`, `PrngState`, `RandomStream`, `ScanOrder` |

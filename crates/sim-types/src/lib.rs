@@ -10,7 +10,7 @@ pub enum Pool { Nutrient, Biomass, Carcass, Waste }
 pub enum ReasonCode { Intake, Maintenance, Starvation, Death, Reproduction, Emission, Diffusion }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum TickPhase { Diffuse, Intake, Maintenance, Starvation, Reproduction, Emission }
+pub enum TickPhase { Diffuse, Intake, Maintenance, StarvationAndDeath, Reproduction, Emission, Occupancy }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum TerminationLabel { Extinct, Fixed, Coexist, Reversal, TimeLimit }
@@ -43,7 +43,7 @@ pub struct PrngState { pub seed: Seed, pub movement: u64, pub reproduction: u64,
 pub struct StateHash(pub [u8; 32]);
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Thresholds { pub epsilon: Fixed, pub fixed_share: Fixed, pub fixed_ticks: u32, pub coexist_share: Fixed, pub max_ticks: u32 }
+pub struct Thresholds { pub epsilon: Fixed, pub fixed_share: Fixed, pub fixed_ticks: u32, pub coexist_share: Fixed, pub max_ticks: u32, pub waste_toxic_threshold: Fixed, pub toxin_maintenance_multiplier: Fixed, pub occupancy_threshold: Fixed, pub vacant_nutrient_threshold: Fixed }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct SaveEnvelope { pub schema_version: String, pub model_version: String, pub config_hash: String, pub seed: Seed, pub prng: PrngState, pub state_hash: StateHash, pub state: WorldState }
@@ -64,16 +64,16 @@ pub struct EnergyLedger { pub entries: Vec<LedgerEntry> }
 pub struct InvariantReport { pub mass_ok: bool, pub energy_ok: bool, pub non_negative: bool, pub message: String }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct RoundingMode;
+pub enum RoundingMode { TowardZero }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct NumericError;
+pub enum NumericError { Negative, OverflowI64, OverflowI128 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VerifySuite;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct ModelVersion;
+pub struct ModelVersion { pub major: u16, pub minor: u16, pub scale: i64, pub rounding: RoundingMode, pub prng: &'static str, pub hash: &'static str }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ScanOrder;
@@ -83,3 +83,18 @@ pub struct RandomStream;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Substrate { Nutrient, Carcass, Waste }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct InflowEvent { pub tick: u32, pub pool: Pool, pub amount: Fixed }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ConversionRule { pub from: Pool, pub to: Pool, pub coefficient: Fixed, pub remainder_to: Pool }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum TerminationTiming { EveryTick, AtTimeLimit }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct TerminationRule { pub label: TerminationLabel, pub timing: TerminationTiming, pub priority: u8 }
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct StateSnapshot { pub state: WorldState, pub prng: PrngState }
