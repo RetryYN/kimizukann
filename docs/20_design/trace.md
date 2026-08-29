@@ -7,7 +7,7 @@
 |---|---|---|---|---|---|
 | REQ-GOAL-01 | P0 | — | INSP | — | — |
 | REQ-GOAL-02 | P0 | D0 | INSP（ADR） | 01_context_map.md | — |
-| REQ-GOAL-03 | P0 | D7 | → REQ-ACC-04 | 08_acceptance_tests.md | — |
+| REQ-GOAL-03 | P0 | D7 | → REQ-ACC-04 | 08_acceptance_tests.md, 12_events_and_explainer.md | — |
 | REQ-SCOPE-01 | P0 | D5 | AT（schema + 参照検査） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md | — |
 | REQ-SCOPE-02 | P0 | D4 | AT | 02_glossary.md, 08_acceptance_tests.md | — |
 | REQ-SCOPE-09 | P0 | D4/D12 | INSP（プリセット定義に型ラベル）+ USER | — | — |
