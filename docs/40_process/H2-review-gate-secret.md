@@ -14,3 +14,5 @@ gh secret set HELIX_ATTEST_SECRET < $secretPath
 ```
 
 `HELIX_ATTEST_SECRET` は Actions の `review-gate` だけへ渡す。鍵のローテーション時は Secret を更新し、既存のレビュー票を stale として再レビューする。
+
+`pr_lint.py` は GitHub の pull-request files API（merge-base を使う三点比較）の統計を正本として本文の `diff --stat` と突合する。同期用の merge commit（`HEAD~1`）ではなく、PR が実際に変更したファイル集合を比較するためである。

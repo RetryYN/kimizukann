@@ -120,6 +120,10 @@ def added_forbidden(files: list[dict[str, Any]]) -> list[str]:
 
 def fetch_data(args: argparse.Namespace) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     metadata = read_json(args.pr_file) or gh_api(f"repos/{args.repo}/pulls/{args.pr}")
+    # GitHub's pull-request files endpoint is the canonical merge-base
+    # (three-dot) diff.  Comparing the body stat with this response keeps
+    # synchronization merge commits (HEAD~1) from changing the expected PR
+    # statistics.
     files = read_json(args.files_file)
     if files is None:
         files = gh_api(f"repos/{args.repo}/pulls/{args.pr}/files?per_page=100", paginate=True)

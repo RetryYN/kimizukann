@@ -291,10 +291,11 @@ def run(args: argparse.Namespace) -> int:
                     continue
                 ticket["_identity"] = canonical_identity(ticket["reviewer"])
                 valid.append(ticket)
+        # A writer's own ticket is deliberately ignored, not an error.  The
+        # ticket is not an approval, but its presence must not keep an
+        # otherwise valid PR red forever.
         if writer:
-            for ticket in valid:
-                if ticket["_identity"] == writer:
-                    errors.append("writer's review ticket is invalid")
+            valid = [ticket for ticket in valid if ticket["_identity"] != writer]
         latest: dict[str, dict[str, str]] = {}
         for ticket in valid:
             latest[ticket["_identity"]] = ticket
