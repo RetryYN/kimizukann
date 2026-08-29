@@ -90,7 +90,6 @@ def canonical_identity(value: str) -> str:
         "cursor-grok": "grok",
         "cursor-glm": "composer",
         "cursor-composer": "composer",
-        "cursor-glm2": "glm2",
         "cursor-gemini": "gemini",
         "retryyn": "owner",
         "owner": "owner",

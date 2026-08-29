@@ -9,7 +9,7 @@
     {
       "paths": ["crates/**"],
       "allOf": ["kimi"],
-      "writers": ["composer", "glm2"]
+      "writers": ["grok"]
     },
     {
       "paths": ["docs/20_design/basic/**", "docs/30_contracts/**"],
@@ -25,7 +25,11 @@
       "allOf": ["claude"]
     },
     {"paths": ["docs/20_design/detail/**"], "allOf": ["kimi"]},
-    {"paths": ["app/**"], "anyOf": ["grok", "composer"]},
+    {
+      "paths": ["app/**"],
+      "allOf": ["kimi"],
+      "writers": ["grok"]
+    },
     {"paths": [".github/**", ".githooks/**", "scripts/**"], "allOf": ["grok"]},
     {"paths": ["docs/10_requirements/**", "docs/20_design/rfc/**"], "allOf": ["owner"]},
     {"paths": ["docs/20_design/basic/02_glossary.md"], "allOf": ["kimi"]},
