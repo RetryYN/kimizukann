@@ -23,8 +23,20 @@ fn pair(nutrient: Fixed) -> SimCore {
 
 #[test]
 fn ut_d2_02_corner_edge_and_no_wrap() {
-    assert_eq!(SimCore::neighbor_indices(64, 64, 0).iter().flatten().count(), 2);
-    assert_eq!(SimCore::neighbor_indices(64, 64, 32).iter().flatten().count(), 3);
+    assert_eq!(
+        SimCore::neighbor_indices(64, 64, 0)
+            .iter()
+            .flatten()
+            .count(),
+        2
+    );
+    assert_eq!(
+        SimCore::neighbor_indices(64, 64, 32)
+            .iter()
+            .flatten()
+            .count(),
+        3
+    );
     let mut cells = vec![blank(); 3];
     cells[0].nutrient = FIXED_SCALE;
     let mut s = SimCore::try_grid(3, 1, 1, cells, vec![]).unwrap();
@@ -39,7 +51,13 @@ fn ut_d2_02_corner_edge_and_no_wrap() {
 
 #[test]
 fn ut_d2_03_uniform_hash_stable() {
-    let cells = vec![CellState { nutrient: FIXED_SCALE, ..blank() }; 64 * 64];
+    let cells = vec![
+        CellState {
+            nutrient: FIXED_SCALE,
+            ..blank()
+        };
+        64 * 64
+    ];
     let mut s = SimCore::try_grid(64, 64, 9, cells, vec![]).unwrap();
     let h = s.state_hash();
     for _ in 0..2_000 {
@@ -63,7 +81,10 @@ fn ut_d2_04_zero_coeff_unchanged() {
 
 #[test]
 fn ut_d2_06_mmax_i128() {
-    assert_eq!(SimCore::outflow_amount(MMAX, C).unwrap(), 10_000_000_000_000);
+    assert_eq!(
+        SimCore::outflow_amount(MMAX, C).unwrap(),
+        10_000_000_000_000
+    );
     let mut s = pair(MMAX);
     s.apply_phase(TickPhase::Diffuse).unwrap();
     assert_eq!(s.total_mass(), MMAX);
