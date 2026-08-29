@@ -70,15 +70,18 @@ pub enum RoundingMode { TowardZero }
 pub enum NumericError { Negative, OverflowI64, OverflowI128 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+/// TODO(D1): define verify --suite week1 cases and report shape.
 pub struct VerifySuite;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ModelVersion { pub major: u16, pub minor: u16, pub scale: i64, pub rounding: RoundingMode, pub prng: &'static str, pub hash: &'static str }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+/// TODO(D1): define canonical row-major cell/lineage/neighbor order.
 pub struct ScanOrder;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+/// TODO(D1): define deterministic stream handles and derivation.
 pub struct RandomStream;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
