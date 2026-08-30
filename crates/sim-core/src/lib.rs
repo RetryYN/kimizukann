@@ -92,6 +92,41 @@ impl Xoshiro256StarStar {
     }
 }
 
+#[derive(Debug, Clone, Default)]
+struct DiffuseScratch {
+    d_n: Vec<i64>,
+    d_c: Vec<i64>,
+    d_w: Vec<i64>,
+    d_b: Vec<[i64; 8]>,
+    neighbors: Vec<[Option<usize>; 4]>,
+    cached_w: u16,
+    cached_h: u16,
+}
+
+impl DiffuseScratch {
+    fn prepare(&mut self, w: u16, h: u16, n: usize) {
+        if self.d_n.len() != n {
+            self.d_n.resize(n, 0);
+            self.d_c.resize(n, 0);
+            self.d_w.resize(n, 0);
+            self.d_b.resize(n, [0; 8]);
+        } else {
+            self.d_n.fill(0);
+            self.d_c.fill(0);
+            self.d_w.fill(0);
+            self.d_b.fill([0; 8]);
+        }
+        if self.cached_w != w || self.cached_h != h || self.neighbors.len() != n {
+            self.neighbors.resize(n, [None; 4]);
+            for (i, slot) in self.neighbors.iter_mut().enumerate() {
+                *slot = SimCore::neighbor_indices(w, h, i);
+            }
+            self.cached_w = w;
+            self.cached_h = h;
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct SimCore {
     pub state: WorldState,
@@ -101,6 +136,7 @@ pub struct SimCore {
     pub thresholds: Thresholds,
     pub model_version: String,
     pub diffusion_coefficients: [Fixed; 4],
+    scratch: DiffuseScratch,
 }
 
 impl SimCore {
@@ -168,6 +204,7 @@ impl SimCore {
             },
             model_version: "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
             diffusion_coefficients: [50_000; 4],
+            scratch: DiffuseScratch::default(),
         })
     }
 
@@ -252,7 +289,41 @@ impl SimCore {
     }
 
     pub fn verify_suite_d2() -> (bool, bool) {
-        (false, false)
+        let blank = CellState {
+            nutrient: 0,
+            biomass: [0; 8],
+            carcass: 0,
+            waste: 0,
+            energy: [FIXED_SCALE / 2; 8],
+            occupancy_peak: 0,
+        };
+        let conservation = (|| -> Result<bool, String> {
+            let mut cells = vec![blank.clone(); 64 * 64];
+            cells[0].nutrient = FIXED_SCALE;
+            let mut s = Self::try_grid(64, 64, 11, cells, vec![])?;
+            let mass = s.total_mass();
+            for _ in 0..2_000 {
+                s.apply_phase(TickPhase::Diffuse)?;
+            }
+            Ok(s.total_mass() == mass)
+        })()
+        .unwrap_or(false);
+        let symmetry = (|| -> Result<bool, String> {
+            let mut left = vec![blank.clone(); 2];
+            left[0].nutrient = FIXED_SCALE;
+            let mut right = vec![blank.clone(); 2];
+            right[1].nutrient = FIXED_SCALE;
+            let mut a = Self::try_grid(2, 1, 13, left, vec![])?;
+            let mut b = Self::try_grid(2, 1, 13, right, vec![])?;
+            a.apply_phase(TickPhase::Diffuse)?;
+            b.apply_phase(TickPhase::Diffuse)?;
+            Ok(
+                a.state.grid.cells[0].nutrient == b.state.grid.cells[1].nutrient
+                    && a.state.grid.cells[1].nutrient == b.state.grid.cells[0].nutrient,
+            )
+        })()
+        .unwrap_or(false);
+        (conservation, symmetry)
     }
 
     pub fn step(&mut self, ticks: u32) -> Result<(), String> {
@@ -274,8 +345,86 @@ impl SimCore {
         self.state.tick = self.state.tick.checked_add(1).ok_or("tick overflow")?;
         Ok(())
     }
+    fn next_pool(pool: Fixed, delta: i64) -> Result<Fixed, String> {
+        let next = pool
+            .checked_add(delta)
+            .ok_or_else(|| format!("diffuse: {:?}", NumericError::OverflowI64))?;
+        if next < 0 {
+            return Err(format!("diffuse: {:?}", NumericError::Negative));
+        }
+        Ok(next)
+    }
+
     fn diffuse(&mut self) -> Result<(), String> {
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        let n = self.state.grid.cells.len();
+        self.scratch.prepare(w, h, n);
+        let coeffs = self.diffusion_coefficients;
+        let mut move_by = [0; 8];
+        for lineage in &self.state.lineages {
+            if (lineage.id as usize) < 8 {
+                move_by[lineage.id as usize] = lineage.traits.movement;
+            }
+        }
+        let any_move = move_by.iter().any(|&m| m != 0);
+        for (i, cell) in self.state.grid.cells.iter().enumerate() {
+            let send = |pool: Fixed, coeff: Fixed| {
+                Self::outflow_amount(pool, coeff).map_err(|e| format!("diffuse: {e:?}"))
+            };
+            let n_out = send(cell.nutrient, coeffs[0])?;
+            let c_out = send(cell.carcass, coeffs[1])?;
+            let w_out = send(cell.waste, coeffs[2])?;
+            let mut b_out = [0; 8];
+            if any_move {
+                for (id, (&mv, &pool)) in move_by.iter().zip(cell.biomass.iter()).enumerate() {
+                    if mv != 0 {
+                        b_out[id] = send(pool, mv)?;
+                    }
+                }
+            }
+            for dest in self.scratch.neighbors[i].into_iter().flatten() {
+                self.scratch.d_n[i] -= n_out;
+                self.scratch.d_n[dest] += n_out;
+                self.scratch.d_c[i] -= c_out;
+                self.scratch.d_c[dest] += c_out;
+                self.scratch.d_w[i] -= w_out;
+                self.scratch.d_w[dest] += w_out;
+                if any_move {
+                    for (id, out) in b_out.iter().enumerate() {
+                        if *out == 0 {
+                            continue;
+                        }
+                        self.scratch.d_b[i][id] -= *out;
+                        self.scratch.d_b[dest][id] += *out;
+                    }
+                }
+            }
+        }
+        for (i, cell) in self.state.grid.cells.iter().enumerate() {
+            Self::next_pool(cell.nutrient, self.scratch.d_n[i])?;
+            Self::next_pool(cell.carcass, self.scratch.d_c[i])?;
+            Self::next_pool(cell.waste, self.scratch.d_w[i])?;
+            for (slot, delta) in cell.biomass.iter().zip(self.scratch.d_b[i].iter()) {
+                Self::next_pool(*slot, *delta)?;
+            }
+        }
+        for (i, cell) in self.state.grid.cells.iter_mut().enumerate() {
+            cell.nutrient = Self::next_pool(cell.nutrient, self.scratch.d_n[i])?;
+            cell.carcass = Self::next_pool(cell.carcass, self.scratch.d_c[i])?;
+            cell.waste = Self::next_pool(cell.waste, self.scratch.d_w[i])?;
+            for (slot, delta) in cell.biomass.iter_mut().zip(self.scratch.d_b[i].iter()) {
+                *slot = Self::next_pool(*slot, *delta)?;
+            }
+        }
         Ok(())
+    }
+
+    /// D2-Q1 boundary: cell-grain Diffusion rows are not retained.
+    /// Tick-end callers fold region aggregates here (no-op until ledger wiring).
+    pub fn fold_diffuse_region_aggregates<F>(&self, _fold: F)
+    where
+        F: FnMut(u8, Pool, Pool, Fixed),
+    {
     }
     fn intake(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
