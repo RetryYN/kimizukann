@@ -252,7 +252,41 @@ impl SimCore {
     }
 
     pub fn verify_suite_d2() -> (bool, bool) {
-        (false, false)
+        let blank = CellState {
+            nutrient: 0,
+            biomass: [0; 8],
+            carcass: 0,
+            waste: 0,
+            energy: [FIXED_SCALE / 2; 8],
+            occupancy_peak: 0,
+        };
+        let conservation = (|| -> Result<bool, String> {
+            let mut cells = vec![blank.clone(); 64 * 64];
+            cells[0].nutrient = FIXED_SCALE;
+            let mut s = Self::try_grid(64, 64, 11, cells, vec![])?;
+            let mass = s.total_mass();
+            for _ in 0..2_000 {
+                s.apply_phase(TickPhase::Diffuse)?;
+            }
+            Ok(s.total_mass() == mass)
+        })()
+        .unwrap_or(false);
+        let symmetry = (|| -> Result<bool, String> {
+            let mut left = vec![blank.clone(); 2];
+            left[0].nutrient = FIXED_SCALE;
+            let mut right = vec![blank.clone(); 2];
+            right[1].nutrient = FIXED_SCALE;
+            let mut a = Self::try_grid(2, 1, 13, left, vec![])?;
+            let mut b = Self::try_grid(2, 1, 13, right, vec![])?;
+            a.apply_phase(TickPhase::Diffuse)?;
+            b.apply_phase(TickPhase::Diffuse)?;
+            Ok(
+                a.state.grid.cells[0].nutrient == b.state.grid.cells[1].nutrient
+                    && a.state.grid.cells[1].nutrient == b.state.grid.cells[0].nutrient,
+            )
+        })()
+        .unwrap_or(false);
+        (conservation, symmetry)
     }
 
     pub fn step(&mut self, ticks: u32) -> Result<(), String> {
@@ -275,6 +309,62 @@ impl SimCore {
         Ok(())
     }
     fn diffuse(&mut self) -> Result<(), String> {
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        let n = self.state.grid.cells.len();
+        let start = self.state.grid.cells.clone();
+        let coeffs = self.diffusion_coefficients;
+        let mut move_by = [0; 8];
+        for lineage in &self.state.lineages {
+            if (lineage.id as usize) < 8 {
+                move_by[lineage.id as usize] = lineage.traits.movement;
+            }
+        }
+        let mut d_n = vec![0i64; n];
+        let mut d_c = vec![0i64; n];
+        let mut d_w = vec![0i64; n];
+        let mut d_b = vec![[0i64; 8]; n];
+        for i in 0..n {
+            let cell = &start[i];
+            for dest in Self::neighbor_indices(w, h, i).into_iter().flatten() {
+                let send = |pool: Fixed, coeff: Fixed| {
+                    Self::outflow_amount(pool, coeff).map_err(|e| format!("diffuse: {e:?}"))
+                };
+                let n_out = send(cell.nutrient, coeffs[0])?;
+                let c_out = send(cell.carcass, coeffs[1])?;
+                let w_out = send(cell.waste, coeffs[2])?;
+                d_n[i] -= n_out;
+                d_n[dest] += n_out;
+                d_c[i] -= c_out;
+                d_c[dest] += c_out;
+                d_w[i] -= w_out;
+                d_w[dest] += w_out;
+                for id in 0..8 {
+                    if move_by[id] == 0 {
+                        continue;
+                    }
+                    let b_out = send(cell.biomass[id], move_by[id])?;
+                    d_b[i][id] -= b_out;
+                    d_b[dest][id] += b_out;
+                }
+            }
+        }
+        for (i, cell) in self.state.grid.cells.iter_mut().enumerate() {
+            let apply = |pool: Fixed, delta: i64| -> Result<Fixed, String> {
+                let next = pool
+                    .checked_add(delta)
+                    .ok_or_else(|| format!("diffuse: {:?}", NumericError::OverflowI64))?;
+                if next < 0 {
+                    return Err(format!("diffuse: {:?}", NumericError::Negative));
+                }
+                Ok(next)
+            };
+            cell.nutrient = apply(cell.nutrient, d_n[i])?;
+            cell.carcass = apply(cell.carcass, d_c[i])?;
+            cell.waste = apply(cell.waste, d_w[i])?;
+            for id in 0..8 {
+                cell.biomass[id] = apply(cell.biomass[id], d_b[i][id])?;
+            }
+        }
         Ok(())
     }
     fn intake(&mut self) -> Result<(), String> {
