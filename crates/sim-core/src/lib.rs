@@ -10,6 +10,8 @@ mod ledger;
 pub use ledger::{fold_region_records, LedgerRecord};
 mod placement;
 pub use placement::{preset_v1, PlaceMode};
+mod termination;
+pub use termination::{epsilon, judge, ranking, share_ge, step_streak, TermState};
 
 macro_rules! rec {
     ($t:expr, $r:expr, $l:expr, $w:expr, $f:expr, $o:expr, $a:expr $(,)?) => {
