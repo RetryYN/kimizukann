@@ -1,5 +1,7 @@
 //! Release timing for REQ-NFR-01 (diffuse-only 2,000 tick on 64×64).
 //! `cargo run -p kimizukann-sim-core --example diffuse_bench --release`
+//! Instant はベンチ計測専用。シム本体の決定性規則（BD-07 §4.2）は維持。
+#![allow(clippy::disallowed_methods)]
 
 use kimizukann_sim_core::SimCore;
 use kimizukann_sim_types::{CellState, TickPhase, FIXED_SCALE};
