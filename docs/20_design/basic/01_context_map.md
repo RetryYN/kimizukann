@@ -1,4 +1,6 @@
-# BD-01 コンテキストマップ（r2: grok 敵対レビュー 14 件反映）
+# BD-01 コンテキストマップ（r5: D8-Q1 裁定反映 — 台帳ダイジェストの対象集合を 3 層保持ポリシに明示）
+
+<!-- r2: grok 敵対レビュー 14 件反映 / r4: 台帳二段モデル（発生時 cell_index・digest/Save は region 集約）/ r5: 2026-08-30 D8-Q1 裁定 -->
 
 参照: REQ-GOAL-02, REQ-CON-01, REQ-CON-05, REQ-CON-08, REQ-OUT-04, REQ-OUT-05, REQ-VIS-04, REQ-NFR-04, REQ-DET-02/06/07, REQ-EVT-04/05, REQ-END-03, REQ-UI-03/05
 
@@ -61,6 +63,7 @@
 | **SessionSave** | 速度、due tick、画面、ひとこと仮説 3 値、経過秒 | Presentation | ✕ | 別ファイル。無くても World/Ledger から再開可能（UX が落ちるだけ） |
 | カード・指標ログ | 生命史カード、ローカル指標 | Presentation | ✕ | 別ファイル |
 - 「save 完了を確認してから kill しても復帰できる」は AT-D12-RES で検証（BD-11 RES-01..04）
+- **台帳ダイジェストの対象集合（D8-Q1 裁定 2026-08-30。確定）**: LedgerRecord の保持ポリシは 3 層 — (a) 累計レコード（tick を落とし region × lineage × reason × from × to で全期間集約）+ (b) 直近 200 tick の per-tick リングバッファ（常に直近 200 tick 分を保持し、201 tick 目の記録時に最古から FIFO で破棄）+ (c) スタンプ窓（転換点スタンプの検出確定 tick 時点の (b) リング全内容 = 確定 tick までの直近 200 tick 分の per-tick レコードをコピーして保存。保存数はスタンプ上限 32 件（BD-10 §5）に従う）—— とし、ダイジェスト入力はこの保持集合全体とする。**(b) と (c) の重複は除重しない**: (c) は複写元レコードが (b) から FIFO 退避した後も残すための独立した保存物であり、ダイジェストは保持集合の物理的内容をそのまま写す（複写元が (b) に残存する間は同一レコードが (b)(c) 双方に入力として現れる）。直列化順: (a) は tick フィールドを持たない累計レコードとして region_id→lineage→reason→from→to の順にソートして LE 直列化 → (b) は tick→region_id→lineage→reason→from→to の順にソート → (c) は窓の確定 tick 昇順・窓内は (b) と同順 → スタンプ（tick, kind, region_ids の順）→ z 窓（pool, 系統, 値の順）。参照: REQ-DET-02, REQ-EVT-04
 
 ## 6. 各境界を越えるデータ（契約の所在）
 | 境界 | データ | 契約 |
