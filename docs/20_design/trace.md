@@ -74,11 +74,11 @@
 | REQ-DET-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 11_ui_flow.md | — |
 | REQ-DET-09 | P0 | D11 | AT（reference_scenarios の model_version 照合） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md | — |
 | REQ-END-01 | P0 | D4 | AT（schema enum） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, DD-D4-lineages.md | — |
-| REQ-END-02 | P0 | D4 | UT + AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D4-lineages.md | — |
-| REQ-END-03 | P0 | D4 | UT + AT | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D4-lineages.md | — |
-| REQ-END-04a | P0 | D4 | UT（最小例）+ AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, DD-D4-lineages.md | — |
-| REQ-END-04b | P0 | D4 | UT（同率ケース含む） | 02_glossary.md, 04_state_machines.md, 05_contract.md, 12_events_and_explainer.md, DD-D4-lineages.md | — |
-| REQ-END-04c | P0 | D4 | UT（同時成立ケース） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, DD-D4-lineages.md | — |
+| REQ-END-02 | P0 | D4 | UT + AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D4-lineages.md | d4_termination.rs |
+| REQ-END-03 | P0 | D4 | UT + AT | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D4-lineages.md | d4_termination.rs |
+| REQ-END-04a | P0 | D4 | UT（最小例）+ AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, DD-D4-lineages.md | d4_termination.rs |
+| REQ-END-04b | P0 | D4 | UT（同率ケース含む） | 02_glossary.md, 04_state_machines.md, 05_contract.md, 12_events_and_explainer.md, DD-D4-lineages.md | d4_termination.rs |
+| REQ-END-04c | P0 | D4 | UT（同時成立ケース） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, DD-D4-lineages.md | d4_termination.rs |
 | REQ-END-05 | P0 | D7 | AT（D7 分布） | 08_acceptance_tests.md, DD-D6-smoke.md, DD-D7-calibration.md | — |
 | REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
