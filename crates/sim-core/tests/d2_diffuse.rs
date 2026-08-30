@@ -194,3 +194,16 @@ fn at_d2_01_02_verify_keys() {
     let (c, sy) = SimCore::verify_suite_d2();
     assert!(c && sy, "conservation_64x64/symmetry");
 }
+
+#[test]
+fn ut_d2_09_overflow_leaves_state() {
+    let mut cells = vec![blank(); 9];
+    cells[4].biomass[0] = FIXED_SCALE;
+    cells[0].nutrient = FIXED_SCALE;
+    let before = cells.clone();
+    let mut s = SimCore::try_grid(3, 3, 1, cells, vec![lin(0, 600_000)]).unwrap();
+    let err = s.apply_phase(TickPhase::Diffuse).unwrap_err();
+    assert!(err.contains("Negative"), "{err}");
+    assert_eq!(s.state.grid.cells, before);
+    s.fold_diffuse_region_aggregates(|_, _, _, _| {});
+}
