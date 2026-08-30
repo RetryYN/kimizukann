@@ -128,12 +128,21 @@ fn main() {
     if args.get(1).map(String::as_str) != Some("verify")
         || args.get(2).map(String::as_str) != Some("--suite")
     {
-        eprintln!("usage: sim-cli verify --suite quick|week1|all");
+        eprintln!("usage: sim-cli verify --suite quick|week1|all|D2");
         std::process::exit(2);
     }
     let suite = args.get(3).map(String::as_str).unwrap_or_default();
+    if suite == "D2" {
+        let (conservation, symmetry) = SimCore::verify_suite_d2();
+        let ok = conservation && symmetry;
+        println!(
+            "{{\"suite\":\"D2\",\"conservation_64x64\":{conservation},\"symmetry\":{symmetry},\"status\":\"{}\"}}",
+            if ok { "pass" } else { "fail" }
+        );
+        std::process::exit(if ok { 0 } else { 1 });
+    }
     if !matches!(suite, "quick" | "week1" | "all") {
-        eprintln!("usage: sim-cli verify --suite quick|week1|all");
+        eprintln!("usage: sim-cli verify --suite quick|week1|all|D2");
         std::process::exit(2);
     }
     let (conservation, determinism, nonneg, transition, hash_normalization, golden, state_hash) =
