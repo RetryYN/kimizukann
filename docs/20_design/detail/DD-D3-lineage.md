@@ -38,7 +38,6 @@
 - **ガードに D1 の `traits.reproduction` 倍率は使わない**（BD-04 §3.2 の `energy > cost × 2` のみに合わせる。PT-D3-02 が traits を [0.5, 1.5] で振るため、ガードが traits に依存すると実装解釈が分かれる。D1 との意図的差分として記録）
 - **抽選の導入（BD-07 §2/§3 の「D3 で確定」への回答。D3-Q2 = claude 判定で採用）**: ガード成立 (cell, lineage) ごとに reproduction ストリームから 1 語を消費し、`u / 2^64 < p_repro` なら繁殖成立。`p_repro` = 1.0 を初期仮説とする（D1 と同じ振る舞いを保ちつつ消費パターンだけ先に確定する。D3 較正で < 1.0 にするか判断）。**p_repro = 1.0 でも消費をスキップしてはならない**（消費回数は状態のみの関数。BD-07 §3）。消費回数表（BD-07 §3）は本 PR で更新済み
 - 抽選導入は PRNG 消費が変わる＝振る舞い変更のため **model_version を bump**（`d3-v1`。BD-05 §14）。**D3-Q4 = claude 裁定済み（2026-08-30、(a)(1) 条件付き採用）**: H2 ゲート稼働後は model_version bump・`one_tick_reference` 更新・golden 再生成・照合文字列更新を**同一 PR**で行う（「別 PR」は verify 赤の中間状態を生むため構造的に不可）。条件: 新 oracle 期待値は writer（grok）が PR 本文に手計算の導出を書き、kimi が契約審査で独立に検算して approve に「検算一致」と明記する（golden の Claude 承認は kimi の検算一致票をもって代える）
-- **D3-Q5 = claude 裁定（2026-08-30、(a)）**: version 文字列は phase 集合の完成時点で確定。中間 PR は同一文字列のまま golden を更新してよい（未リリースに限る）。`d3-v1` は D3 完成形（A+B）の識別子。
 - 台帳: 物質台帳 `Nutrient → Biomass`（amount = gain）＋ エネルギー台帳 `Biomass → Waste`（amount = gain。繁殖仕事は熱として散逸）（reason = Reproduction）
 
 ## 6. emission（REQ-SIM-05）
