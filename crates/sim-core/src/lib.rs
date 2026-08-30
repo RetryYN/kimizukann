@@ -127,6 +127,17 @@ impl DiffuseScratch {
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct LedgerRecord {
+    pub tick: u32,
+    pub region_id: u8,
+    pub lineage: u8,
+    pub reason: kimizukann_sim_types::ReasonCode,
+    pub from_pool: Pool,
+    pub to_pool: Pool,
+    pub amount: Fixed,
+}
+
 #[derive(Debug, Clone)]
 pub struct SimCore {
     pub state: WorldState,
@@ -137,6 +148,10 @@ pub struct SimCore {
     pub model_version: String,
     pub diffusion_coefficients: [Fixed; 4],
     scratch: DiffuseScratch,
+    mass_ledger: Vec<LedgerRecord>,
+    energy_ledger: Vec<LedgerRecord>,
+    life: Vec<[u8; 8]>,
+    deficit: Vec<[Fixed; 8]>,
 }
 
 impl SimCore {
@@ -179,7 +194,7 @@ impl SimCore {
             },
             lineages,
         };
-        Ok(Self {
+        let mut core = Self {
             state,
             seed: Seed(seed),
             initial_mass,
@@ -205,7 +220,13 @@ impl SimCore {
             model_version: "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
             diffusion_coefficients: [50_000; 4],
             scratch: DiffuseScratch::default(),
-        })
+            mass_ledger: Vec::new(),
+            energy_ledger: Vec::new(),
+            life: vec![[0; 8]],
+            deficit: vec![[0; 8]],
+        };
+        core.sync_life_slots();
+        Ok(core)
     }
 
     pub fn try_grid(
@@ -231,7 +252,47 @@ impl SimCore {
             cells,
         };
         core.initial_mass = core.total_mass();
+        core.sync_life_slots();
         Ok(core)
+    }
+
+    fn sync_life_slots(&mut self) {
+        let n = self.state.grid.cells.len();
+        self.life.resize(n, [0; 8]);
+        self.deficit.resize(n, [0; 8]);
+        for (i, cell) in self.state.grid.cells.iter().enumerate() {
+            for id in 0..8 {
+                if cell.biomass[id] > 0 && self.life[i][id] == 0 {
+                    self.life[i][id] = 1;
+                }
+            }
+        }
+    }
+
+    pub fn energy_records(&self) -> &[LedgerRecord] {
+        &self.energy_ledger
+    }
+    pub fn ledger_records(&self) -> &[LedgerRecord] {
+        &self.mass_ledger
+    }
+    pub fn life_of(&self, cell: usize, id: usize) -> u8 {
+        self.life.get(cell).map(|row| row[id]).unwrap_or(0)
+    }
+    pub fn last_deficit(&self, cell: usize, id: usize) -> Fixed {
+        self.deficit.get(cell).map(|row| row[id]).unwrap_or(0)
+    }
+    pub fn set_life(&mut self, cell: usize, id: usize, life: u8) {
+        self.sync_life_slots();
+        self.life[cell][id] = life;
+    }
+    pub fn set_deficit(&mut self, cell: usize, id: usize, amount: Fixed) {
+        self.sync_life_slots();
+        self.deficit[cell][id] = amount;
+    }
+    pub fn fold_lineage_records(&mut self) {
+        self.mass_ledger.sort_by_key(|r| {
+            (r.tick, r.region_id, r.lineage, r.reason as u8, r.from_pool as u8, r.to_pool as u8)
+        });
     }
 
     pub fn total_mass(&self) -> Fixed {
@@ -246,7 +307,12 @@ impl SimCore {
     pub fn apply_phase(&mut self, phase: TickPhase) -> Result<(), String> {
         match phase {
             TickPhase::Diffuse => self.diffuse(),
-            _ => Err("apply_phase: only Diffuse in D2-A".into()),
+            TickPhase::Intake => self.intake(),
+            TickPhase::Maintenance => self.maintenance(),
+            TickPhase::StarvationAndDeath => self.starvation_and_death(),
+            TickPhase::Reproduction => self.reproduction(),
+            TickPhase::Emission => self.emission(),
+            TickPhase::Occupancy => self.occupancy(),
         }
     }
 
