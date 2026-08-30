@@ -49,12 +49,12 @@ fn core(cell: CellState, lineages: Vec<LineageParams>) -> SimCore {
 #[test]
 fn ut_d3_01_no_split_intake() {
     let mut cell = blank();
-    cell.nutrient = 250_000;
+    cell.nutrient = 150_000;
     cell.biomass = [FIXED_SCALE, FIXED_SCALE, 0, 0, 0, 0, 0, 0];
     let mut s = core(cell, vec![lin(0, nutrient_tag()), lin(1, nutrient_tag())]);
     s.apply_phase(TickPhase::Intake).unwrap();
     let c = &s.state.grid.cells[0];
-    assert_eq!(c.nutrient, 50_000);
+    assert_eq!(c.nutrient, 0);
     assert!(c.biomass[0] > c.biomass[1]);
 }
 

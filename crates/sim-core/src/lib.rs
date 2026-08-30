@@ -6,6 +6,8 @@ use kimizukann_sim_types::{
 };
 use sha2::{Digest, Sha256};
 
+mod lineage_phases;
+
 pub mod fixed {
     use kimizukann_sim_types::{ConversionRule, Fixed, NumericError, Pool, FIXED_SCALE};
 
@@ -305,15 +307,7 @@ impl SimCore {
     }
 
     pub fn apply_phase(&mut self, phase: TickPhase) -> Result<(), String> {
-        match phase {
-            TickPhase::Diffuse => self.diffuse(),
-            TickPhase::Intake => self.intake(),
-            TickPhase::Maintenance => self.maintenance(),
-            TickPhase::StarvationAndDeath => self.starvation_and_death(),
-            TickPhase::Reproduction => self.reproduction(),
-            TickPhase::Emission => self.emission(),
-            TickPhase::Occupancy => self.occupancy(),
-        }
+        self.run_lineage_phase(phase)
     }
 
     pub fn neighbor_indices(width: u16, height: u16, index: usize) -> [Option<usize>; 4] {
@@ -402,11 +396,11 @@ impl SimCore {
     fn tick_once(&mut self) -> Result<(), String> {
         // Seven phases are explicit even though diffusion is a one-cell no-op in D1.
         self.diffuse()?;
-        self.intake()?;
-        self.maintenance()?;
-        self.starvation_and_death()?;
-        self.reproduction()?;
-        self.emission()?;
+        self.run_lineage_phase(TickPhase::Intake)?;
+        self.run_lineage_phase(TickPhase::Maintenance)?;
+        self.run_lineage_phase(TickPhase::StarvationAndDeath)?;
+        self.run_lineage_phase(TickPhase::Reproduction)?;
+        self.run_lineage_phase(TickPhase::Emission)?;
         self.occupancy()?;
         self.state.tick = self.state.tick.checked_add(1).ok_or("tick overflow")?;
         Ok(())
@@ -492,6 +486,7 @@ impl SimCore {
         F: FnMut(u8, Pool, Pool, Fixed),
     {
     }
+    #[allow(dead_code)]
     fn intake(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -522,6 +517,7 @@ impl SimCore {
         }
         Ok(())
     }
+    #[allow(dead_code)]
     fn maintenance(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -548,6 +544,7 @@ impl SimCore {
         }
         Ok(())
     }
+    #[allow(dead_code)]
     fn starvation_and_death(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -574,6 +571,7 @@ impl SimCore {
         }
         Ok(())
     }
+    #[allow(dead_code)]
     fn reproduction(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -597,6 +595,7 @@ impl SimCore {
         }
         Ok(())
     }
+    #[allow(dead_code)]
     fn emission(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
