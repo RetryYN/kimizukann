@@ -49,7 +49,7 @@
 | REQ-SIM-12 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, DD-D3-lineage.md | — |
 | REQ-SIM-13 | P0 | D1 | property + UT（上限・上限+1） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, DD-D2-diffuse.md, DD-D3-lineage.md | — |
 | REQ-SIM-14 | P0 | D2/D6 | INSP（numeric-model）+ AT（D6 煙試験で panic 0） | 03_domain_model.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D2-diffuse.md | — |
-| REQ-GEN-01 | P0 | D0 | AT（config schema additionalProperties=false） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
+| REQ-GEN-01 | P0 | D0 | AT（config schema additionalProperties=false） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-GEN-02 | P0 | D12 | INSP + USER | 02_glossary.md, 05_contract.md, 11_ui_flow.md | — |
 | REQ-GEN-03 | P0 | D4 | INSP（config golden） | 02_glossary.md, DD-D7-calibration.md | — |
 | REQ-GEN-04 | P0 | D4 | UT（プリセット検査） | 06_numeric_model.md | — |
