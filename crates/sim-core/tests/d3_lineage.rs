@@ -43,7 +43,9 @@ fn nutrient_tag() -> MechanismTags {
 }
 
 fn core(cell: CellState, lineages: Vec<LineageParams>) -> SimCore {
-    SimCore::try_grid(1, 1, 7, vec![cell], lineages).unwrap()
+    let mut s = SimCore::try_grid(1, 1, 7, vec![cell], lineages).unwrap();
+    s.model_version = "d3-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into();
+    s
 }
 
 #[test]

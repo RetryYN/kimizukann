@@ -403,11 +403,19 @@ impl SimCore {
     fn tick_once(&mut self) -> Result<(), String> {
         // Seven phases are explicit even though diffusion is a one-cell no-op in D1.
         self.diffuse()?;
-        self.run_lineage_phase(TickPhase::Intake)?;
-        self.run_lineage_phase(TickPhase::Maintenance)?;
-        self.run_lineage_phase(TickPhase::StarvationAndDeath)?;
-        self.run_lineage_phase(TickPhase::Reproduction)?;
-        self.run_lineage_phase(TickPhase::Emission)?;
+        if self.model_version.starts_with("d3-v1") {
+            self.run_lineage_phase(TickPhase::Intake)?;
+            self.run_lineage_phase(TickPhase::Maintenance)?;
+            self.run_lineage_phase(TickPhase::StarvationAndDeath)?;
+            self.run_lineage_phase(TickPhase::Reproduction)?;
+            self.run_lineage_phase(TickPhase::Emission)?;
+        } else {
+            self.intake()?;
+            self.maintenance()?;
+            self.starvation_and_death()?;
+            self.reproduction()?;
+            self.emission()?;
+        }
         self.occupancy()?;
         self.state.tick = self.state.tick.checked_add(1).ok_or("tick overflow")?;
         Ok(())
@@ -524,7 +532,6 @@ impl SimCore {
         }
         Ok(())
     }
-    #[allow(dead_code)]
     fn maintenance(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -551,7 +558,6 @@ impl SimCore {
         }
         Ok(())
     }
-    #[allow(dead_code)]
     fn starvation_and_death(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -578,7 +584,6 @@ impl SimCore {
         }
         Ok(())
     }
-    #[allow(dead_code)]
     fn reproduction(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
@@ -602,7 +607,6 @@ impl SimCore {
         }
         Ok(())
     }
-    #[allow(dead_code)]
     fn emission(&mut self) -> Result<(), String> {
         let lineages = self.state.lineages.clone();
         for cell in &mut self.state.grid.cells {
