@@ -1,0 +1,6 @@
+[
+  {"id":0,"trait_vector":{"movement":700000,"intake":1050000,"conversion":950000,"maintenance_cost":1000000,"reproduction":850000},"mechanism_tags":{"use_nutrient":true,"use_carcass":false,"use_waste":false,"toxin_sensitive":true,"density_bonus":false},"mortality_threshold":5000,"waste_emission":1000},
+  {"id":1,"trait_vector":{"movement":1200000,"intake":800000,"conversion":900000,"maintenance_cost":1100000,"reproduction":850000},"mechanism_tags":{"use_nutrient":true,"use_carcass":false,"use_waste":false,"toxin_sensitive":false,"density_bonus":false},"mortality_threshold":5000,"waste_emission":1000},
+  {"id":2,"trait_vector":{"movement":1000000,"intake":1150000,"conversion":850000,"maintenance_cost":1300000,"reproduction":1600000},"mechanism_tags":{"use_nutrient":true,"use_carcass":false,"use_waste":false,"toxin_sensitive":false,"density_bonus":false},"mortality_threshold":10000,"waste_emission":2000},
+  {"id":3,"trait_vector":{"movement":800000,"intake":450000,"conversion":950000,"maintenance_cost":900000,"reproduction":650000},"mechanism_tags":{"use_nutrient":true,"use_carcass":true,"use_waste":true,"toxin_sensitive":false,"density_bonus":false},"mortality_threshold":5000,"waste_emission":1000}
+]
