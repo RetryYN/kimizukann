@@ -3,6 +3,8 @@
 ## ID
 <!-- brief / カード ID。ブランチ名と一致: 例 D2-diffuse-001 -->
 
+writer: <identity>
+
 ## 種別
 <!-- feat | fix | design | docs | test | ci | rfc | hotfix -->
 
