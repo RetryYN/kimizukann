@@ -667,7 +667,7 @@ impl SimCore {
         Ok(cost.max(1))
     }
 
-    fn to_carcass(&mut self, cell_i: usize, id: usize, amount: Fixed) -> Result<(), String> {
+    fn move_into_carcass(&mut self, cell_i: usize, id: usize, amount: Fixed) -> Result<(), String> {
         self.state.grid.cells[cell_i].biomass[id] -= amount;
         self.state.grid.cells[cell_i].carcass =
             fixed::add(self.state.grid.cells[cell_i].carcass, amount)
@@ -691,7 +691,7 @@ impl SimCore {
                     let loss =
                         self.state.grid.cells[cell_i].biomass[id].min(self.deficit[cell_i][id]);
                     if loss > 0 {
-                        self.to_carcass(cell_i, id, loss)?;
+                        self.move_into_carcass(cell_i, id, loss)?;
                         Self::push_row(
                             &mut self.mass_ledger,
                             rec!(
@@ -713,7 +713,7 @@ impl SimCore {
                 let left = self.state.grid.cells[cell_i].biomass[id];
                 if left < lineage.mortality_threshold {
                     if left > 0 {
-                        self.to_carcass(cell_i, id, left)?;
+                        self.move_into_carcass(cell_i, id, left)?;
                         Self::push_row(
                             &mut self.mass_ledger,
                             rec!(
