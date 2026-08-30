@@ -11,7 +11,7 @@
 | REQ-SCOPE-01 | P0 | D5 | AT（schema + 参照検査） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
 | REQ-SCOPE-02 | P0 | D4 | AT | 02_glossary.md, 08_acceptance_tests.md, DD-D4-lineages.md | — |
 | REQ-SCOPE-09 | P0 | D4/D12 | INSP（プリセット定義に型ラベル）+ USER | — | — |
-| REQ-SCOPE-03 | P0 | D12 | AT（config schema）+USER | 02_glossary.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 11_ui_flow.md | — |
+| REQ-SCOPE-03 | P0 | D12 | AT（config schema）+USER | 02_glossary.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 11_ui_flow.md | d4_lineages.rs |
 | REQ-SCOPE-04 | P0 | D4 | AT（ReasonCode 網羅） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md, DD-D4-lineages.md | — |
 | REQ-SCOPE-05 | P0 | D4 | AT（use_carcass 系統の存在） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, DD-D3-lineage.md, DD-D4-lineages.md | — |
 | REQ-SCOPE-06 | P0 | D7 | AT | 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D4-lineages.md, DD-D7-calibration.md | — |
@@ -52,11 +52,11 @@
 | REQ-GEN-01 | P0 | D0 | AT（config schema additionalProperties=false） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md, DD-D3-lineage.md, DD-D4-lineages.md | — |
 | REQ-GEN-02 | P0 | D12 | INSP + USER | 02_glossary.md, 05_contract.md, 11_ui_flow.md | — |
 | REQ-GEN-03 | P0 | D4 | INSP（config golden） | 02_glossary.md, DD-D4-lineages.md, DD-D7-calibration.md | — |
-| REQ-GEN-04 | P0 | D4 | UT（プリセット検査） | 06_numeric_model.md, DD-D4-lineages.md | — |
+| REQ-GEN-04 | P0 | D4 | UT（プリセット検査） | 06_numeric_model.md, DD-D4-lineages.md | d4_lineages.rs |
 | REQ-GEN-05 | P0 | D7 | AT（D7 分布判定） | 08_acceptance_tests.md, DD-D7-calibration.md | — |
 | REQ-GEN-06 | P0 | D7 | AT | 02_glossary.md, 08_acceptance_tests.md, DD-D7-calibration.md | — |
 | REQ-GEN-07 | P1 | D7 | AT | DD-D7-calibration.md | — |
-| REQ-GEN-08 | P1 | D4/D12 | UT（上限・上限+1）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md, DD-D4-lineages.md | — |
+| REQ-GEN-08 | P1 | D4/D12 | UT（上限・上限+1）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md, DD-D4-lineages.md | d4_lineages.rs |
 | REQ-ENV-01 | P0 | D5 | AT（schema） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md | — |
 | REQ-ENV-02 | P0 | D5 | AT（4 config が schema 通過、load→save→load 同一） | 02_glossary.md, 08_acceptance_tests.md, 11_ui_flow.md | — |
 | REQ-ENV-03 | P0 | D5 | UT | 02_glossary.md | — |
