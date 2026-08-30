@@ -3,6 +3,7 @@
   "rules": [
     {"paths": ["crates/**/tests/**"], "anyOf": ["kimi", "claude"]},
     {"paths": ["docs/20_design/basic/08_*.md"], "allOf": ["claude"]},
+    {"paths": ["docs/20_design/trace.md"], "allOf": ["claude"]},
     {
       "paths": ["crates/**"],
       "allOf": ["kimi"],

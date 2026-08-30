@@ -25,6 +25,11 @@ from typing import Any, Iterable
 HEX64 = re.compile(r"^[0-9a-fA-F]{64}$")
 MARKER = re.compile(r"^\s*helix-review:\s*v1\s*$", re.I)
 FIELD = re.compile(r"^\s*(reviewer|pr|sha|verdict|checklist|evidence|sig):\s*(.*?)\s*$", re.I)
+WAIVER_CHECKLIST = re.compile(
+    r"^\s*owner-instructed\s+\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}"
+    r"(?::\d{2})?(?:Z|[+-]\d{2}:?\d{2})?\s*$",
+    re.I,
+)
 
 
 class GateError(RuntimeError):
@@ -167,6 +172,11 @@ def checklist_hash(value: str) -> bool:
     return bool(HEX64.fullmatch(value.strip()))
 
 
+def is_waiver_checklist(value: str) -> bool:
+    """Return whether a waiver ticket records the owner instruction timestamp."""
+    return bool(WAIVER_CHECKLIST.fullmatch(value.strip()))
+
+
 def state_hash_values(value: Any) -> list[str]:
     found: list[str] = []
     if isinstance(value, dict):
@@ -280,9 +290,14 @@ def verify_ticket(ticket: dict[str, str], pr: int, head_sha: str, secret: bytes)
             f"(ticket {ticket['sha'][:7]} → head {head_sha[:7]})"
         )
     verdict = ticket["verdict"].lower()
-    if verdict not in {"approve", "request-changes"}:
+    if verdict not in {"approve", "request-changes", "waiver"}:
         return False, "invalid verdict"
-    if not checklist_hash(ticket["checklist"]):
+    if verdict == "waiver":
+        if not is_waiver_checklist(ticket["checklist"]):
+            return False, "waiver checklist must be owner-instructed <timestamp>"
+        if ticket["evidence"].lower() != "none":
+            return False, "waiver evidence must be none"
+    elif not checklist_hash(ticket["checklist"]):
         return False, "checklist is not a sha256"
     if ticket["evidence"].lower() != "none" and not checklist_hash(ticket["evidence"]):
         return False, "evidence is not a sha256 or none"
@@ -357,6 +372,11 @@ def run(args: argparse.Namespace) -> int:
                 if needs_evidence and ticket.get("evidence", "").lower() != state_hash:
                     continue
                 if not needs_evidence and ticket.get("evidence", "").lower() != "none":
+                    continue
+                # A waiver authorizes the line-limit exception only; it is not
+                # a review approval and must not replace a reviewer's latest
+                # approve/request-changes ticket.
+                if ticket.get("verdict", "").lower() == "waiver":
                     continue
                 ticket["_identity"] = canonical_identity(ticket["reviewer"])
                 valid.append(ticket)

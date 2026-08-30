@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from review_gate import canonical_identity, parse_tickets, verify_ticket
+from review_gate import canonical_identity, is_waiver_checklist, parse_tickets, verify_ticket
 
 
 class LintError(RuntimeError):
@@ -20,9 +20,9 @@ class LintError(RuntimeError):
 
 
 LINE_LIMIT = 300
-LINE_LIMIT_EXCEPTION_PRS = {7, 11}
 OWNER_LINE_LIMIT_MARKER = re.compile(r"(?im)^\s*helix-line-limit:\s*approve\s*$")
 BENCHMARK_TARGET = re.compile(r"^crates/[^/]+/(?:examples|benches)(?:/|$)", re.I)
+TRACE_PATH = "docs/20_design/trace.md"
 
 
 def _decode_many(raw: str) -> list[Any]:
@@ -94,14 +94,19 @@ def touched_stat(body: str) -> tuple[int, int, int, set[str]] | None:
     files_match = re.search(r"(\d+)\s+files?\s+changed", text, re.I)
     ins_match = re.search(r"(\d+)\s+insertions?\(\+\)", text, re.I)
     del_match = re.search(r"(\d+)\s+deletions?\(-\)", text, re.I)
-    if not (files_match and ins_match and del_match):
+    if not files_match:
         return None
     listed: set[str] = set()
     for line in text.splitlines():
         match = re.match(r"\s*(?:`([^`]+)`|([^|\s]+))\s*\|", line)
         if match:
             listed.add((match.group(1) or match.group(2)).replace("\\", "/"))
-    return int(files_match.group(1)), int(ins_match.group(1)), int(del_match.group(1)), listed
+    # git diff --stat omits a zero side (for example
+    # ``1 file changed, 1 insertion(+)``).  Treat an omitted side as zero so
+    # docs-only additions/deletions remain lintable.
+    additions = int(ins_match.group(1)) if ins_match else 0
+    deletions = int(del_match.group(1)) if del_match else 0
+    return int(files_match.group(1)), additions, deletions, listed
 
 
 def is_test_path(path: str) -> bool:
@@ -161,35 +166,74 @@ def has_line_limit_exception(
     metadata: dict[str, Any],
     comments: list[dict[str, Any]],
 ) -> bool:
-    """Return whether the narrowly-scoped H0/H2 line-limit waiver is approved.
+    """Return whether an owner-approved line-limit waiver is present.
 
-    The waiver is intentionally independent of the PR body: either the owner
-    posts the exact marker, or Claude posts a current-head, HMAC-signed
-    ``helix-review: v1`` approval.  This mirrors review-gate's attestation
-    validation and prevents a body-only self-approval from bypassing 300 lines.
+    The waiver requires both halves of the owner hand-off: an owner comment
+    with the exact marker and a current-head HMAC-signed Claude ticket whose
+    checklist records ``owner-instructed <timestamp>``.  A normal Claude
+    approval, an owner ticket, or a body-only claim is not a waiver.
     """
-    if pr not in LINE_LIMIT_EXCEPTION_PRS:
-        return False
     head_sha = str(metadata.get("head", {}).get("sha", ""))
+    owner_marker = False
     for comment in comments:
         if not isinstance(comment, dict):
             continue
         user = comment.get("user")
         login = user.get("login", "") if isinstance(user, dict) else ""
         if canonical_identity(str(login)) == "owner" and OWNER_LINE_LIMIT_MARKER.search(str(comment.get("body", ""))):
-            return True
+            owner_marker = True
+            break
+    if not owner_marker:
+        return False
+    return any(
+        is_waiver_checklist(ticket.get("checklist", ""))
+        for ticket in valid_signed_tickets(
+            pr, metadata, comments, reviewer="claude", verdict="waiver", exact_head=True
+        )
+    )
+
+
+def valid_signed_tickets(
+    pr: int,
+    metadata: dict[str, Any],
+    comments: list[dict[str, Any]],
+    *,
+    reviewer: str,
+    verdict: str,
+    exact_head: bool = False,
+) -> list[dict[str, str]]:
+    """Return structurally valid tickets for a named identity and verdict."""
+    head_sha = str(metadata.get("head", {}).get("sha", ""))
     secret_text = os.environ.get("HELIX_ATTEST_SECRET", "").strip()
     if not secret_text or not re.fullmatch(r"[0-9a-fA-F]{40}", head_sha):
-        return False
+        return []
+    expected_reviewer = canonical_identity(reviewer)
+    expected_verdict = verdict.lower()
+    valid: list[dict[str, str]] = []
     for ticket in parse_tickets(comments):
-        if canonical_identity(ticket.get("reviewer", "")) != "claude":
+        if canonical_identity(ticket.get("reviewer", "")) != expected_reviewer:
             continue
-        if ticket.get("verdict", "").lower() != "approve":
+        if ticket.get("verdict", "").lower() != expected_verdict:
             continue
-        valid, _ = verify_ticket(ticket, pr, head_sha, secret_text.encode("utf-8"))
-        if valid:
-            return True
-    return False
+        if exact_head and ticket.get("sha", "").lower() != head_sha.lower():
+            continue
+        accepted, _ = verify_ticket(ticket, pr, head_sha, secret_text.encode("utf-8"))
+        if accepted:
+            valid.append(ticket)
+    return valid
+
+
+def has_claude_trace_approval(
+    pr: int,
+    metadata: dict[str, Any],
+    comments: list[dict[str, Any]],
+) -> bool:
+    """Require Claude's signed approval when generated trace is in the diff."""
+    return bool(
+        valid_signed_tickets(
+            pr, metadata, comments, reviewer="claude", verdict="approve", exact_head=True
+        )
+    )
 
 
 def run(args: argparse.Namespace) -> int:
@@ -232,20 +276,23 @@ def run(args: argparse.Namespace) -> int:
         stat = touched_stat(body)
         additions = sum(int(entry.get("additions", 0) or 0) for entry in files)
         deletions = sum(int(entry.get("deletions", 0) or 0) for entry in files)
+        actual_names = {str(entry.get("filename", "")).replace("\\", "/") for entry in files}
         if stat is None:
             errors.append("触ったファイル must contain a complete git diff --stat")
         else:
             file_count, body_additions, body_deletions, listed = stat
-            actual_names = {str(entry.get("filename", "")).replace("\\", "/") for entry in files}
             if (file_count, body_additions, body_deletions) != (len(actual_names), additions, deletions):
                 errors.append("PR diff --stat does not match GitHub file statistics")
             if actual_names - listed:
                 errors.append("触ったファイル stat omits: " + ", ".join(sorted(actual_names - listed)))
+        if TRACE_PATH in {path.casefold() for path in actual_names}:
+            if not has_claude_trace_approval(args.pr, metadata, comments):
+                errors.append("trace.md changes require a current-head Claude signed approval")
         if additions + deletions > LINE_LIMIT:
             if "分割理由" not in body and "split reason" not in body.lower():
                 errors.append("changed lines exceed 300 without a split reason")
             if not has_line_limit_exception(args.pr, metadata, comments):
-                errors.append("changed lines exceed 300 without an approved H0/H2 line-limit exception")
+                errors.append("changed lines exceed 300 without an owner-approved line-limit exception")
         errors.extend("forbidden addition: " + item for item in added_forbidden(files))
 
         implementation_index: int | None = None
