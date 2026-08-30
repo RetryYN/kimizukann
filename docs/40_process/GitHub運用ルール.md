@@ -128,7 +128,7 @@ GitHub の Review approve は使わない（単一アカウント）。代わり
   evidence: <reviewer が自分で実行した検証手順の出力の sha256（§3.3「自分で実行」の証拠）>
   sig: <hmac>
   ```
-- `review-gate` は Secret で sig を再計算し、一致しないコメントを無視する。**sha が現在の head と一致しない票は無効**（push すると再レビューが必要＝stale approval の代替）
+- `review-gate` は Secret で sig を再計算し、一致しないコメントを無視する。**sha が現在の head と一致しない票は原則無効**（内容を変更して push すると再レビューが必要＝stale approval の代替）。ただし main 追従のマージだけで PR の内容が変わっていない場合は、票の sha が現在の head の祖先で、`git diff $(git merge-base origin/main <ticket_sha>)..<ticket_sha> | git patch-id --stable` と `git diff $(git merge-base origin/main HEAD)..HEAD | git patch-id --stable` が一致するときに限り、票を継承する。review-gate はこの採用をログに残し、workflow の checkout は `fetch-depth: 0` で履歴を保持する
 - writer 自身の票は無効（PR 本文の `writer:` と reviewer が一致 → 無効）。writer 欄が無い PR は red
 
 **B. 必要レビュアーの充足**
@@ -136,7 +136,7 @@ GitHub の Review approve は使わない（単一アカウント）。代わり
 - `docs/30_contracts/**`・`golden/**`・hash 正規化順の変更は Claude 票が必須。要件・RFC はオーナー票（オーナーは GitHub の Review approve で可＝唯一の人間）
 
 **C. 証拠の突合**
-- reviewer 票の `evidence` は署名とは別に検証する。コードを含む PR では、reviewer がローカルで `cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all` を実行して得た `report.json` の **`state_hash`（64 桁 hex そのもの）**を記載し、CI の `verify` job の `report.json` の `state_hash` と完全一致させる（ハッシュの再計算や hash 集合の再ハッシュはしない）。文書のみの PR は `evidence: none` を必須とし、代わりに `checklist` を検証する
+- reviewer 票の `evidence` は署名とは別に検証する。code PR では、その head に対する CI の `verify`（ubuntu / windows）両 job で一致した **`state_hash`（64 桁 hex そのもの）**を記載する（ハッシュの再計算や hash 集合の再ハッシュはしない）。審査者のローカル実行は任意（推奨）であり必須ではない。署名票の `checklist` には `evidence=CI` と明記し、CI 両 job の一致を確認した記録をレビューコメントに残す。文書のみの PR は `evidence: none` を必須とし、代わりに `checklist` を検証する。
 - writer は PR 本文に `diff --stat` を貼る。`pr-lint` が実際の diff と突合し、不一致なら red（「反映した」誤報の機械検出）
 
 **D. その他の必須 check**（§3.2 に追加）

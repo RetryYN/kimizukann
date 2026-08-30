@@ -1,6 +1,6 @@
 # 基本設計書 BD-02: 用語集（ユビキタス言語）
 
-- 版: 0.1（起草 cursor-gemini、2026-08-30）
+- 版: 0.2（起草 cursor-gemini、2026-08-30。0.2: D4-Q2 裁定（2026-08-30 Claude 採用）により density_bonus に「検証版では未使用（予約）」を追記。改訂: cursor-kimi）
 - 入力: `docs/10_requirements/要件定義書_検証版_v0.2.md`、`docs/30_contracts/simulation_contract.md`、`crates/sim-types/src/lib.rs`、`docs/00_product/第2回_統合案_v0.5.md`
 - 目的: 要件定義書・契約・Rust コア実装・Flutter UI・説明器の間で用語・識別子・型・単位を厳密に一致させ、表記揺れや意味の曖昧さを排除する。
 
@@ -40,7 +40,7 @@
 | 死骸利用タグ | `use_carcass` | 死骸プールを取り込み基質として利用できるかを示すフラグ | `bool` | true / false | REQ-GEN-01, REQ-SCOPE-05 |
 | 老廃物利用タグ | `use_waste` | 老廃物プールを取り込み基質として利用できるかを示すフラグ | `bool` | true / false | REQ-GEN-01 |
 | 毒性感受性タグ | `toxin_sensitive` | 老廃物濃度が毒性閾値を超えた場合に維持コスト増大ペナルティを受けるフラグ | `bool` | true / false | REQ-GEN-01, REQ-SIM-02 |
-| 密度効果タグ | `density_bonus` | 同一セル内の高密度集積によって有利な補正を受けるフラグ | `bool` | true / false | REQ-GEN-01 |
+| 密度効果タグ | `density_bonus` | 同一セル内の高密度集積によって有利な補正を受けるフラグ。**検証版では未使用（予約）**: 全系統 0・効果なし（D4-Q2 裁定 2026-08-30。DD-D4 §1.2） | `bool` | true / false | REQ-GEN-01 |
 | 死亡閾値 | `mortality_threshold` | セル内生体量がこの値を下回ると即座に全量死骸化する系統定数 | `Fixed` | mass_u (scale=1e6) | REQ-GEN-01, REQ-SIM-09 |
 | 老廃物排出量 | `waste_emission` | 代謝活動に伴い固定的に発生する老廃物量の系統定数 | `Fixed` | mass_u (scale=1e6) | REQ-GEN-01 |
 | 基質 | `Substrate` | 系統が摂取対象として消費可能な物質プール種別（栄養・死骸・老廃物） | `enum Substrate` | Nutrient / Carcass / Waste | REQ-GEN-01 |
