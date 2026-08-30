@@ -279,27 +279,9 @@ impl SimCore {
         }
     }
 
-    #[allow(clippy::too_many_arguments)]
-    fn push_row(
-        rows: &mut Vec<LedgerRecord>,
-        tick: u32,
-        region_id: u8,
-        lineage: u8,
-        reason: ReasonCode,
-        from: Pool,
-        to: Pool,
-        amount: Fixed,
-    ) {
-        if amount > 0 {
-            rows.push(LedgerRecord {
-                tick,
-                region_id,
-                lineage,
-                reason,
-                from_pool: from,
-                to_pool: to,
-                amount,
-            });
+    fn push_row(rows: &mut Vec<LedgerRecord>, rec: LedgerRecord) {
+        if rec.amount > 0 {
+            rows.push(rec);
         }
     }
 
@@ -542,43 +524,51 @@ impl SimCore {
                     cell.energy[id] = next.min(FIXED_SCALE);
                     Self::push_row(
                         &mut self.energy_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Intake,
-                        pool,
-                        Pool::Biomass,
-                        amount - heat,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Biomass,
+                            amount: amount - heat,
+                        },
                     );
                     Self::push_row(
                         &mut self.energy_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Intake,
-                        Pool::Biomass,
-                        Pool::Waste,
-                        heat,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: Pool::Biomass,
+                            to_pool: Pool::Waste,
+                            amount: heat,
+                        },
                     );
                     Self::push_row(
                         &mut self.mass_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Intake,
-                        pool,
-                        Pool::Biomass,
-                        to_biomass,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Biomass,
+                            amount: to_biomass,
+                        },
                     );
                     Self::push_row(
                         &mut self.mass_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Intake,
-                        pool,
-                        Pool::Waste,
-                        to_waste,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Waste,
+                            amount: to_waste,
+                        },
                     );
                 }
             }
@@ -614,13 +604,15 @@ impl SimCore {
                     self.state.grid.cells[cell_i].energy[id] = energy - cost;
                     Self::push_row(
                         &mut self.energy_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Maintenance,
-                        Pool::Biomass,
-                        Pool::Waste,
-                        cost,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Maintenance,
+                            from_pool: Pool::Biomass,
+                            to_pool: Pool::Waste,
+                            amount: cost,
+                        },
                     );
                 } else {
                     self.deficit[cell_i][id] = cost - energy;
@@ -628,13 +620,15 @@ impl SimCore {
                     self.life[cell_i][id] = 2;
                     Self::push_row(
                         &mut self.energy_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Maintenance,
-                        Pool::Biomass,
-                        Pool::Waste,
-                        energy,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Maintenance,
+                            from_pool: Pool::Biomass,
+                            to_pool: Pool::Waste,
+                            amount: energy,
+                        },
                     );
                 }
             }
@@ -827,6 +821,17 @@ mod tests {
         b.state.grid.cells[0].energy[0] = FIXED_SCALE - 10_000;
         b.apply_phase(TickPhase::Intake).unwrap();
         assert_eq!(b.state.grid.cells[0].energy[0], FIXED_SCALE);
+        let heat: Fixed = b
+            .energy_ledger
+            .iter()
+            .filter(|r| {
+                r.reason == ReasonCode::Intake
+                    && r.from_pool == Pool::Biomass
+                    && r.to_pool == Pool::Waste
+            })
+            .map(|r| r.amount)
+            .sum();
+        assert_eq!(heat, 90_000);
         let mut c = SimCore::one_cell(7, 0, FIXED_SCALE, vec![lineage()]);
         c.state.grid.cells[0].energy[0] = 1;
         c.apply_phase(TickPhase::Maintenance).unwrap();
