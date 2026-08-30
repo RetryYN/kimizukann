@@ -138,7 +138,15 @@ def state_hash_values(value: Any) -> list[str]:
     return found
 
 
-def report_digest(path: str | None) -> str | None:
+def report_state_hash(path: str | None) -> str | None:
+    """Return the verification report's raw, single state hash.
+
+    ``evidence`` is the state hash printed by the reviewer-run verification,
+    not a second digest over the report's hash fields.  Prefer the report's
+    top-level ``state_hash`` and fall back to a single unambiguous hash for
+    compatibility with older report wrappers.  Conflicting or malformed
+    values fail closed by returning ``None``.
+    """
     if not path:
         return None
     if not Path(path).is_file():
@@ -146,11 +154,19 @@ def report_digest(path: str | None) -> str | None:
     report = read_json(path)
     if report is None:
         return None
-    hashes = sorted(set(state_hash_values(report)))
-    if not hashes:
+    if isinstance(report, dict) and "state_hash" in report:
+        value = report["state_hash"]
+        if not isinstance(value, str) or not HEX64.fullmatch(value.strip()):
+            return None
+        return value.strip().lower()
+    hashes = {
+        candidate.strip().lower()
+        for candidate in state_hash_values(report)
+        if isinstance(candidate, str) and HEX64.fullmatch(candidate.strip())
+    }
+    if len(hashes) != 1:
         return None
-    canonical = "\n".join(hashes).encode("utf-8")
-    return hashlib.sha256(canonical).hexdigest()
+    return next(iter(hashes))
 
 
 def normalize_rule(raw: dict[str, Any]) -> dict[str, Any]:
@@ -219,9 +235,12 @@ def verify_ticket(ticket: dict[str, str], pr: int, head_sha: str, secret: bytes)
         return False, "checklist is not a sha256"
     if ticket["evidence"].lower() != "none" and not checklist_hash(ticket["evidence"]):
         return False, "evidence is not a sha256 or none"
-    payload = "|".join(
-        [ticket["reviewer"], ticket["pr"], ticket["sha"], verdict, ticket["checklist"], ticket["evidence"]]
-    ).encode("utf-8")
+    # evidence is deliberately not part of the attestation payload.  The bus
+    # signs the five fields defined by GitHub運用ルール §3.8; evidence is
+    # checked separately against the CI verification report below.
+    payload = "|".join([ticket["reviewer"], ticket["pr"], ticket["sha"], verdict, ticket["checklist"]]).encode(
+        "utf-8"
+    )
     expected = hmac.new(secret, payload, hashlib.sha256).hexdigest()
     if not hmac.compare_digest(expected, ticket["sig"].strip().lower()):
         return False, "invalid signature"
@@ -271,17 +290,17 @@ def run(args: argparse.Namespace) -> int:
             errors.append("HELIX_ATTEST_SECRET is not configured")
         owners = load_rules(args.owners)
         all_required, any_required, one_non_writer = required_reviewers(files, owners)
-        digest = report_digest(args.report or os.environ.get("VERIFY_REPORT") or "report.json")
+        state_hash = report_state_hash(args.report or os.environ.get("VERIFY_REPORT") or "report.json")
         needs_evidence = not docs_only(files)
-        if needs_evidence and digest is None:
-            errors.append("verify report has no state_hash digest")
+        if needs_evidence and state_hash is None:
+            errors.append("verify report has no valid state_hash")
         valid: list[dict[str, str]] = []
         if secret_text and head_sha:
             for ticket in parse_tickets(comments):
                 ok, reason = verify_ticket(ticket, args.pr, head_sha, secret_text.encode("utf-8"))
                 if not ok:
                     continue
-                if needs_evidence and ticket.get("evidence", "").lower() != digest:
+                if needs_evidence and ticket.get("evidence", "").lower() != state_hash:
                     continue
                 if not needs_evidence and ticket.get("evidence", "").lower() != "none":
                     continue
