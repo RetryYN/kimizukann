@@ -8,6 +8,8 @@ use sha2::{Digest, Sha256};
 
 mod ledger;
 pub use ledger::{fold_region_records, LedgerRecord};
+mod placement;
+pub use placement::{preset_v1, PlaceMode};
 mod termination;
 pub use termination::{epsilon, judge, ranking, share_ge, step_streak, TermState};
 
