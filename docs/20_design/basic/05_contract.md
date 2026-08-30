@@ -1,6 +1,6 @@
 # BD-05 契約（公開 API・FFI・schema・事前事後条件・semver）
 
-- 版: 0.2（起草 cursor-kimi、2026-08-30。PR #1 レビュー r1 反映: hash v2 の追加フィールド、FFI 表を BD-01 r2 §3 に整合、StreamKind 用途の完全割当）
+- 版: 0.3（起草 cursor-kimi、2026-08-30。PR #1 レビュー r1 反映: hash v2 の追加フィールド、FFI 表を BD-01 r2 §3 に整合、StreamKind 用途の完全割当。0.3: D11-Q1 裁定（2026-08-30 採用）に対応 — KzError に KZ_ERR_INTERNAL=8 を semver minor で追加）
 - 入力: `docs/10_requirements/要件定義書_検証版_v0.2.md`（sign-off 済）、`docs/30_contracts/simulation_contract.md` v0.1
 - 本章は `simulation_contract.md` v0.1 を吸収・再編した**契約の正本**である。`simulation_contract.md` は v0.1 として凍結し、以後の変更は本章を RFC 経由で改訂する（移行の扱いは §8）
 - 完成条件: `cargo public-api` の出力と一致。各 pub 項目に REQ 参照
@@ -193,6 +193,7 @@ typedef enum KzError {
   KZ_ERR_BUSY = 5,           // 再入（操作中の同一 handle 呼出）
   KZ_ERR_NUMERIC = 6,        // NumericError（負値・i64/i128 範囲外）
   KZ_ERR_STATE_HASH = 7,     // load 後の state_hash / ledger_hash 再計算が不一致（BD-10 §2。semver minor で追加）
+  KZ_ERR_INTERNAL = 8,       // FFI 境界で捕捉した panic・呼出規約違反（null ポインタ等の事前条件違反）（D11-Q1 裁定 2026-08-30。semver minor で追加。DD-D11 §1/§1.1）
 } KzError;
 ```
 

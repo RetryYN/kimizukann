@@ -1,6 +1,6 @@
 # BD-10 永続化（SaveEnvelope・版規則・migration）
 
-- 版: 0.3（起草 cursor-kimi、2026-08-30。r1: grok 審査反映 — envelope に config・ledger・ledger_hash・generation を同梱、prng_state を 4 語×10 進文字列化、正規化を一文で固定、state_hash 不一致に専用エラー。r2: BD-01 r4（#13 マージ、台帳二段モデル）に追従 — ledger_hash は r4 の LE ダイジェスト、schema の ledger 部を LedgerRecord フィールドに固定）
+- 版: 0.4（起草 cursor-kimi、2026-08-30。r1: grok 審査反映 — envelope に config・ledger・ledger_hash・generation を同梱、prng_state を 4 語×10 進文字列化、正規化を一文で固定、state_hash 不一致に専用エラー。r2: BD-01 r4（#13 マージ、台帳二段モデル）に追従 — ledger_hash は r4 の LE ダイジェスト、schema の ledger 部を LedgerRecord フィールドに固定。0.4: D8-Q1 裁定（2026-08-30 Claude 条件付採用）に対応 — ledger_hash の対象集合を (a) 累計 + (b) 直近 200 tick リング + (c) スタンプ窓と明示（BD-01 r5 §5 が正本））
 - 入力: `docs/10_requirements/要件定義書_検証版_v0.2.md`（sign-off 済）。責務分担の正本は BD-01 r4 §5（WorldSave / LedgerSave / SessionSave 表、台帳ダイジェスト定義）、FFI 境界の正本は BD-05 §12、semver の正本は BD-05 §14。本章はそれらを保存設計に展開する
 - 完成条件: 旧 save 読込テストの設計がある（§6）。各項目に REQ 参照
 - 数値は「確定 / 初期仮説（Dn で確定）」を明記する
@@ -25,10 +25,10 @@
   - `config`: config JSON 本体（正規化形式）。config_hash はこの正規化バイト列の SHA-256。4 レバー変更後の再開・複製（REQ-UI-08）に必要。確定
   - `prng_state`: 4 ストリーム × 各 `[u64; 4]`（xoshiro256**、BD-07 §2）を 10 進文字列 4 要素の配列で。確定。参照: REQ-DET-04a
   - `state_hash`: state の state hash（BD-05 §10、sha256-v2）。load 後に再計算して照合し、不一致は **`KZ_ERR_STATE_HASH`**（BD-05 §12.2 に追加する新値。checksum 破損・版不一致の 3 経路と区別する）。確定。参照: REQ-DET-06
-  - `ledger_hash`: 台帳ダイジェスト（BD-01 r4 §5 が正本）= `SHA-256(region 集約後の LedgerRecord を tick→region_id→lineage→reason→from→to の順にソートし tick, region_id, lineage, reason, from, to, amount の順に LE 直列化 → スタンプを tick, kind, region_ids の順 → z 窓を pool, 系統, 値の順)`。load 時は ledger 部から **r4 の LE 直列化を再構成して**ダイジェストを再計算し突合する（envelope の JSON テキストを再出力するのではない。JSON は表現形式、hash 入力は r4 の LE バイト列）。確定。参照: REQ-DET-02, REQ-EVT-04
+  - `ledger_hash`: 台帳ダイジェスト（BD-01 r5 §5 が正本）。対象集合は台帳保持ポリシの 3 層 —— (a) 累計レコード + (b) 直近 200 tick の per-tick リング + (c) スタンプ窓 —— 全体とし、直列化順は (a)（tick なし累計。region_id→lineage→reason→from→to でソート）→ (b)（tick→region_id→lineage→reason→from→to でソート）→ (c)（確定 tick 昇順）→ スタンプ（tick, kind, region_ids の順）→ z 窓（pool, 系統, 値の順）の LE バイト列（D8-Q1 裁定 2026-08-30）。load 時は ledger 部から **r5 の LE 直列化を再構成して**ダイジェストを再計算し突合する（envelope の JSON テキストを再出力するのではない。JSON は表現形式、hash 入力は r5 の LE バイト列）。確定。参照: REQ-DET-02, REQ-EVT-04
   - `generation`: 単調増加 u64（10 進文字列）。2 世代ローテーションの最新判定に使う（§6）。確定。参照: REQ-UI-05
   - `state`: `tick: u32`、`cells`（row-major。件数 = config の grid 寸法 width × height で、load 時に検証する）、`fixed_streak`、`tick0_ranking: [u8; 8]`、`inflow_cursor`。確定。参照: REQ-SIM-01, BD-05 §1/§11
-  - `ledger`: region 集約レコード（`LedgerRecord { tick: u32, region_id: u8 (0..=15), lineage: u8, reason, from_pool, to_pool, amount: 和 }`、BD-01 r4 §5）・スタンプ列・z 窓（§1 の LedgerSave 行どおり）。各配列の要素 schema は save.schema.json で r4 のフィールドに固定する
+  - `ledger`: 台帳保持ポリシの 3 層（(a) 累計レコード（tick なし。region × lineage × reason × from × to で全期間集約）+ (b) 直近 200 tick の per-tick `LedgerRecord { tick: u32, region_id: u8 (0..=15), lineage: u8, reason, from_pool, to_pool, amount: 和 }`（BD-01 r5 §5）+ (c) スタンプ窓のリング複写）・スタンプ列・z 窓（§1 の LedgerSave 行どおり）。各配列の要素 schema は save.schema.json で r5 のフィールドに固定する
   - `checksum`: 上記全フィールド（checksum 自身を除く）の正規化バイト列の SHA-256（hex 64）
 - `load` の検証順: checksum → schema_version → model_version →（state・ledger 復元後）state_hash・ledger_hash。エラーはそれぞれ `KZ_ERR_CHECKSUM` / `KZ_ERR_SCHEMA` / `KZ_ERR_MODEL_VERSION` / `KZ_ERR_STATE_HASH`（ledger_hash 不一致も `KZ_ERR_STATE_HASH`）。確定。参照: REQ-CON-08, REQ-DET-06
 
