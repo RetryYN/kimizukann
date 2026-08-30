@@ -67,10 +67,10 @@ fn one_tick_reference() -> bool {
         return false;
     }
     let cell = &sim.state.grid.cells[0];
-    cell.nutrient == 9_630_000
-        && cell.biomass[0] == 2_339_999
+    cell.nutrient == 9_615_000
+        && cell.biomass[0] == 2_354_999
         && cell.waste == 30_001
-        && cell.energy[0] == 290_000
+        && cell.energy[0] == 305_000
 }
 
 fn week1_golden_matches(suite: &str, state_hash: &str) -> bool {
@@ -83,7 +83,7 @@ fn week1_golden_matches(suite: &str, state_hash: &str) -> bool {
     };
     golden["schema_version"] == "golden-v1"
         && golden["case"] == "d1-one-cell-week1"
-        && golden["model_version"] == "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1"
+        && golden["model_version"] == "d3-v1;prng=xoshiro256ss-v1;hash=sha256-v1"
         && golden["config"]["seed"] == 7
         && golden["config"]["grid"] == "one-cell"
         && golden["config"]["nutrient"] == 10_000_000
