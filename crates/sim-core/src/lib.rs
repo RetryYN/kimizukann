@@ -541,7 +541,7 @@ impl SimCore {
                             region_id,
                             lineage: lineage.id,
                             reason: ReasonCode::Intake,
-                            from_pool: Pool::Biomass,
+                            from_pool: pool,
                             to_pool: Pool::Waste,
                             amount: heat,
                         },
@@ -817,6 +817,13 @@ mod tests {
     }
     #[test]
     fn ut_d3_01_intake_order_and_heat() {
+        let mut l1 = lineage();
+        l1.id = 1;
+        let mut a = SimCore::one_cell(7, 150_000, FIXED_SCALE, vec![lineage(), l1]);
+        a.state.grid.cells[0].biomass[1] = FIXED_SCALE;
+        a.apply_phase(TickPhase::Intake).unwrap();
+        assert_eq!(a.state.grid.cells[0].nutrient, 0);
+        assert!(a.state.grid.cells[0].biomass[0] > a.state.grid.cells[0].biomass[1]);
         let mut b = SimCore::one_cell(7, 100_000, FIXED_SCALE, vec![lineage()]);
         b.state.grid.cells[0].energy[0] = FIXED_SCALE - 10_000;
         b.apply_phase(TickPhase::Intake).unwrap();
@@ -826,7 +833,7 @@ mod tests {
             .iter()
             .filter(|r| {
                 r.reason == ReasonCode::Intake
-                    && r.from_pool == Pool::Biomass
+                    && r.from_pool == Pool::Nutrient
                     && r.to_pool == Pool::Waste
             })
             .map(|r| r.amount)
