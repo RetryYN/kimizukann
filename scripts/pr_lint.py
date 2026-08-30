@@ -20,9 +20,10 @@ class LintError(RuntimeError):
 
 
 LINE_LIMIT = 300
-LINE_LIMIT_EXCEPTION_PRS = {7, 11}
 OWNER_LINE_LIMIT_MARKER = re.compile(r"(?im)^\s*helix-line-limit:\s*approve\s*$")
 BENCHMARK_TARGET = re.compile(r"^crates/[^/]+/(?:examples|benches)(?:/|$)", re.I)
+TRACE_PATH = "docs/20_design/trace.md"
+TRACE_WRITERS = {"bot", "claude"}
 
 
 def _decode_many(raw: str) -> list[Any]:
@@ -161,15 +162,13 @@ def has_line_limit_exception(
     metadata: dict[str, Any],
     comments: list[dict[str, Any]],
 ) -> bool:
-    """Return whether the narrowly-scoped H0/H2 line-limit waiver is approved.
+    """Return whether an owner-approved line-limit waiver is present.
 
     The waiver is intentionally independent of the PR body: either the owner
-    posts the exact marker, or Claude posts a current-head, HMAC-signed
-    ``helix-review: v1`` approval.  This mirrors review-gate's attestation
-    validation and prevents a body-only self-approval from bypassing 300 lines.
+    posts the exact marker, or the owner posts a current-head, HMAC-signed
+    ``helix-review: v1`` approval.  Claude's approval is not a line-limit
+    waiver.  This prevents a body-only self-approval from bypassing 300 lines.
     """
-    if pr not in LINE_LIMIT_EXCEPTION_PRS:
-        return False
     head_sha = str(metadata.get("head", {}).get("sha", ""))
     for comment in comments:
         if not isinstance(comment, dict):
@@ -182,7 +181,7 @@ def has_line_limit_exception(
     if not secret_text or not re.fullmatch(r"[0-9a-fA-F]{40}", head_sha):
         return False
     for ticket in parse_tickets(comments):
-        if canonical_identity(ticket.get("reviewer", "")) != "claude":
+        if canonical_identity(ticket.get("reviewer", "")) != "owner":
             continue
         if ticket.get("verdict", "").lower() != "approve":
             continue
@@ -232,20 +231,24 @@ def run(args: argparse.Namespace) -> int:
         stat = touched_stat(body)
         additions = sum(int(entry.get("additions", 0) or 0) for entry in files)
         deletions = sum(int(entry.get("deletions", 0) or 0) for entry in files)
+        actual_names = {str(entry.get("filename", "")).replace("\\", "/") for entry in files}
         if stat is None:
             errors.append("触ったファイル must contain a complete git diff --stat")
         else:
             file_count, body_additions, body_deletions, listed = stat
-            actual_names = {str(entry.get("filename", "")).replace("\\", "/") for entry in files}
             if (file_count, body_additions, body_deletions) != (len(actual_names), additions, deletions):
                 errors.append("PR diff --stat does not match GitHub file statistics")
             if actual_names - listed:
                 errors.append("触ったファイル stat omits: " + ", ".join(sorted(actual_names - listed)))
+        if TRACE_PATH in {path.casefold() for path in actual_names}:
+            trace_writer = canonical_identity(writer(body) or "")
+            if trace_writer not in TRACE_WRITERS:
+                errors.append("trace.md may only be changed by writer bot or Claude")
         if additions + deletions > LINE_LIMIT:
             if "分割理由" not in body and "split reason" not in body.lower():
                 errors.append("changed lines exceed 300 without a split reason")
             if not has_line_limit_exception(args.pr, metadata, comments):
-                errors.append("changed lines exceed 300 without an approved H0/H2 line-limit exception")
+                errors.append("changed lines exceed 300 without an owner-approved line-limit exception")
         errors.extend("forbidden addition: " + item for item in added_forbidden(files))
 
         implementation_index: int | None = None

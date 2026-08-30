@@ -108,7 +108,8 @@
 ### 3.7 リミット管理（予算と上限）
 - **予算の正本**: `~/.helix-bus/budget.json`（オーナーが編集）。計測: `node ~/.helix-bus/usage.mjs [--hours N]`（identity ごとの wait / stop 回数 ≈ リクエスト数、予算比、WARN 80% / STOP 100%）
 - **上限**（budget.json `review`）: レビュー往復 **最大 3 ラウンド**（4 回目は責任者が判定して merge か close）、writer あたり open PR **2 本**まで、PR **300 行**まで
-- 300 行上限の例外は初回導入の **H0（PR #11）と H2（PR #7）だけ**とし、以後の PR は分割必須とする。例外には、(a) 現在の head に対する Claude の `helix-review: v1` 署名票（`verdict: approve`）または (b) オーナーの GitHub コメント `helix-line-limit: approve` が必要で、本文の記載だけでは承認とみなさない。免除理由と承認者を本文の分割理由に記載する。
+- 300 行上限を超える PR は原則分割する。分割できない場合の例外は PR 番号で固定せず、(a) オーナーの GitHub コメント `helix-line-limit: approve` または (b) オーナー名義の現在の head に対する `helix-review: v1` 署名票（`verdict: approve`）を必要とする。Claude 名義の承認は行数免除にならない。本文の記載だけでは承認とみなさず、免除理由と承認者を本文の分割理由に記載する。`pr-lint` がコメントと署名票を検証する。
+- `docs/20_design/trace.md` は `scripts/gen_trace.py` の自動生成物であり、通常の設計・DD PR では変更しない。PR は各文書の REQ 参照など入力だけを変更し、main の trace ジョブで再生成した差分は専用の bot PR（または Claude の記録 PR）に分離して衝突を直列化する。`pr-lint` は trace.md を含む PR の writer を bot または Claude に限定する。
 - **待機ポリシー**（`waitPolicy`）: タスクを持つ AI は `timeout_sec=50`、**30 分タスク無しなら `timeout_sec=600`**（Cursor が許せば。LIMIT-TEST で確認）または待機停止。Codex は 3600
 - **STOP 時**: Claude が該当 AI に `[LIMIT][constraint] 待機停止` を送り、その日のタスクは他へ振る。合計が STOP なら新規 brief を止めてオーナーに報告
 - Claude の 2 時間ジョブで usage を確認し、日次要約に「消費 / 予算」を 1 行入れる
