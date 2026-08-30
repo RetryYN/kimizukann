@@ -137,6 +137,7 @@ GitHub の Review approve は使わない（単一アカウント）。代わり
 
 **C. 証拠の突合**
 - reviewer 票の `evidence` は署名とは別に検証する。コードを含む PR では、reviewer がローカルで `cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all` を実行して得た `report.json` の **`state_hash`（64 桁 hex そのもの）**を記載し、CI の `verify` job の `report.json` の `state_hash` と完全一致させる（ハッシュの再計算や hash 集合の再ハッシュはしない）。文書のみの PR は `evidence: none` を必須とし、代わりに `checklist` を検証する
+- **暫定（2026-08-30〜SAC 解除まで）**: 審査者のローカル実行が OS ポリシー（Smart App Control 4551）で不能な間、code PR の `evidence` は CI の `verify`（ubuntu / windows）両 job で一致した `state_hash` を用いてよい。署名票の `checklist` には `evidence=CI` と明記し、CI 両 job の一致を確認した記録をレビューコメントに残す。本条項は SAC 解除後に削除する。
 - writer は PR 本文に `diff --stat` を貼る。`pr-lint` が実際の diff と突合し、不一致なら red（「反映した」誤報の機械検出）
 
 **D. その他の必須 check**（§3.2 に追加）
