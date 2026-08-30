@@ -10,7 +10,7 @@ mod ledger;
 pub use ledger::{fold_region_records, LedgerRecord};
 
 macro_rules! rec {
-    ($t:expr, $r:expr, $l:expr, $w:expr, $f:expr, $o:expr, $a:expr) => {
+    ($t:expr, $r:expr, $l:expr, $w:expr, $f:expr, $o:expr, $a:expr $(,)?) => {
         LedgerRecord {
             tick: $t,
             region_id: $r,
