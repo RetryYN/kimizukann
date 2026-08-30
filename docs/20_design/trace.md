@@ -26,8 +26,8 @@
 | REQ-USER-02 | P0 | 配布 | INSP | 09_performance_budget.md | — |
 | REQ-USER-03 | P0 | D12 | USER | — | — |
 | REQ-USER-04 | P1 | — | INSP | — | — |
-| REQ-CON-01 | P0 | D0/D12 | INSP + AT（public-api） | 0004-rust-flutter-android.md, 01_context_map.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
-| REQ-CON-08 | P0 | D12 | UT（容量不足・不一致ケース） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 11_ui_flow.md, DD-D8-persistence.md | — |
+| REQ-CON-01 | P0 | D0/D12 | INSP + AT（public-api） | 0004-rust-flutter-android.md, 01_context_map.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D11-ffi.md | — |
+| REQ-CON-08 | P0 | D12 | UT（容量不足・不一致ケース） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 11_ui_flow.md, DD-D11-ffi.md, DD-D8-persistence.md | — |
 | REQ-CON-02 | P0 | D0〜 | UT + INSP（clippy: f32/f64 禁止 lint） | 0001-fixed-point-i64.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 12_events_and_explainer.md | — |
 | REQ-CON-03 | P0 | 配布 | INSP | 0004-rust-flutter-android.md | — |
 | REQ-CON-04 | P0 | ハーネス | AT（CI） | 0005-toolchain-gnu-ci-primary.md, 08_acceptance_tests.md | — |
@@ -72,7 +72,7 @@
 | REQ-DET-06 | P0 | D8 | AT（schema）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D8-persistence.md | — |
 | REQ-DET-07 | P0 | D12 | AT | 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D12-ui.md | — |
 | REQ-DET-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 11_ui_flow.md | — |
-| REQ-DET-09 | P0 | D11 | AT（reference_scenarios の model_version 照合） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, DD-D8-persistence.md | — |
+| REQ-DET-09 | P0 | D11 | AT（reference_scenarios の model_version 照合） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, DD-D11-ffi.md, DD-D8-persistence.md | — |
 | REQ-END-01 | P0 | D4 | AT（schema enum） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, DD-D4-lineages.md | — |
 | REQ-END-02 | P0 | D4 | UT + AT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D4-lineages.md | d4_termination.rs |
 | REQ-END-03 | P0 | D4 | UT + AT | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D4-lineages.md | d4_termination.rs |
@@ -124,7 +124,7 @@
 | REQ-ACC-02 | P0 | 配布 | USER | DD-D12-ui.md | — |
 | REQ-ACC-03 | P0 | 配布 | USER | — | — |
 | REQ-ACC-04 | P0 | D7 | AT | 08_acceptance_tests.md, DD-D7-calibration.md | — |
-| REQ-ACC-05 | P0 | D11 | AT + INSP | 02_glossary.md, 08_acceptance_tests.md | — |
+| REQ-ACC-05 | P0 | D11 | AT + INSP | 02_glossary.md, 08_acceptance_tests.md, DD-D11-ffi.md | — |
 
 ## 未着手（P0 かつ AT 指定なのに設計参照なし）: 0
 
