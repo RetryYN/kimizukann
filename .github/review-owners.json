@@ -4,6 +4,12 @@
     {"paths": ["crates/**/tests/**"], "anyOf": ["kimi", "claude"]},
     {"paths": ["docs/20_design/basic/08_*.md"], "allOf": ["claude"]},
     {
+      "paths": ["docs/30_contracts/presets/**"],
+      "allOf": ["kimi"],
+      "writers": ["grok"],
+      "exclusive": true
+    },
+    {
       "paths": ["crates/**"],
       "allOf": ["kimi"],
       "writers": ["grok"]
