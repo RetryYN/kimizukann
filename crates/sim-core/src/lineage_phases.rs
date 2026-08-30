@@ -129,9 +129,10 @@ impl SimCore {
                     Pool::Waste => cell.waste -= take,
                     Pool::Biomass => {}
                 }
-                cell.biomass[id] =
-                    fixed::add(cell.biomass[id], to_biomass).map_err(|e| format!("biomass: {e:?}"))?;
-                cell.waste = fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
+                cell.biomass[id] = fixed::add(cell.biomass[id], to_biomass)
+                    .map_err(|e| format!("biomass: {e:?}"))?;
+                cell.waste =
+                    fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
                 let next_energy = cell.energy[id].saturating_add(take);
                 heat = next_energy.saturating_sub(FIXED_SCALE);
                 cell.energy[id] = next_energy.min(FIXED_SCALE);
@@ -244,11 +245,9 @@ impl SimCore {
                 let loss = biomass.min(deficit);
                 if loss > 0 {
                     self.state.grid.cells[cell_i].biomass[id] -= loss;
-                    self.state.grid.cells[cell_i].carcass = fixed::add(
-                        self.state.grid.cells[cell_i].carcass,
-                        loss,
-                    )
-                    .map_err(|e| format!("carcass: {e:?}"))?;
+                    self.state.grid.cells[cell_i].carcass =
+                        fixed::add(self.state.grid.cells[cell_i].carcass, loss)
+                            .map_err(|e| format!("carcass: {e:?}"))?;
                     self.push_mass(
                         cell_i,
                         lineage.id,
@@ -265,11 +264,9 @@ impl SimCore {
                 } else {
                     if left > 0 {
                         self.state.grid.cells[cell_i].biomass[id] = 0;
-                        self.state.grid.cells[cell_i].carcass = fixed::add(
-                            self.state.grid.cells[cell_i].carcass,
-                            left,
-                        )
-                        .map_err(|e| format!("death: {e:?}"))?;
+                        self.state.grid.cells[cell_i].carcass =
+                            fixed::add(self.state.grid.cells[cell_i].carcass, left)
+                                .map_err(|e| format!("death: {e:?}"))?;
                         self.push_mass(
                             cell_i,
                             lineage.id,
@@ -314,11 +311,9 @@ impl SimCore {
                 }
                 self.state.grid.cells[cell_i].energy[id] = energy - gain;
                 self.state.grid.cells[cell_i].nutrient -= gain;
-                self.state.grid.cells[cell_i].biomass[id] = fixed::add(
-                    self.state.grid.cells[cell_i].biomass[id],
-                    gain,
-                )
-                .map_err(|e| format!("reproduction: {e:?}"))?;
+                self.state.grid.cells[cell_i].biomass[id] =
+                    fixed::add(self.state.grid.cells[cell_i].biomass[id], gain)
+                        .map_err(|e| format!("reproduction: {e:?}"))?;
                 self.push_mass(
                     cell_i,
                     lineage.id,
@@ -349,17 +344,15 @@ impl SimCore {
                 if id >= 8 || self.life[cell_i][id] == LIFE_ABSENT {
                     continue;
                 }
-                let amount = self.state.grid.cells[cell_i].biomass[id]
-                    .min(lineage.waste_emission.max(0));
+                let amount =
+                    self.state.grid.cells[cell_i].biomass[id].min(lineage.waste_emission.max(0));
                 if amount <= 0 {
                     continue;
                 }
                 self.state.grid.cells[cell_i].biomass[id] -= amount;
-                self.state.grid.cells[cell_i].waste = fixed::add(
-                    self.state.grid.cells[cell_i].waste,
-                    amount,
-                )
-                .map_err(|e| format!("emission: {e:?}"))?;
+                self.state.grid.cells[cell_i].waste =
+                    fixed::add(self.state.grid.cells[cell_i].waste, amount)
+                        .map_err(|e| format!("emission: {e:?}"))?;
                 self.push_mass(
                     cell_i,
                     lineage.id,

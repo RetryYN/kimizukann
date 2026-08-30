@@ -243,7 +243,16 @@ fn ut_d3_13_ledger_sorted() {
     assert!(!recs.is_empty());
     let keys: Vec<_> = recs
         .iter()
-        .map(|r| (r.tick, r.region_id, r.lineage, r.reason as u8, r.from_pool as u8, r.to_pool as u8))
+        .map(|r| {
+            (
+                r.tick,
+                r.region_id,
+                r.lineage,
+                r.reason as u8,
+                r.from_pool as u8,
+                r.to_pool as u8,
+            )
+        })
         .collect();
     let mut sorted = keys.clone();
     sorted.sort();
@@ -260,7 +269,10 @@ fn ut_d3_14_prng_table() {
     let r0 = s.rng[1].words();
     s.step(1).unwrap();
     assert_ne!(s.rng[1].words(), r0);
-    assert_eq!(s.rng[0].words(), SimCore::one_cell(7, 0, 0, vec![]).rng[0].words());
+    assert_eq!(
+        s.rng[0].words(),
+        SimCore::one_cell(7, 0, 0, vec![]).rng[0].words()
+    );
 }
 
 #[test]

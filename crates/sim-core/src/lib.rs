@@ -293,7 +293,14 @@ impl SimCore {
     }
     pub fn fold_lineage_records(&mut self) {
         self.mass_ledger.sort_by_key(|r| {
-            (r.tick, r.region_id, r.lineage, r.reason as u8, r.from_pool as u8, r.to_pool as u8)
+            (
+                r.tick,
+                r.region_id,
+                r.lineage,
+                r.reason as u8,
+                r.from_pool as u8,
+                r.to_pool as u8,
+            )
         });
     }
 
