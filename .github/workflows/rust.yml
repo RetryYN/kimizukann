@@ -50,9 +50,28 @@ jobs:
         run: cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all | tee report.json
       - uses: actions/upload-artifact@v4
         with:
-          name: verify-ubuntu
+          name: verify-report-ubuntu
           path: report.json
           if-no-files-found: error
+      - name: Publish verification state hash
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path("report.json").read_text(encoding="utf-8"))
+          values = report.get("state_hashes") or [report.get("state_hash")]
+          values = sorted(value for value in values if isinstance(value, str) and value)
+          if not values:
+              raise SystemExit("report.json has no state_hash")
+          line = f"state_hash={values[0]}"
+          Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text(
+              f"### verify (ubuntu)\\n\\n`{line}`\\n", encoding="utf-8"
+          )
+          print(line)
+          PY
 
   verify-windows:
     name: verify-windows
@@ -67,9 +86,28 @@ jobs:
         run: cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all | tee report.json
       - uses: actions/upload-artifact@v4
         with:
-          name: verify-windows
+          name: verify-report-windows
           path: report.json
           if-no-files-found: error
+      - name: Publish verification state hash
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report = json.loads(Path("report.json").read_text(encoding="utf-8"))
+          values = report.get("state_hashes") or [report.get("state_hash")]
+          values = sorted(value for value in values if isinstance(value, str) and value)
+          if not values:
+              raise SystemExit("report.json has no state_hash")
+          line = f"state_hash={values[0]}"
+          Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text(
+              f"### verify (windows)\\n\\n`{line}`\\n", encoding="utf-8"
+          )
+          print(line)
+          PY
 
   determinism-xos:
     name: determinism-xos
@@ -78,11 +116,11 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: verify-ubuntu
+          name: verify-report-ubuntu
           path: artifacts/ubuntu
       - uses: actions/download-artifact@v4
         with:
-          name: verify-windows
+          name: verify-report-windows
           path: artifacts/windows
       - name: Compare state hashes
         run: |
