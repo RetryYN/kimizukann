@@ -102,11 +102,13 @@
 | 環境・CI が壊れた | 気づいた人 | Codex | `[ENV][request]` |
 | 用語が無い・文言が要る | 誰でも | kimi | `[TERM][request]` |
 - Codex（ルーター）は 10 分ごとに `gh pr list --json number,isDraft,reviewRequests,reviews,updatedAt,labels` を見る。観測対象は **GitHub の Ready 時刻（`ready_for_review` イベント）とラベル**: writer は Ready にする時に `needs-review:<name>` ラベルを付け、reviewer は本文投稿後に外す。ラベルが 30 分以上残っていれば該当レビュアーへ催促 post、`ready-to-merge` ラベル（必須レビュアー全員の `verdict: approve` COMMENT／署名票がそろった時点で **最後の reviewer が付ける**。§3.8 の review-gate が green ならラベルは自動付与）が 30 分残っていれば責任者へ催促
+  - レビュー依頼から 15 分経過した時点で相手の helix-bus inbox に `active` が残っている場合は、該当相手へ `[nudge]` を 1 回送る（同じ依頼に対する重複催促はしない）。
 - Claude は日次で PR 一覧・開発ログ・trace を確認してオーナーに要約する（進行の中継はしない）
 
 ### 3.7 リミット管理（予算と上限）
 - **予算の正本**: `~/.helix-bus/budget.json`（オーナーが編集）。計測: `node ~/.helix-bus/usage.mjs [--hours N]`（identity ごとの wait / stop 回数 ≈ リクエスト数、予算比、WARN 80% / STOP 100%）
 - **上限**（budget.json `review`）: レビュー往復 **最大 3 ラウンド**（4 回目は責任者が判定して merge か close）、writer あたり open PR **2 本**まで、PR **300 行**まで
+- 300 行上限の例外は初回導入の **H0（PR #11）と H2（PR #7）だけ**とし、以後の PR は分割必須とする。例外には、(a) 現在の head に対する Claude の `helix-review: v1` 署名票（`verdict: approve`）または (b) オーナーの GitHub コメント `helix-line-limit: approve` が必要で、本文の記載だけでは承認とみなさない。免除理由と承認者を本文の分割理由に記載する。
 - **待機ポリシー**（`waitPolicy`）: タスクを持つ AI は `timeout_sec=50`、**30 分タスク無しなら `timeout_sec=600`**（Cursor が許せば。LIMIT-TEST で確認）または待機停止。Codex は 3600
 - **STOP 時**: Claude が該当 AI に `[LIMIT][constraint] 待機停止` を送り、その日のタスクは他へ振る。合計が STOP なら新規 brief を止めてオーナーに報告
 - Claude の 2 時間ジョブで usage を確認し、日次要約に「消費 / 予算」を 1 行入れる
