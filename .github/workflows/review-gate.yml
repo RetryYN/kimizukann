@@ -22,6 +22,9 @@ jobs:
         with:
           ref: refs/pull/${{ github.event.pull_request.number || github.event.issue.number }}/merge
           fetch-depth: 0
+      - name: Ensure base branch history is available
+        shell: bash
+        run: git fetch --no-tags origin refs/heads/main:refs/remotes/origin/main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
