@@ -114,9 +114,7 @@ impl DiffuseScratch {
             self.d_n.fill(0);
             self.d_c.fill(0);
             self.d_w.fill(0);
-            for row in &mut self.d_b {
-                *row = [0; 8];
-            }
+            self.d_b.fill([0; 8]);
         }
         if self.cached_w != w || self.cached_h != h || self.neighbors.len() != n {
             self.neighbors.resize(n, [None; 4]);
