@@ -2,8 +2,9 @@
 """Validate signed helix-review attestations for a pull request.
 
 The checker is deliberately fail-closed.  It only treats a review as valid when
-the ticket is for the current head, has a valid HMAC, and its evidence matches
-the verification report (or is ``none`` for documentation-only changes).
+the ticket is for the current head (or an ancestor with an identical PR
+patch), has a valid HMAC, and its evidence matches the verification report (or
+is ``none`` for documentation-only changes).
 """
 
 from __future__ import annotations
@@ -70,6 +71,50 @@ def gh_api(endpoint: str, *, paginate: bool = False) -> Any:
     for value in values:
         flattened.extend(value if isinstance(value, list) else [value])
     return flattened
+
+
+def _git(
+    arguments: list[str], *, cwd: str | Path | None = None, input_text: str | None = None
+) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *arguments],
+        cwd=cwd,
+        input=input_text,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def _patch_id(commit: str, *, cwd: str | Path | None = None) -> str | None:
+    """Return the stable patch-id from origin/main to ``commit``."""
+    merge_base = _git(["merge-base", "origin/main", commit], cwd=cwd)
+    if merge_base.returncode or not re.fullmatch(r"[0-9a-fA-F]{40}", merge_base.stdout.strip()):
+        return None
+    diff = _git(
+        ["diff", "--no-ext-diff", f"{merge_base.stdout.strip()}..{commit}"],
+        cwd=cwd,
+    )
+    if diff.returncode:
+        return None
+    patch = _git(["patch-id", "--stable"], cwd=cwd, input_text=diff.stdout)
+    if patch.returncode:
+        return None
+    values = patch.stdout.split()
+    return values[0].lower() if values and re.fullmatch(r"[0-9a-fA-F]{40}", values[0]) else None
+
+
+def patch_id_equivalent(ticket_sha: str, head_sha: str, *, cwd: str | Path | None = None) -> bool:
+    """Accept an old ticket only when the checked-out PR patch is unchanged."""
+    if _git(["merge-base", "--is-ancestor", ticket_sha, head_sha], cwd=cwd).returncode:
+        return False
+    # The workflow checks out the PR merge ref.  Requiring the API head to be
+    # present in that checkout prevents comparing an unrelated repository HEAD.
+    if _git(["merge-base", "--is-ancestor", head_sha, "HEAD"], cwd=cwd).returncode:
+        return False
+    ticket_patch = _patch_id(ticket_sha, cwd=cwd)
+    current_patch = _patch_id("HEAD", cwd=cwd)
+    return bool(ticket_patch and current_patch and hmac.compare_digest(ticket_patch, current_patch))
 
 
 def read_json(path: str | None) -> Any | None:
@@ -226,8 +271,14 @@ def verify_ticket(ticket: dict[str, str], pr: int, head_sha: str, secret: bytes)
         return False, "PR number mismatch"
     if not re.fullmatch(r"[0-9a-fA-F]{40}", ticket["sha"]):
         return False, "ticket sha must be exactly 40 hexadecimal characters"
+    sha_note = ""
     if ticket["sha"].lower() != head_sha.lower():
-        return False, "stale head sha"
+        if not patch_id_equivalent(ticket["sha"], head_sha):
+            return False, "stale head sha"
+        sha_note = (
+            "accepted via patch-id equivalence "
+            f"(ticket {ticket['sha'][:7]} → head {head_sha[:7]})"
+        )
     verdict = ticket["verdict"].lower()
     if verdict not in {"approve", "request-changes"}:
         return False, "invalid verdict"
@@ -244,7 +295,7 @@ def verify_ticket(ticket: dict[str, str], pr: int, head_sha: str, secret: bytes)
     expected = hmac.new(secret, payload, hashlib.sha256).hexdigest()
     if not hmac.compare_digest(expected, ticket["sig"].strip().lower()):
         return False, "invalid signature"
-    return True, "ok"
+    return True, sha_note or "ok"
 
 
 def docs_only(files: Iterable[str]) -> bool:
@@ -271,6 +322,7 @@ def load_pr_data(pr: int, args: argparse.Namespace) -> tuple[dict[str, Any], lis
 
 def run(args: argparse.Namespace) -> int:
     errors: list[str] = []
+    notes: list[str] = []
     try:
         metadata, file_entries, comments = load_pr_data(args.pr, args)
         body = str(metadata.get("body") or "")
@@ -300,6 +352,8 @@ def run(args: argparse.Namespace) -> int:
                 ok, reason = verify_ticket(ticket, args.pr, head_sha, secret_text.encode("utf-8"))
                 if not ok:
                     continue
+                if reason.startswith("accepted via patch-id equivalence"):
+                    notes.append(reason)
                 if needs_evidence and ticket.get("evidence", "").lower() != state_hash:
                     continue
                 if not needs_evidence and ticket.get("evidence", "").lower() != "none":
@@ -338,6 +392,8 @@ def run(args: argparse.Namespace) -> int:
             print(f"- {error}")
         return 1
     print("review-gate: PASS")
+    for note in dict.fromkeys(notes):
+        print(note)
     return 0
 
 
