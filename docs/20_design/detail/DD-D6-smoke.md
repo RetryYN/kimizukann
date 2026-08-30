@@ -1,6 +1,6 @@
 # DD-D6 詳細設計: 煙試験（4 環境 × 20 seed バッチ）
 
-- 版: 0.1（起草 cursor-kimi、2026-08-30）
+- 版: 0.2（起草 cursor-kimi、2026-08-30。0.2: grok 審査 r1（PR #31）反映 — blocker（UT-D6-03 と elapsed_ms の両立不能）・major 5 件を修正）
 - 上位正本: `docs/10_requirements/要件定義書_検証版_v0.2.md`（REQ-OPS-02a、REQ-OUT-01、REQ-SIM-14、REQ-DET-03）、v0.5 §7.2、BD-03（INV-07）、BD-05 §10、BD-06 §3、BD-08 §6（AT-D6-01/02）
 - スコープ: 煙試験バッチの実行仕様・seed 導出・分布 JSON 形式・失敗時の終了コード
 - 非スコープ: 較正ゲート本体（D7 = 100 seed + 上位互換判定）、分布帯の合否判定（REQ-END-05 は D7）、CI ワークフロー定義（H0 済み。本 DD はバッチコマンドの契約のみ）
@@ -27,24 +27,25 @@
 ### 2.3 並列化（確定。契約 §6）
 
 - seed 間バッチのみ並列化（run 内は単一スレッド）。ワーカー数は `--jobs`（既定 = 論理コア数）
-- 並列実行は結果に影響しない（run 間で状態を共有しない）。出力 JSON の run レコード順は `environment_id × seed` の辞書順にソートし、ワーカー完了順に依存しない
+- 並列実行は結果に影響しない（run 間で状態を共有しない）。出力 JSON の run レコード順は `environment_id` の ASCII 辞書順（`carcass_pulse` < `center_rich` < `edge_sparse` < `local_waste`）→ `seed` 昇順にソートし、ワーカー完了順に依存しない
 
 ### 2.4 時間予算（初期仮説）
 
-- 1 run = 2,000 tick。NFR-01（拡散 200 ms / 2,000 tick）から全 phase で 1 run ≤ 2 s を目標とし、80 run を 4 並列で ≤ 60 s。超過時は失敗ではなく JSON の `elapsed_ms` に記録して D7 の較正材料とする
+- 1 run = 2,000 tick。NFR-01（headless 全体 ≤ 1.0 s / 2,000 tick）から 1 run ≤ 1.0 s を目標とし、80 run を 4 並列で ≤ 30 s。超過時は失敗ではなく JSON の `elapsed_ms` に記録して D7 の較正材料とする
 
 ## 3. 分布 JSON 形式（確定）
 
 ```json
 {
   "suite": "smoke",
-  "model_version": "d3-v1",
+  "model_version": "<実装時の World.model_version を書く>",
   "batch_base": 42,
   "max_ticks": 2000,
   "runs": [
     {
-      "environment_id": "center_rich",
+      "environment_id": "carcass_pulse",
       "seed": 42,
+      "status": "ok",
       "end_label": "TimeLimit",
       "ticks_run": 2000,
       "final_shares": [250000, 250000, 250000, 250000],
@@ -64,8 +65,16 @@
 }
 ```
 
-- `final_shares` は系統 id 昇順の Fixed（百万分率）。`lineage_count` は終了時の系統数（INV-07 検査用。初期値 4 と比較）
-- `state_hash` を全 run に記録し、同一 seed の再実行一致（REQ-DET-03 の CI xos 検査）に使う
+- `final_shares` は系統 id 昇順の Fixed（百万分率）。`lineage_count` は系統配列の**スロット数**（INV-07: Absent/Dead で縮めない。分岐もないため常に初期配列長と等しいはず）と定義する。違反条件は `lineage_count != 初期配列長`（INV-07 の等号条件を採用。REQ-OUT-01「初期値を超えない」を含意する stronger 条件）
+- `status` は `ok | panic | numeric_error | lineage_violation` の 4 値。失敗時の必須フィールド:
+
+| status | end_label | final_shares | state_hash | ticks_run |
+|---|---|---|---|---|
+| ok | 必須 | 必須 | 必須 | 必須（= 終了 tick） |
+| panic / numeric_error | 省略 | 省略 | 省略 | 必須（異常発生までの tick 数） |
+| lineage_violation | 必須 | 必須 | 必須 | 必須 |
+
+- `state_hash` を全正常 run に記録し、同一 seed の再実行一致（REQ-DET-03 の CI xos 検査）に使う
 - schema は `docs/30_contracts/batch_result.schema.json`（実装 PR で新設）
 
 ## 4. 失敗時の挙動（確定）
@@ -74,8 +83,8 @@
 |---|---|
 | いずれかの run が panic | バッチは残りを最後まで実行し、JSON に記録。終了コード 1 |
 | いずれかの run が NumericError | 同上（REQ-SIM-14: 煙試験で panic 0 が合格線。NumericError も 0 が合格線） |
-| lineage_count ≠ 4 | 同上（INV-07 違反として記録。終了コード 1） |
-| 環境プリセットの load 失敗 | 即時終了コード 2（バッチ不成立。run は未実行） |
+| `lineage_count != 初期配列長` | 同上（INV-07 違反として記録。終了コード 1） |
+| 環境プリセットの load 失敗（存在しない environment_id・設計上限超過 config を含む） | 即時終了コード 2（バッチ不成立。run は未実行） |
 
 panic の捕捉はワーカー側で `catch_unwind` 相当を用い、プロセスを殺さず記録する（初期仮説）
 
@@ -85,16 +94,17 @@ panic の捕捉はワーカー側で `catch_unwind` 相当を用い、プロセ�
 |---|---|---|
 | UT-D6-01 | batch_base = 42 | seed 列 = 42..61（20 件、重複なし） |
 | UT-D6-02 | 同一 config で batch 2 回 | 全 run の state_hash が一致（REQ-DET-03） |
-| UT-D6-03 | jobs = 1 と jobs = 4 | 出力 JSON がバイト一致（レコード順が決定的） |
-| UT-D6-04 | 強制 NumericError fixture（上限超過 config） | 終了コード 1、JSON に記録、他 run は完走 |
+| UT-D6-03 | jobs = 1 と jobs = 4 | 出力 JSON から `elapsed_ms` を除いた canonical JSON がバイト一致（レコード順が決定的。`elapsed_ms` は壁時計由来のため比較対象外） |
+| UT-D6-04 | テスト hook で run 中に NumericError を注入 | 終了コード 1、`status: "numeric_error"` で JSON に記録、他 run は完走（上限超過 config は create 時 ValidationError であり NumericError ではない。BD-06 §5。上限超過は load 失敗 = 終了コード 2 側） |
 | UT-D6-05 | 存在しない environment_id | 終了コード 2、run 0 件 |
+| UT-D6-06 | テスト hook で run 中に panic を注入 | 終了コード 1、`status: "panic"` で JSON に記録、他 run は完走 |
 
 ## 6. AT 対応（BD-08 §6）
 
 | AT | 対応 |
 |---|---|
-| AT-D6-01 | 全 80 run の `lineage_count` を集計し 4 以外を検出（§3 summary.lineage_count_violations） |
-| AT-D6-02 | §2 のバッチを CI で実行し、終了コード 0 + JSON schema 通過を合否とする |
+| AT-D6-01 | 全 80 run の `lineage_count` を集計し初期配列長と異なるものを検出（§3 summary.lineage_count_violations） |
+| AT-D6-02 | CI の**独立 job** として `sim-cli batch --suite smoke` を直接実行し、終了コード 0 + JSON schema 通過を合否とする。`verify --suite all` / `verify --suite <Dn>` には含めない（verify は単一 run の検査群のまま。80 run を verify に入れる解釈は CI を壊す） |
 
 ## 7. ファイル分割（実装 PR の予定。writer = cursor-grok）
 
