@@ -12,9 +12,6 @@ pub struct LedgerRecord {
 }
 
 pub fn fold_region_records(rows: &mut Vec<LedgerRecord>) {
-    if rows.is_empty() {
-        return;
-    }
     rows.sort_by_key(|r| {
         (
             r.tick,

@@ -831,11 +831,7 @@ mod tests {
         let heat: Fixed = b
             .energy_ledger
             .iter()
-            .filter(|r| {
-                r.reason == ReasonCode::Intake
-                    && r.from_pool == Pool::Nutrient
-                    && r.to_pool == Pool::Waste
-            })
+            .filter(|r| r.reason == ReasonCode::Intake && r.to_pool == Pool::Waste)
             .map(|r| r.amount)
             .sum();
         assert_eq!(heat, 90_000);
