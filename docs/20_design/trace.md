@@ -54,7 +54,7 @@
 | REQ-GEN-03 | P0 | D4 | INSP（config golden） | 02_glossary.md, DD-D4-lineages.md, DD-D7-calibration.md | — |
 | REQ-GEN-04 | P0 | D4 | UT（プリセット検査） | 06_numeric_model.md, DD-D4-lineages.md | — |
 | REQ-GEN-05 | P0 | D7 | AT（D7 分布判定） | 08_acceptance_tests.md, DD-D7-calibration.md | — |
-| REQ-GEN-06 | P0 | D7 | AT | 02_glossary.md, 08_acceptance_tests.md, DD-D4-lineages.md, DD-D7-calibration.md | — |
+| REQ-GEN-06 | P0 | D7 | AT | 02_glossary.md, 08_acceptance_tests.md, DD-D7-calibration.md | — |
 | REQ-GEN-07 | P1 | D7 | AT | DD-D7-calibration.md | — |
 | REQ-GEN-08 | P1 | D4/D12 | UT（上限・上限+1）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 11_ui_flow.md, DD-D4-lineages.md | — |
 | REQ-ENV-01 | P0 | D5 | AT（schema） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md | — |
