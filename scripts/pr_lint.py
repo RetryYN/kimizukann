@@ -22,6 +22,7 @@ class LintError(RuntimeError):
 LINE_LIMIT = 300
 LINE_LIMIT_EXCEPTION_PRS = {7, 11}
 OWNER_LINE_LIMIT_MARKER = re.compile(r"(?im)^\s*helix-line-limit:\s*approve\s*$")
+BENCHMARK_TARGET = re.compile(r"^crates/[^/]+/(?:examples|benches)(?:/|$)", re.I)
 
 
 def _decode_many(raw: str) -> list[Any]:
@@ -118,9 +119,17 @@ def added_forbidden(files: list[dict[str, Any]]) -> list[str]:
     found: list[str] = []
     for entry in files:
         path = str(entry.get("filename", ""))
+        normalized_path = path.replace("\\", "/")
         patch = str(entry.get("patch") or "")
         for line in patch.splitlines():
-            if line.startswith("+") and not line.startswith("+++") and any(word in line for word in forbidden):
+            if not line.startswith("+") or line.startswith("+++"):
+                continue
+            # Benchmark/example targets may use wall-clock APIs for measuring
+            # performance.  Keep the exception path-scoped and limited to the
+            # clippy allow directive; production and test code stays fail-closed.
+            if "allow(clippy" in line and BENCHMARK_TARGET.match(normalized_path):
+                continue
+            if any(word in line for word in forbidden):
                 found.append(f"{path}: {line[1:].strip()}")
     return found
 
