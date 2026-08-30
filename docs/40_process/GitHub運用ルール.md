@@ -136,7 +136,7 @@ GitHub の Review approve は使わない（単一アカウント）。代わり
 - `docs/30_contracts/**`・`golden/**`・hash 正規化順の変更は Claude 票が必須。要件・RFC はオーナー票（オーナーは GitHub の Review approve で可＝唯一の人間）
 
 **C. 証拠の突合**
-- reviewer 票の `evidence` は署名とは別に検証する。コードを含む PR では、reviewer がローカルで `cargo run --manifest-path crates/sim-cli/Cargo.toml -- verify --suite all` を実行して得た `report.json` の **`state_hash`（64 桁 hex そのもの）**を記載し、CI の `verify` job の `report.json` の `state_hash` と完全一致させる（ハッシュの再計算や hash 集合の再ハッシュはしない）。文書のみの PR は `evidence: none` を必須とし、代わりに `checklist` を検証する
+- reviewer 票の `evidence` は署名とは別に検証する。code PR では、その head に対する CI の `verify`（ubuntu / windows）両 job で一致した **`state_hash`（64 桁 hex そのもの）**を記載する（ハッシュの再計算や hash 集合の再ハッシュはしない）。審査者のローカル実行は任意（推奨）であり必須ではない。署名票の `checklist` には `evidence=CI` と明記し、CI 両 job の一致を確認した記録をレビューコメントに残す。文書のみの PR は `evidence: none` を必須とし、代わりに `checklist` を検証する。
 - writer は PR 本文に `diff --stat` を貼る。`pr-lint` が実際の diff と突合し、不一致なら red（「反映した」誤報の機械検出）
 
 **D. その他の必須 check**（§3.2 に追加）
