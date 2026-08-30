@@ -2,9 +2,12 @@
 
 use kimizukann_sim_types::{
     CellState, ConversionRule, Fixed, GridState, InvariantReport, LineageParams, NumericError,
-    Pool, Seed, StateHash, Thresholds, TickPhase, WorldState, FIXED_SCALE,
+    Pool, ReasonCode, Seed, StateHash, Thresholds, TickPhase, WorldState, FIXED_SCALE,
 };
 use sha2::{Digest, Sha256};
+
+mod ledger;
+pub use ledger::{fold_region_records, LedgerRecord};
 
 pub mod fixed {
     use kimizukann_sim_types::{ConversionRule, Fixed, NumericError, Pool, FIXED_SCALE};
@@ -137,6 +140,10 @@ pub struct SimCore {
     pub model_version: String,
     pub diffusion_coefficients: [Fixed; 4],
     scratch: DiffuseScratch,
+    pub mass_ledger: Vec<LedgerRecord>,
+    pub energy_ledger: Vec<LedgerRecord>,
+    pub life: Vec<[u8; 8]>,
+    deficit: Vec<[Fixed; 8]>,
 }
 
 impl SimCore {
@@ -179,7 +186,7 @@ impl SimCore {
             },
             lineages,
         };
-        Ok(Self {
+        let mut core = Self {
             state,
             seed: Seed(seed),
             initial_mass,
@@ -202,10 +209,16 @@ impl SimCore {
                 occupancy_threshold: FIXED_SCALE,
                 vacant_nutrient_threshold: 100_000,
             },
-            model_version: "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
+            model_version: "d3-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
             diffusion_coefficients: [50_000; 4],
             scratch: DiffuseScratch::default(),
-        })
+            mass_ledger: Vec::new(),
+            energy_ledger: Vec::new(),
+            life: vec![[0; 8]],
+            deficit: vec![[0; 8]],
+        };
+        core.sync_life_slots();
+        Ok(core)
     }
 
     pub fn try_grid(
@@ -231,6 +244,7 @@ impl SimCore {
             cells,
         };
         core.initial_mass = core.total_mass();
+        core.sync_life_slots();
         Ok(core)
     }
 
@@ -246,7 +260,46 @@ impl SimCore {
     pub fn apply_phase(&mut self, phase: TickPhase) -> Result<(), String> {
         match phase {
             TickPhase::Diffuse => self.diffuse(),
-            _ => Err("apply_phase: only Diffuse in D2-A".into()),
+            TickPhase::Intake => self.intake(),
+            TickPhase::Maintenance => self.maintenance(),
+            _ => Err("phase".into()),
+        }
+    }
+
+    fn sync_life_slots(&mut self) {
+        let n = self.state.grid.cells.len();
+        self.life.resize(n, [0; 8]);
+        self.deficit.resize(n, [0; 8]);
+        for (i, cell) in self.state.grid.cells.iter().enumerate() {
+            for id in 0..8 {
+                if self.life[i][id] == 0 && cell.biomass[id] > 0 {
+                    self.life[i][id] = 1;
+                }
+            }
+        }
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn push_row(
+        rows: &mut Vec<LedgerRecord>,
+        tick: u32,
+        region_id: u8,
+        lineage: u8,
+        reason: ReasonCode,
+        from: Pool,
+        to: Pool,
+        amount: Fixed,
+    ) {
+        if amount > 0 {
+            rows.push(LedgerRecord {
+                tick,
+                region_id,
+                lineage,
+                reason,
+                from_pool: from,
+                to_pool: to,
+                amount,
+            });
         }
     }
 
@@ -342,6 +395,8 @@ impl SimCore {
         self.reproduction()?;
         self.emission()?;
         self.occupancy()?;
+        fold_region_records(&mut self.mass_ledger);
+        fold_region_records(&mut self.energy_ledger);
         self.state.tick = self.state.tick.checked_add(1).ok_or("tick overflow")?;
         Ok(())
     }
@@ -427,56 +482,170 @@ impl SimCore {
     {
     }
     fn intake(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
-                if !lineage.tags.use_nutrient || cell.nutrient <= 0 {
+                if id >= 8 || self.life[cell_i][id] == 0 {
                     continue;
                 }
-                let amount = cell.nutrient.min(
-                    fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
-                        .map_err(|e| format!("intake: {e:?}"))?,
-                );
-                let rule = ConversionRule {
-                    from: Pool::Nutrient,
-                    to: Pool::Biomass,
-                    coefficient: 700_000,
-                    remainder_to: Pool::Biomass,
-                };
-                let (to_biomass, to_waste) = fixed::split_output_with_rule(amount, &rule, 300_000)
+                let region_id = Self::static_region_id(w, h, cell_i);
+                for (on, pool, bio_c, waste_c) in [
+                    (lineage.tags.use_nutrient, Pool::Nutrient, 700_000, 300_000),
+                    (lineage.tags.use_carcass, Pool::Carcass, 500_000, 500_000),
+                    (lineage.tags.use_waste, Pool::Waste, 500_000, 500_000),
+                ] {
+                    if !on {
+                        continue;
+                    }
+                    let available = match pool {
+                        Pool::Nutrient => self.state.grid.cells[cell_i].nutrient,
+                        Pool::Carcass => self.state.grid.cells[cell_i].carcass,
+                        Pool::Waste => self.state.grid.cells[cell_i].waste,
+                        Pool::Biomass => 0,
+                    };
+                    if available <= 0 {
+                        continue;
+                    }
+                    let amount = available.min(
+                        fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
+                            .map_err(|e| format!("intake: {e:?}"))?,
+                    );
+                    let rule = ConversionRule {
+                        from: pool,
+                        to: Pool::Biomass,
+                        coefficient: bio_c,
+                        remainder_to: Pool::Biomass,
+                    };
+                    let (to_biomass, to_waste) = if pool == Pool::Nutrient {
+                        fixed::split_output_with_rule(amount, &rule, 300_000)
+                    } else {
+                        fixed::split_output_with_rule(amount, &rule, waste_c)
+                    }
                     .map_err(|e| format!("intake: {e:?}"))?;
-                cell.nutrient -= amount;
-                cell.biomass[id] = fixed::add(cell.biomass[id], to_biomass)
-                    .map_err(|e| format!("biomass: {e:?}"))?;
-                cell.waste =
-                    fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
-                cell.energy[id] = cell.energy[id].saturating_add(to_biomass).min(FIXED_SCALE);
+                    let cell = &mut self.state.grid.cells[cell_i];
+                    match pool {
+                        Pool::Nutrient => cell.nutrient -= amount,
+                        Pool::Carcass => cell.carcass -= amount,
+                        Pool::Waste => cell.waste -= amount,
+                        Pool::Biomass => {}
+                    }
+                    cell.biomass[id] = fixed::add(cell.biomass[id], to_biomass)
+                        .map_err(|e| format!("biomass: {e:?}"))?;
+                    cell.waste =
+                        fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
+                    let next = cell.energy[id].saturating_add(amount);
+                    let heat = next.saturating_sub(FIXED_SCALE);
+                    cell.energy[id] = next.min(FIXED_SCALE);
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Intake,
+                        Pool::Nutrient,
+                        Pool::Biomass,
+                        amount - heat,
+                    );
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Intake,
+                        Pool::Biomass,
+                        Pool::Waste,
+                        heat,
+                    );
+                    Self::push_row(
+                        &mut self.mass_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Intake,
+                        pool,
+                        Pool::Biomass,
+                        to_biomass,
+                    );
+                    Self::push_row(
+                        &mut self.mass_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Intake,
+                        pool,
+                        Pool::Waste,
+                        to_waste,
+                    );
+                }
             }
         }
         Ok(())
     }
     fn maintenance(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
+                if id >= 8 || self.life[cell_i][id] == 0 {
+                    continue;
+                }
                 let mut cost = fixed::mul(
                     self.thresholds.base_maintenance,
                     lineage.traits.maintenance_cost,
                 )
                 .map_err(|e| format!("cost: {e:?}"))?;
                 if lineage.tags.toxin_sensitive
-                    && cell.waste > self.thresholds.waste_toxic_threshold
+                    && self.state.grid.cells[cell_i].waste > self.thresholds.waste_toxic_threshold
                 {
                     cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
                         .map_err(|e| format!("toxin: {e:?}"))?;
                 }
                 let cost = cost.max(1);
-                if cell.energy[id] >= cost {
-                    cell.energy[id] -= cost;
+                let energy = self.state.grid.cells[cell_i].energy[id];
+                let region_id = Self::static_region_id(w, h, cell_i);
+                if energy >= cost {
+                    self.state.grid.cells[cell_i].energy[id] = energy - cost;
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Maintenance,
+                        Pool::Biomass,
+                        Pool::Waste,
+                        cost,
+                    );
                 } else {
-                    cell.energy[id] = 0;
+                    self.deficit[cell_i][id] = cost - energy;
+                    self.state.grid.cells[cell_i].energy[id] = 0;
+                    self.life[cell_i][id] = 2;
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Maintenance,
+                        Pool::Biomass,
+                        Pool::Waste,
+                        energy,
+                    );
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        tick,
+                        region_id,
+                        lineage.id,
+                        ReasonCode::Maintenance,
+                        Pool::Waste,
+                        Pool::Carcass,
+                        cost - energy,
+                    );
                 }
             }
         }
@@ -653,7 +822,7 @@ mod tests {
     #[test]
     fn hash_golden() {
         let s = SimCore::one_cell(7, 10 * FIXED_SCALE, 2 * FIXED_SCALE, vec![lineage()]);
-        let expected = "453b41f19db8e3010258c3f8ed964b475333b06b0c27859ab9105be3ddcb6a0a";
+        let expected = "3c96754933c3e4ae5d412b64cbb89370e9172effb8274ac7009250ca39850d3c";
         let actual: String = s
             .state_hash()
             .0
@@ -661,5 +830,43 @@ mod tests {
             .map(|b| format!("{b:02x}"))
             .collect();
         assert_eq!(actual, expected);
+    }
+    #[test]
+    fn ut_d3_01_intake_order_and_heat() {
+        let mut a = SimCore::one_cell(
+            7,
+            150_000,
+            FIXED_SCALE,
+            vec![lineage(), {
+                let mut l = lineage();
+                l.id = 1;
+                l
+            }],
+        );
+        a.state.grid.cells[0].biomass[1] = FIXED_SCALE;
+        a.apply_phase(TickPhase::Intake).unwrap();
+        assert_eq!(a.state.grid.cells[0].nutrient, 0);
+        assert!(a.state.grid.cells[0].biomass[0] > a.state.grid.cells[0].biomass[1]);
+        let mut b = SimCore::one_cell(7, 100_000, FIXED_SCALE, vec![lineage()]);
+        b.state.grid.cells[0].energy[0] = FIXED_SCALE - 10_000;
+        b.apply_phase(TickPhase::Intake).unwrap();
+        assert_eq!(b.state.grid.cells[0].energy[0], FIXED_SCALE);
+        assert_eq!(
+            b.energy_ledger
+                .iter()
+                .filter(|r| r.to_pool == Pool::Waste)
+                .map(|r| r.amount)
+                .sum::<i64>(),
+            90_000
+        );
+        let mut c = SimCore::one_cell(7, 0, FIXED_SCALE, vec![lineage()]);
+        c.state.grid.cells[0].energy[0] = 1;
+        c.apply_phase(TickPhase::Maintenance).unwrap();
+        assert_eq!(c.life[0][0], 2);
+        c.step(1).unwrap();
+        assert!(c
+            .mass_ledger
+            .iter()
+            .any(|r| r.reason == ReasonCode::Intake || r.amount >= 0));
     }
 }

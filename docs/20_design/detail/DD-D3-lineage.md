@@ -46,7 +46,7 @@
 
 ## 7. 台帳と region 集約（論点 D3-Q1 = claude 判定 r2 で確定）
 
-- 全変換は LedgerEntry を生成し、tick 終了時に region 集約の LedgerRecord（キー tick→region_id→lineage→reason→from→to、amount = 和）へ畳む（BD-01 r4 §5・D2-Q1 確定どおり）。集約・digest・保持は D2 の ledger 基盤を使い、D3 はエントリ生成のみ追加する
+- 全変換は LedgerEntry を生成し、tick 終了時に region 集約の LedgerRecord（キー tick→region_id→lineage→reason→from→to、amount = 和）へ畳む（BD-01 r4 §5・D2-Q1 確定どおり）。集約実装は `crates/sim-core/src/ledger.rs`（D3-A。D2 は fold hook のみ）。D3-A は intake/maintenance のエントリ生成を追加する
 - **region は二層（確定）**:
   - **(A) 台帳 LedgerRecord.region_id = 静的 4×4 タイル**。64×64 を 16×16 セルのタイル 16 枚に分割し、`ID = (row/16)*4 + (col/16)`（row-major、0..=15）。tick をまたいで安定し、digest も窓集計も安定。空タイルも ID を持つ（nutrient のみの区画の資源枯渇を置ける）
   - **(B) スタンプの region_ids（REQ-EVT-04）= 動的 4 連結成分**。イベント tick の占有マスク（Σbiomass > 0）の 4 連結成分を row-major 初出順に採番（最大 16、超過は 15 に併合）。説明器側で派生計算し、保存は stamp 内のみ。**派生 ID を LedgerRecord に書かない**
@@ -89,7 +89,7 @@
 
 | ファイル | 担当 PR | 内容 |
 |---|---|---|
-| `crates/sim-core/src/grid.rs`, `diffuse.rs`, `ledger.rs` | D2（cursor-grok） | grid 一般化・diffuse・台帳基盤（region 集約・digest） |
+| `crates/sim-core/src/grid.rs`, `diffuse.rs` | D2（cursor-grok） | grid 一般化・diffuse。`ledger.rs` の集約は D3-A で新設 |
 | `crates/sim-core/src/lib.rs` | D2（cursor-grok） | SimCore 本体・tick_once。D3 は `mod lineage_phases;` 追加と phase 呼出の差替えのみ（D2 マージ後の姿に追従） |
 | `crates/sim-core/src/lineage_phases.rs` | **D3（cursor-grok）** | intake / maintenance / starvation_and_death / reproduction / emission の複数系統意味論（本 DD） |
 | `crates/sim-core/tests/d3_*.rs` | **D3（cursor-grok）** | §9 の UT/PT |
