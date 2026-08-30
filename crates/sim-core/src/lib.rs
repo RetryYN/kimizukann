@@ -2,9 +2,26 @@
 
 use kimizukann_sim_types::{
     CellState, ConversionRule, Fixed, GridState, InvariantReport, LineageParams, NumericError,
-    Pool, Seed, StateHash, Thresholds, TickPhase, WorldState, FIXED_SCALE,
+    Pool, ReasonCode, Seed, StateHash, Thresholds, TickPhase, WorldState, FIXED_SCALE,
 };
 use sha2::{Digest, Sha256};
+
+mod ledger;
+pub use ledger::{fold_region_records, LedgerRecord};
+
+macro_rules! rec {
+    ($t:expr, $r:expr, $l:expr, $w:expr, $f:expr, $o:expr, $a:expr $(,)?) => {
+        LedgerRecord {
+            tick: $t,
+            region_id: $r,
+            lineage: $l,
+            reason: $w,
+            from_pool: $f,
+            to_pool: $o,
+            amount: $a,
+        }
+    };
+}
 
 pub mod fixed {
     use kimizukann_sim_types::{ConversionRule, Fixed, NumericError, Pool, FIXED_SCALE};
@@ -137,6 +154,10 @@ pub struct SimCore {
     pub model_version: String,
     pub diffusion_coefficients: [Fixed; 4],
     scratch: DiffuseScratch,
+    pub mass_ledger: Vec<LedgerRecord>,
+    pub energy_ledger: Vec<LedgerRecord>,
+    pub life: Vec<[u8; 8]>,
+    deficit: Vec<[Fixed; 8]>,
 }
 
 impl SimCore {
@@ -179,7 +200,7 @@ impl SimCore {
             },
             lineages,
         };
-        Ok(Self {
+        let mut core = Self {
             state,
             seed: Seed(seed),
             initial_mass,
@@ -202,10 +223,16 @@ impl SimCore {
                 occupancy_threshold: FIXED_SCALE,
                 vacant_nutrient_threshold: 100_000,
             },
-            model_version: "d1-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
+            model_version: "d3-v1;prng=xoshiro256ss-v1;hash=sha256-v1".into(),
             diffusion_coefficients: [50_000; 4],
             scratch: DiffuseScratch::default(),
-        })
+            mass_ledger: Vec::new(),
+            energy_ledger: Vec::new(),
+            life: vec![[0; 8]],
+            deficit: vec![[0; 8]],
+        };
+        core.sync_life_slots();
+        Ok(core)
     }
 
     pub fn try_grid(
@@ -231,6 +258,7 @@ impl SimCore {
             cells,
         };
         core.initial_mass = core.total_mass();
+        core.sync_life_slots();
         Ok(core)
     }
 
@@ -246,7 +274,31 @@ impl SimCore {
     pub fn apply_phase(&mut self, phase: TickPhase) -> Result<(), String> {
         match phase {
             TickPhase::Diffuse => self.diffuse(),
-            _ => Err("apply_phase: only Diffuse in D2-A".into()),
+            TickPhase::Intake => self.intake(),
+            TickPhase::Maintenance => self.maintenance(),
+            TickPhase::StarvationAndDeath => self.starvation_and_death(),
+            TickPhase::Reproduction => self.reproduction(),
+            TickPhase::Emission => self.emission(),
+            TickPhase::Occupancy => self.occupancy(),
+        }
+    }
+
+    fn sync_life_slots(&mut self) {
+        let n = self.state.grid.cells.len();
+        self.life.resize(n, [0; 8]);
+        self.deficit.resize(n, [0; 8]);
+        for (i, cell) in self.state.grid.cells.iter().enumerate() {
+            for id in 0..8 {
+                if self.life[i][id] == 0 && cell.biomass[id] > 0 {
+                    self.life[i][id] = 1;
+                }
+            }
+        }
+    }
+
+    fn push_row(rows: &mut Vec<LedgerRecord>, rec: LedgerRecord) {
+        if rec.amount > 0 {
+            rows.push(rec);
         }
     }
 
@@ -342,6 +394,8 @@ impl SimCore {
         self.reproduction()?;
         self.emission()?;
         self.occupancy()?;
+        fold_region_records(&mut self.mass_ledger);
+        fold_region_records(&mut self.energy_ledger);
         self.state.tick = self.state.tick.checked_add(1).ok_or("tick overflow")?;
         Ok(())
     }
@@ -427,119 +481,349 @@ impl SimCore {
     {
     }
     fn intake(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
-                if !lineage.tags.use_nutrient || cell.nutrient <= 0 {
+                if id >= 8 || self.life[cell_i][id] == 0 {
                     continue;
                 }
-                let amount = cell.nutrient.min(
-                    fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
-                        .map_err(|e| format!("intake: {e:?}"))?,
-                );
-                let rule = ConversionRule {
-                    from: Pool::Nutrient,
-                    to: Pool::Biomass,
-                    coefficient: 700_000,
-                    remainder_to: Pool::Biomass,
-                };
-                let (to_biomass, to_waste) = fixed::split_output_with_rule(amount, &rule, 300_000)
+                let region_id = Self::static_region_id(w, h, cell_i);
+                for (on, pool, bio_c, waste_c) in [
+                    (lineage.tags.use_nutrient, Pool::Nutrient, 700_000, 300_000),
+                    (lineage.tags.use_carcass, Pool::Carcass, 500_000, 500_000),
+                    (lineage.tags.use_waste, Pool::Waste, 500_000, 500_000),
+                ] {
+                    if !on {
+                        continue;
+                    }
+                    let available = match pool {
+                        Pool::Nutrient => self.state.grid.cells[cell_i].nutrient,
+                        Pool::Carcass => self.state.grid.cells[cell_i].carcass,
+                        Pool::Waste => self.state.grid.cells[cell_i].waste,
+                        Pool::Biomass => 0,
+                    };
+                    if available <= 0 {
+                        continue;
+                    }
+                    let amount = available.min(
+                        fixed::mul(self.thresholds.base_intake, lineage.traits.intake)
+                            .map_err(|e| format!("intake: {e:?}"))?,
+                    );
+                    let rule = ConversionRule {
+                        from: pool,
+                        to: Pool::Biomass,
+                        coefficient: bio_c,
+                        remainder_to: Pool::Biomass,
+                    };
+                    let (to_biomass, to_waste) = if pool == Pool::Nutrient {
+                        fixed::split_output_with_rule(amount, &rule, 300_000)
+                    } else {
+                        fixed::split_output_with_rule(amount, &rule, waste_c)
+                    }
                     .map_err(|e| format!("intake: {e:?}"))?;
-                cell.nutrient -= amount;
-                cell.biomass[id] = fixed::add(cell.biomass[id], to_biomass)
-                    .map_err(|e| format!("biomass: {e:?}"))?;
-                cell.waste =
-                    fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
-                cell.energy[id] = cell.energy[id].saturating_add(to_biomass).min(FIXED_SCALE);
+                    let cell = &mut self.state.grid.cells[cell_i];
+                    match pool {
+                        Pool::Nutrient => cell.nutrient -= amount,
+                        Pool::Carcass => cell.carcass -= amount,
+                        Pool::Waste => cell.waste -= amount,
+                        Pool::Biomass => {}
+                    }
+                    cell.biomass[id] = fixed::add(cell.biomass[id], to_biomass)
+                        .map_err(|e| format!("biomass: {e:?}"))?;
+                    cell.waste =
+                        fixed::add(cell.waste, to_waste).map_err(|e| format!("waste: {e:?}"))?;
+                    let next = cell.energy[id].saturating_add(amount);
+                    let heat = next.saturating_sub(FIXED_SCALE);
+                    cell.energy[id] = next.min(FIXED_SCALE);
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Biomass,
+                            amount: amount - heat,
+                        },
+                    );
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Waste,
+                            amount: heat,
+                        },
+                    );
+                    Self::push_row(
+                        &mut self.mass_ledger,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Biomass,
+                            amount: to_biomass,
+                        },
+                    );
+                    Self::push_row(
+                        &mut self.mass_ledger,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Intake,
+                            from_pool: pool,
+                            to_pool: Pool::Waste,
+                            amount: to_waste,
+                        },
+                    );
+                }
             }
         }
         Ok(())
     }
     fn maintenance(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
+                if id >= 8 || self.life[cell_i][id] == 0 {
+                    continue;
+                }
                 let mut cost = fixed::mul(
                     self.thresholds.base_maintenance,
                     lineage.traits.maintenance_cost,
                 )
                 .map_err(|e| format!("cost: {e:?}"))?;
                 if lineage.tags.toxin_sensitive
-                    && cell.waste > self.thresholds.waste_toxic_threshold
+                    && self.state.grid.cells[cell_i].waste > self.thresholds.waste_toxic_threshold
                 {
                     cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
                         .map_err(|e| format!("toxin: {e:?}"))?;
                 }
                 let cost = cost.max(1);
-                if cell.energy[id] >= cost {
-                    cell.energy[id] -= cost;
+                let energy = self.state.grid.cells[cell_i].energy[id];
+                let region_id = Self::static_region_id(w, h, cell_i);
+                if energy >= cost {
+                    self.state.grid.cells[cell_i].energy[id] = energy - cost;
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Maintenance,
+                            from_pool: Pool::Biomass,
+                            to_pool: Pool::Waste,
+                            amount: cost,
+                        },
+                    );
                 } else {
-                    cell.energy[id] = 0;
+                    self.deficit[cell_i][id] = cost - energy;
+                    self.state.grid.cells[cell_i].energy[id] = 0;
+                    self.life[cell_i][id] = 2;
+                    Self::push_row(
+                        &mut self.energy_ledger,
+                        LedgerRecord {
+                            tick,
+                            region_id,
+                            lineage: lineage.id,
+                            reason: ReasonCode::Maintenance,
+                            from_pool: Pool::Biomass,
+                            to_pool: Pool::Waste,
+                            amount: energy,
+                        },
+                    );
                 }
             }
         }
         Ok(())
     }
+    fn lineage_cost(&self, cell_i: usize, lineage: &LineageParams) -> Result<Fixed, String> {
+        let mut cost = fixed::mul(
+            self.thresholds.base_maintenance,
+            lineage.traits.maintenance_cost,
+        )
+        .map_err(|e| format!("cost: {e:?}"))?;
+        if lineage.tags.toxin_sensitive
+            && self.state.grid.cells[cell_i].waste > self.thresholds.waste_toxic_threshold
+        {
+            cost = fixed::mul(cost, self.thresholds.toxin_maintenance_multiplier)
+                .map_err(|e| format!("toxin: {e:?}"))?;
+        }
+        Ok(cost.max(1))
+    }
+
+    fn move_into_carcass(&mut self, cell_i: usize, id: usize, amount: Fixed) -> Result<(), String> {
+        self.state.grid.cells[cell_i].biomass[id] -= amount;
+        self.state.grid.cells[cell_i].carcass =
+            fixed::add(self.state.grid.cells[cell_i].carcass, amount)
+                .map_err(|e| format!("carcass: {e:?}"))?;
+        Ok(())
+    }
+
     fn starvation_and_death(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
-                let cost = fixed::mul(
-                    self.thresholds.base_maintenance,
-                    lineage.traits.maintenance_cost,
-                )
-                .map_err(|e| format!("cost: {e:?}"))?;
-                if cell.energy[id] < cost && cell.biomass[id] > 0 {
-                    let loss = cell.biomass[id].min(cost - cell.energy[id]);
-                    cell.biomass[id] -= loss;
-                    cell.carcass =
-                        fixed::add(cell.carcass, loss).map_err(|e| format!("carcass: {e:?}"))?;
+                if id >= 8 || self.life[cell_i][id] == 0 {
+                    continue;
                 }
-                if cell.biomass[id] > 0 && cell.biomass[id] < lineage.mortality_threshold {
-                    let loss = cell.biomass[id];
-                    cell.biomass[id] = 0;
-                    cell.carcass =
-                        fixed::add(cell.carcass, loss).map_err(|e| format!("death: {e:?}"))?;
+                let rid = Self::static_region_id(w, h, cell_i);
+                if self.life[cell_i][id] == 2 {
+                    let loss =
+                        self.state.grid.cells[cell_i].biomass[id].min(self.deficit[cell_i][id]);
+                    if loss > 0 {
+                        self.move_into_carcass(cell_i, id, loss)?;
+                        Self::push_row(
+                            &mut self.mass_ledger,
+                            rec!(
+                                tick,
+                                rid,
+                                lineage.id,
+                                ReasonCode::Starvation,
+                                Pool::Biomass,
+                                Pool::Carcass,
+                                loss,
+                            ),
+                        );
+                    }
+                    if self.state.grid.cells[cell_i].biomass[id] >= lineage.mortality_threshold {
+                        self.life[cell_i][id] = 1;
+                        self.deficit[cell_i][id] = 0;
+                    }
+                }
+                let left = self.state.grid.cells[cell_i].biomass[id];
+                if left < lineage.mortality_threshold {
+                    if left > 0 {
+                        self.move_into_carcass(cell_i, id, left)?;
+                        Self::push_row(
+                            &mut self.mass_ledger,
+                            rec!(
+                                tick,
+                                rid,
+                                lineage.id,
+                                ReasonCode::Death,
+                                Pool::Biomass,
+                                Pool::Carcass,
+                                left,
+                            ),
+                        );
+                    }
+                    self.life[cell_i][id] = 0;
+                    self.deficit[cell_i][id] = 0;
                 }
             }
         }
         Ok(())
     }
     fn reproduction(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
-                let cost = fixed::mul(
-                    self.thresholds.base_maintenance,
-                    lineage.traits.maintenance_cost,
-                )
-                .map_err(|e| format!("cost: {e:?}"))?;
-                let threshold = fixed::mul(cost * 2, lineage.traits.reproduction)
-                    .map_err(|e| format!("reproduction: {e:?}"))?;
-                if cell.energy[id] > threshold && cell.nutrient > 0 {
-                    let gain = ((cell.energy[id] - threshold) / 2).min(cell.nutrient);
-                    cell.energy[id] -= gain;
-                    cell.nutrient -= gain;
-                    cell.biomass[id] = fixed::add(cell.biomass[id], gain)
-                        .map_err(|e| format!("reproduction: {e:?}"))?;
+                if id >= 8 || self.life[cell_i][id] != 1 {
+                    continue;
                 }
+                let guard = self.lineage_cost(cell_i, lineage)?.saturating_mul(2);
+                let energy = self.state.grid.cells[cell_i].energy[id];
+                if energy <= guard {
+                    continue;
+                }
+                let _draw = self.rng[1].next_u64();
+                let gain = ((energy - guard) / 2).min(self.state.grid.cells[cell_i].nutrient);
+                if gain <= 0 {
+                    continue;
+                }
+                self.state.grid.cells[cell_i].energy[id] = energy - gain;
+                self.state.grid.cells[cell_i].nutrient -= gain;
+                self.state.grid.cells[cell_i].biomass[id] =
+                    fixed::add(self.state.grid.cells[cell_i].biomass[id], gain)
+                        .map_err(|e| format!("reproduction: {e:?}"))?;
+                let rid = Self::static_region_id(w, h, cell_i);
+                Self::push_row(
+                    &mut self.mass_ledger,
+                    rec!(
+                        tick,
+                        rid,
+                        lineage.id,
+                        ReasonCode::Reproduction,
+                        Pool::Nutrient,
+                        Pool::Biomass,
+                        gain,
+                    ),
+                );
+                Self::push_row(
+                    &mut self.energy_ledger,
+                    rec!(
+                        tick,
+                        rid,
+                        lineage.id,
+                        ReasonCode::Reproduction,
+                        Pool::Biomass,
+                        Pool::Waste,
+                        gain,
+                    ),
+                );
             }
         }
         Ok(())
     }
     fn emission(&mut self) -> Result<(), String> {
+        self.sync_life_slots();
         let lineages = self.state.lineages.clone();
-        for cell in &mut self.state.grid.cells {
+        let tick = self.state.tick;
+        let (w, h) = (self.state.grid.width, self.state.grid.height);
+        for cell_i in 0..self.state.grid.cells.len() {
             for lineage in &lineages {
                 let id = lineage.id as usize;
-                let amount = cell.biomass[id].min(lineage.waste_emission.max(0));
-                cell.biomass[id] -= amount;
-                cell.waste =
-                    fixed::add(cell.waste, amount).map_err(|e| format!("emission: {e:?}"))?;
+                if id >= 8 || self.life[cell_i][id] == 0 {
+                    continue;
+                }
+                let amount =
+                    self.state.grid.cells[cell_i].biomass[id].min(lineage.waste_emission.max(0));
+                if amount > 0 {
+                    self.state.grid.cells[cell_i].biomass[id] -= amount;
+                    self.state.grid.cells[cell_i].waste =
+                        fixed::add(self.state.grid.cells[cell_i].waste, amount)
+                            .map_err(|e| format!("emission: {e:?}"))?;
+                    Self::push_row(
+                        &mut self.mass_ledger,
+                        rec!(
+                            tick,
+                            Self::static_region_id(w, h, cell_i),
+                            lineage.id,
+                            ReasonCode::Emission,
+                            Pool::Biomass,
+                            Pool::Waste,
+                            amount,
+                        ),
+                    );
+                }
+                if self.state.grid.cells[cell_i].biomass[id] == 0 {
+                    self.life[cell_i][id] = 0;
+                    self.deficit[cell_i][id] = 0;
+                }
             }
         }
         Ok(())
@@ -653,7 +937,7 @@ mod tests {
     #[test]
     fn hash_golden() {
         let s = SimCore::one_cell(7, 10 * FIXED_SCALE, 2 * FIXED_SCALE, vec![lineage()]);
-        let expected = "453b41f19db8e3010258c3f8ed964b475333b06b0c27859ab9105be3ddcb6a0a";
+        let expected = "3c96754933c3e4ae5d412b64cbb89370e9172effb8274ac7009250ca39850d3c";
         let actual: String = s
             .state_hash()
             .0
@@ -661,5 +945,125 @@ mod tests {
             .map(|b| format!("{b:02x}"))
             .collect();
         assert_eq!(actual, expected);
+    }
+    #[test]
+    fn ut_d3_01_intake_order_and_heat() {
+        let mut l1 = lineage();
+        l1.id = 1;
+        let mut a = SimCore::one_cell(7, 150_000, FIXED_SCALE, vec![lineage(), l1]);
+        a.state.grid.cells[0].biomass[1] = FIXED_SCALE;
+        a.apply_phase(TickPhase::Intake).unwrap();
+        assert_eq!(a.state.grid.cells[0].nutrient, 0);
+        assert!(a.state.grid.cells[0].biomass[0] > a.state.grid.cells[0].biomass[1]);
+        let mut b = SimCore::one_cell(7, 100_000, FIXED_SCALE, vec![lineage()]);
+        b.state.grid.cells[0].energy[0] = FIXED_SCALE - 10_000;
+        b.apply_phase(TickPhase::Intake).unwrap();
+        assert_eq!(b.state.grid.cells[0].energy[0], FIXED_SCALE);
+        let heat: Fixed = b
+            .energy_ledger
+            .iter()
+            .filter(|r| r.reason == ReasonCode::Intake && r.to_pool == Pool::Waste)
+            .map(|r| r.amount)
+            .sum();
+        assert_eq!(heat, 90_000);
+        let mut c = SimCore::one_cell(7, 0, FIXED_SCALE, vec![lineage()]);
+        c.state.grid.cells[0].energy[0] = 1;
+        c.apply_phase(TickPhase::Maintenance).unwrap();
+        assert_eq!(c.life[0][0], 2);
+        assert!(c
+            .energy_ledger
+            .iter()
+            .any(|r| r.reason == ReasonCode::Maintenance));
+    }
+
+    #[rustfmt::skip]
+    fn d3b_cell(b: Fixed, e: Fixed, n: Fixed) -> CellState {
+        let mut c = CellState { nutrient: n, biomass: [0; 8], carcass: 0, waste: 0, energy: [FIXED_SCALE / 2; 8], occupancy_peak: 0 };
+        c.biomass[0] = b; c.energy[0] = e; c
+    }
+    #[rustfmt::skip]
+    fn d3b_core(b: Fixed, e: Fixed, n: Fixed) -> SimCore {
+        let mut l = lineage();
+        l.traits.movement = 0; l.mortality_threshold = 5_000; l.waste_emission = 1_000;
+        SimCore::try_grid(1, 1, 7, vec![d3b_cell(b, e, n)], vec![l]).unwrap()
+    }
+    #[rustfmt::skip]
+    fn d3b_mass(s: &SimCore, reason: ReasonCode, from: Pool, to: Pool) -> Fixed {
+        s.mass_ledger.iter().filter(|r| r.reason == reason && r.from_pool == from && r.to_pool == to).map(|r| r.amount).sum()
+    }
+
+    #[test]
+    #[rustfmt::skip]
+    fn ut_d3_07_08_starvation() {
+        let mut a = d3b_core(80_000, 0, 0);
+        a.apply_phase(TickPhase::Maintenance).unwrap();
+        a.mass_ledger.clear();
+        a.apply_phase(TickPhase::StarvationAndDeath).unwrap();
+        assert_eq!((a.state.grid.cells[0].biomass[0], a.state.grid.cells[0].carcass, a.life[0][0]), (70_000, 10_000, 1));
+        assert_eq!(d3b_mass(&a, ReasonCode::Starvation, Pool::Biomass, Pool::Carcass), 10_000);
+        let mut b = d3b_core(3_000, 0, 0);
+        b.apply_phase(TickPhase::Maintenance).unwrap();
+        b.mass_ledger.clear();
+        b.apply_phase(TickPhase::StarvationAndDeath).unwrap();
+        assert_eq!((b.state.grid.cells[0].biomass[0], b.state.grid.cells[0].carcass, b.life[0][0]), (0, 3_000, 0));
+        assert_eq!(d3b_mass(&b, ReasonCode::Starvation, Pool::Biomass, Pool::Carcass), 3_000);
+        assert_eq!(d3b_mass(&b, ReasonCode::Death, Pool::Biomass, Pool::Carcass), 0);
+    }
+
+    #[test]
+    #[rustfmt::skip]
+    fn ut_d3_09_10_11_reproduction() {
+        let mut blocked = d3b_core(1_000_000, 15_000, 1_000_000);
+        let snap = (blocked.state.grid.cells[0].clone(), blocked.rng[1].words());
+        blocked.apply_phase(TickPhase::Reproduction).unwrap();
+        assert_eq!((blocked.rng[1].words(), blocked.state.grid.cells[0].clone()), (snap.1, snap.0));
+        let mut s = d3b_core(1_000_000, 100_000, 1_000_000);
+        let mut expect = s.rng[1];
+        expect.next_u64();
+        s.apply_phase(TickPhase::Reproduction).unwrap();
+        assert_eq!(s.rng[1].words(), expect.words());
+        let c = &s.state.grid.cells[0];
+        assert_eq!((c.nutrient, c.biomass[0], c.energy[0]), (960_000, 1_040_000, 60_000));
+        assert_eq!(d3b_mass(&s, ReasonCode::Reproduction, Pool::Nutrient, Pool::Biomass), 40_000);
+        assert!(s.energy_ledger.iter().any(|r| r.reason == ReasonCode::Reproduction && r.from_pool == Pool::Biomass && r.to_pool == Pool::Waste && r.amount == 40_000));
+    }
+
+    #[test]
+    #[rustfmt::skip]
+    fn ut_d3_12_16_emission() {
+        let mut s = d3b_core(50_000, 500_000, 0);
+        s.apply_phase(TickPhase::Emission).unwrap();
+        assert_eq!((s.state.grid.cells[0].biomass[0], s.state.grid.cells[0].waste), (49_000, 1_000));
+        assert_eq!(d3b_mass(&s, ReasonCode::Emission, Pool::Biomass, Pool::Waste), 1_000);
+        let mut l = lineage();
+        l.traits.movement = 0; l.mortality_threshold = 5_000; l.waste_emission = 10_000;
+        let mut gone = SimCore::try_grid(1, 1, 7, vec![d3b_cell(5_000, 500_000, 1_000_000)], vec![l]).unwrap();
+        gone.apply_phase(TickPhase::Emission).unwrap();
+        assert_eq!((gone.state.grid.cells[0].biomass[0], gone.state.grid.cells[0].waste, gone.life[0][0]), (0, 5_000, 0));
+        let n = gone.state.grid.cells[0].nutrient;
+        gone.apply_phase(TickPhase::Intake).unwrap();
+        assert_eq!(gone.state.grid.cells[0].nutrient, n);
+    }
+
+    #[test]
+    #[rustfmt::skip]
+    fn ut_d3_14_step_repro_stream() {
+        let mut s = d3b_core(1_000_000, 100_000, 1_000_000);
+        let (w0, w2, w3) = (s.rng[0].words(), s.rng[2].words(), s.rng[3].words());
+        let mut expect = s.rng[1];
+        expect.next_u64();
+        s.step(1).unwrap();
+        assert_eq!(s.rng[1].words(), expect.words());
+        assert_eq!((s.rng[0].words(), s.rng[2].words(), s.rng[3].words()), (w0, w2, w3));
+    }
+
+    #[test]
+    #[rustfmt::skip]
+    fn ut_d3_15_alive_below_threshold() {
+        let mut s = d3b_core(4_000, 1_000_000, 0);
+        s.apply_phase(TickPhase::StarvationAndDeath).unwrap();
+        assert_eq!((s.state.grid.cells[0].biomass[0], s.state.grid.cells[0].carcass, s.life[0][0]), (0, 4_000, 0));
+        assert_eq!(d3b_mass(&s, ReasonCode::Death, Pool::Biomass, Pool::Carcass), 4_000);
+        assert_eq!(d3b_mass(&s, ReasonCode::Starvation, Pool::Biomass, Pool::Carcass), 0);
     }
 }
