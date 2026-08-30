@@ -20,7 +20,7 @@
 | REQ-OUT-01 | P0 | D6 | INSP + AT（系統数不変） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
 | REQ-OUT-02 | P0 | D12 | INSP + AT（権限なし） | 08_acceptance_tests.md | — |
 | REQ-OUT-03 | P0 | — | INSP | 02_glossary.md | — |
-| REQ-OUT-04 | P0 | D10 | AT | 01_context_map.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, DD-D9-explainer.md | — |
+| REQ-OUT-04 | P0 | D10 | AT | 01_context_map.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-OUT-05 | P0 | D12 | AT（ネット権限なし・依存なし） | 01_context_map.md, 05_contract.md, 08_acceptance_tests.md, 11_ui_flow.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-USER-01 | P0 | 配布 | INSP（募集リスト） | — | — |
 | REQ-USER-02 | P0 | 配布 | INSP | 09_performance_budget.md | — |
@@ -80,14 +80,14 @@
 | REQ-END-04b | P0 | D4 | UT（同率ケース含む） | 02_glossary.md, 04_state_machines.md, 05_contract.md, 12_events_and_explainer.md | — |
 | REQ-END-04c | P0 | D4 | UT（同時成立ケース） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md | — |
 | REQ-END-05 | P0 | D7 | AT（D7 分布） | 08_acceptance_tests.md | — |
-| REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
-| REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md, 12_events_and_explainer.md | — |
-| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 12_events_and_explainer.md, DD-D3-lineage.md | — |
-| REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md | — |
+| REQ-EVT-02 | P0 | D8 | UT + AT（100 seed で空転・満杯なし） | 02_glossary.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
+| REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
+| REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 12_events_and_explainer.md, DD-D3-lineage.md, DD-D9-explainer.md | — |
+| REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 02_glossary.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | 02_glossary.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-03 | P0 | D9 | INSP + UT | 02_glossary.md, 05_contract.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
-| REQ-EXP-04 | P0 | D9 | UT | 02_glossary.md, 11_ui_flow.md, 12_events_and_explainer.md | — |
+| REQ-EXP-04 | P0 | D9 | UT | 02_glossary.md, 11_ui_flow.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-05 | P0 | D9/D12 | UT + USER | 02_glossary.md, 04_state_machines.md, 05_contract.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-06 | P1 | D9 | INSP（文言リント） | 02_glossary.md, 11_ui_flow.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-UI-01 | P0 | D12 | USER + AT（画面遷移テスト） | 02_glossary.md, 08_acceptance_tests.md, 11_ui_flow.md, README.md | — |
