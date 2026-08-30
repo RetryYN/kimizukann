@@ -127,7 +127,7 @@ def added_forbidden(files: list[dict[str, Any]]) -> list[str]:
             # Benchmark/example targets may use wall-clock APIs for measuring
             # performance.  Keep the exception path-scoped and limited to the
             # clippy allow directive; production and test code stays fail-closed.
-            if "allow(clippy" in line and BENCHMARK_TARGET.match(normalized_path):
+            if forbidden[1] in line and BENCHMARK_TARGET.match(normalized_path):
                 continue
             if any(word in line for word in forbidden):
                 found.append(f"{path}: {line[1:].strip()}")
