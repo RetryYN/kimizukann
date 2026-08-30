@@ -36,7 +36,7 @@
 - ガード: `energy > cost × 2`（初期仮説、D3 で確定）。不成立なら繁殖 0・**乱数消費 0**。確定（BD-04 §3.2）
 - 増量: 余剰 `(energy − 2×cost) / 2` を上限に、質量は同量を nutrient から引いて biomass へ（energy→質量係数 1.0、初期仮説 D3 で確定）。質量保存のため増分は `min(余剰/2, nutrient)` でクランプ（D1 と同じ構造）。P8。参照: REQ-SIM-12
 - **抽選の導入（BD-07 §2/§3 の「D3 で確定」への回答。D3-Q2 = claude 判定で採用）**: ガード成立 (cell, lineage) ごとに reproduction ストリームから 1 語を消費し、`u / 2^64 < p_repro` なら繁殖成立。`p_repro` = 1.0 を初期仮説とする（D1 と同じ振る舞いを保ちつつ消費パターンだけ先に確定する。D3 較正で < 1.0 にするか判断）。**p_repro = 1.0 でも消費をスキップしてはならない**（消費回数は状態のみの関数。BD-07 §3）。消費回数表（BD-07 §3）は本 PR で更新済み
-- 抽選導入は PRNG 消費が変わる＝振る舞い変更のため **model_version を bump**（`d3-v1`。BD-05 §14）。golden hash の更新は Claude 承認・別 PR
+- 抽選導入は PRNG 消費が変わる＝振る舞い変更のため **model_version を bump**（`d3-v1`。BD-05 §14）。H2 稼働後は golden 更新を同一 PR に含め、kimi の検算一致票を必須とする
 - 台帳: nutrient → biomass（reason = Reproduction）＋ エネルギー台帳に Reproduction 消費
 
 ## 6. emission（REQ-SIM-05）
@@ -94,6 +94,6 @@
 | `crates/sim-core/src/lineage_phases.rs` | **D3（cursor-grok）** | intake / maintenance / starvation_and_death / reproduction / emission の複数系統意味論（本 DD） |
 | `crates/sim-core/tests/d3_*.rs` | **D3（cursor-grok）** | §9 の UT/PT |
 | `crates/sim-core/tests/d2_*.rs`, `benches/` | D2（cursor-grok） | D2 のテスト・ベンチ |
-| `docs/**`, `clippy.toml`, golden | 触らない | golden 更新は Claude 承認・別 PR |
+| `docs/**`, `clippy.toml`, golden | D3-A は golden を同一 PR で更新（H2 後・検算票必須） | その他 docs は触らない |
 
 - 依存順序: D3 実装は D2 マージ後に着手（ledger 基盤と grid 一般化に依存）。同一実装者（grok）が D2 → D3 の順で担当するためファイル衝突は発生しない。不明点は `[D3-lineage-001][question]` を cursor-kimi へ（NETWORK 規則: grok→kimi=[question]）

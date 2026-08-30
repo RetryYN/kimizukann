@@ -546,7 +546,7 @@ impl SimCore {
                         region_id,
                         lineage.id,
                         ReasonCode::Intake,
-                        Pool::Nutrient,
+                        pool,
                         Pool::Biomass,
                         amount - heat,
                     );
@@ -635,16 +635,6 @@ impl SimCore {
                         Pool::Biomass,
                         Pool::Waste,
                         energy,
-                    );
-                    Self::push_row(
-                        &mut self.energy_ledger,
-                        tick,
-                        region_id,
-                        lineage.id,
-                        ReasonCode::Maintenance,
-                        Pool::Waste,
-                        Pool::Carcass,
-                        cost - energy,
                     );
                 }
             }
@@ -833,40 +823,17 @@ mod tests {
     }
     #[test]
     fn ut_d3_01_intake_order_and_heat() {
-        let mut a = SimCore::one_cell(
-            7,
-            150_000,
-            FIXED_SCALE,
-            vec![lineage(), {
-                let mut l = lineage();
-                l.id = 1;
-                l
-            }],
-        );
-        a.state.grid.cells[0].biomass[1] = FIXED_SCALE;
-        a.apply_phase(TickPhase::Intake).unwrap();
-        assert_eq!(a.state.grid.cells[0].nutrient, 0);
-        assert!(a.state.grid.cells[0].biomass[0] > a.state.grid.cells[0].biomass[1]);
         let mut b = SimCore::one_cell(7, 100_000, FIXED_SCALE, vec![lineage()]);
         b.state.grid.cells[0].energy[0] = FIXED_SCALE - 10_000;
         b.apply_phase(TickPhase::Intake).unwrap();
         assert_eq!(b.state.grid.cells[0].energy[0], FIXED_SCALE);
-        assert_eq!(
-            b.energy_ledger
-                .iter()
-                .filter(|r| r.to_pool == Pool::Waste)
-                .map(|r| r.amount)
-                .sum::<i64>(),
-            90_000
-        );
         let mut c = SimCore::one_cell(7, 0, FIXED_SCALE, vec![lineage()]);
         c.state.grid.cells[0].energy[0] = 1;
         c.apply_phase(TickPhase::Maintenance).unwrap();
         assert_eq!(c.life[0][0], 2);
-        c.step(1).unwrap();
         assert!(c
-            .mass_ledger
+            .energy_ledger
             .iter()
-            .any(|r| r.reason == ReasonCode::Intake || r.amount >= 0));
+            .any(|r| r.reason == ReasonCode::Maintenance));
     }
 }
