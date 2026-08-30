@@ -62,7 +62,7 @@
 | REQ-ENV-03 | P0 | D5 | UT | 02_glossary.md | — |
 | REQ-ENV-04 | P1 | D5/D7 | AT（schema） | — | — |
 | REQ-DET-01 | P0 | D1 | AT | 0003-state-hash-sha256.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-DET-02 | P0 | D1/D8 | AT（代表 tick + ランダム tick 数点） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
+| REQ-DET-02 | P0 | D1/D8 | AT（代表 tick + ランダム tick 数点） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D3-lineage.md | — |
 | REQ-DET-03 | P0 | D2/D12 | AT（CI xos）+ MEAS（実機） | 0001-fixed-point-i64.md, 0005-toolchain-gnu-ci-primary.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-04a | P0 | D0 | UT（既知ベクトル） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 10_persistence.md | — |
 | REQ-DET-04b | P0 | D2 | UT（消費回数カウント） | 02_glossary.md, 05_contract.md, 07_determinism_model.md, DD-D3-lineage.md | — |
