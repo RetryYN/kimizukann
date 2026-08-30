@@ -31,8 +31,8 @@
 | REQ-CON-02 | P0 | D0〜 | UT + INSP（clippy: f32/f64 禁止 lint） | 0001-fixed-point-i64.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 12_events_and_explainer.md | — |
 | REQ-CON-03 | P0 | 配布 | INSP | 0004-rust-flutter-android.md | — |
 | REQ-CON-04 | P0 | ハーネス | AT（CI） | 0005-toolchain-gnu-ci-primary.md, 08_acceptance_tests.md | — |
-| REQ-CON-05 | P0 | D12 | INSP + AT | 01_context_map.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 11_ui_flow.md, DD-D10-presentation.md | diffuse_bench.rs |
-| REQ-CON-06 | P1 | — | INSP | — | — |
+| REQ-CON-05 | P0 | D12 | INSP + AT | 01_context_map.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 11_ui_flow.md, DD-D10-presentation.md, DD-D12-ui.md | diffuse_bench.rs |
+| REQ-CON-06 | P1 | — | INSP | DD-D12-ui.md | — |
 | REQ-CON-07 | P0 | — | INSP | — | — |
 | REQ-SIM-01 | P0 | D0 | UT（型）+ INSP | 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 10_persistence.md | — |
 | REQ-SIM-02 | P0 | D3 | UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 06_numeric_model.md, 08_acceptance_tests.md, DD-D3-lineage.md | — |
@@ -70,7 +70,7 @@
 | REQ-DET-04d | P0 | D0〜 | INSP（clippy disallowed_types / disallowed_methods） | 07_determinism_model.md | — |
 | REQ-DET-05 | P0 | D1 | UT（golden） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-06 | P0 | D8 | AT（schema）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
-| REQ-DET-07 | P0 | D12 | AT | 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
+| REQ-DET-07 | P0 | D12 | AT | 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D12-ui.md | — |
 | REQ-DET-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 11_ui_flow.md | — |
 | REQ-DET-09 | P0 | D11 | AT（reference_scenarios の model_version 照合） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md | — |
 | REQ-END-01 | P0 | D4 | AT（schema enum） | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, DD-D4-lineages.md | — |
@@ -84,20 +84,20 @@
 | REQ-EVT-03 | P0 | D8 | UT | 02_glossary.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EVT-04 | P0 | D8 | UT + MEAS（保存 ≤ 5 MB） | 01_context_map.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 10_persistence.md, 12_events_and_explainer.md, DD-D3-lineage.md, DD-D9-explainer.md | — |
 | REQ-EVT-05 | P0 | D8 | AT（検出 off/on で hash 一致） | 03_domain_model.md, 07_determinism_model.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
-| REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 02_glossary.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
+| REQ-EXP-01 | P0 | D9 | UT（出力構造）+ USER | 02_glossary.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 12_events_and_explainer.md, DD-D12-ui.md, DD-D9-explainer.md | — |
 | REQ-EXP-02 | P0 | D9/D12 | INSP + USER（質問 3） | 02_glossary.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-03 | P0 | D9 | INSP + UT | 02_glossary.md, 05_contract.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-04 | P0 | D9 | UT | 02_glossary.md, 11_ui_flow.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-05 | P0 | D9/D12 | UT + USER | 02_glossary.md, 04_state_machines.md, 05_contract.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
 | REQ-EXP-06 | P1 | D9 | INSP（文言リント） | 02_glossary.md, 11_ui_flow.md, 12_events_and_explainer.md, DD-D9-explainer.md | — |
-| REQ-UI-01 | P0 | D12 | USER + AT（画面遷移テスト） | 02_glossary.md, 08_acceptance_tests.md, 11_ui_flow.md, README.md | — |
+| REQ-UI-01 | P0 | D12 | USER + AT（画面遷移テスト） | 02_glossary.md, 08_acceptance_tests.md, 11_ui_flow.md, DD-D12-ui.md, README.md | — |
 | REQ-UI-02 | P0 | D12 | INSP（文言チェックリスト） | 02_glossary.md, 11_ui_flow.md | — |
 | REQ-UI-03 | P0 | D12 | AT（模擬 30〜120 Hz フレーム列。7 要素それぞれを独立ケースにする） | 01_context_map.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, README.md | — |
-| REQ-UI-04a | P0 | D12 | MEAS（実機） | 09_performance_budget.md, 11_ui_flow.md | — |
+| REQ-UI-04a | P0 | D12 | MEAS（実機） | 09_performance_budget.md, 11_ui_flow.md, DD-D12-ui.md | — |
 | REQ-UI-04b | P0 | D12 | MEAS（実機） | 09_performance_budget.md, 11_ui_flow.md | — |
-| REQ-UI-05 | P0 | D12 | AT | 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
+| REQ-UI-05 | P0 | D12 | AT | 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D12-ui.md | — |
 | REQ-UI-06 | P0 | D12 | UT（判定）+ INSP | 02_glossary.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
-| REQ-UI-07 | P0 | D12 | AT（schema）+ USER | 02_glossary.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, 12_events_and_explainer.md | — |
+| REQ-UI-07 | P0 | D12 | AT（schema）+ USER | 02_glossary.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, 12_events_and_explainer.md, DD-D12-ui.md | — |
 | REQ-UI-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-UI-09 | P1 | D12 | UT + INSP | 11_ui_flow.md | — |
 | REQ-VIS-01 | P0 | D10 | INSP + USER（質問 1） | 05_contract.md, DD-D10-presentation.md | — |
@@ -113,7 +113,7 @@
 | REQ-OPS-06 | P0 | 配布 | INSP | — | — |
 | REQ-OPS-07 | P1 | 配布 | INSP | 09_performance_budget.md | — |
 | REQ-NFR-01 | P1 | D2/D4 | MEAS（criterion、CI でしきい値） | 06_numeric_model.md, 09_performance_budget.md, DD-D2-diffuse.md, README.md | diffuse_bench.rs |
-| REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md, 05_contract.md, 09_performance_budget.md, 10_persistence.md, DD-D2-diffuse.md, DD-D5-environments.md | — |
+| REQ-NFR-02 | P1 | D12 | MEAS（実機） | 03_domain_model.md, 05_contract.md, 09_performance_budget.md, 10_persistence.md, DD-D12-ui.md, DD-D2-diffuse.md, DD-D5-environments.md | — |
 | REQ-NFR-03 | P2 | D7 | MEAS | 09_performance_budget.md | — |
 | REQ-NFR-04 | P0 | D12 | AT（manifest 権限） | 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-NFR-05 | P0 | D12 | INSP | — | — |
@@ -121,7 +121,7 @@
 | REQ-NFR-07 | P0 | 全段階 | AT（REQ-SIM-05/06, GEN-04）+ INSP（文言） | 02_glossary.md, 08_acceptance_tests.md, 09_performance_budget.md | — |
 | REQ-NFR-08 | P0 | 配布 | INSP（禁止語リント） | 02_glossary.md, 09_performance_budget.md | — |
 | REQ-ACC-01 | P0 | 配布 | USER | — | — |
-| REQ-ACC-02 | P0 | 配布 | USER | — | — |
+| REQ-ACC-02 | P0 | 配布 | USER | DD-D12-ui.md | — |
 | REQ-ACC-03 | P0 | 配布 | USER | — | — |
 | REQ-ACC-04 | P0 | D7 | AT | 08_acceptance_tests.md, DD-D7-calibration.md | — |
 | REQ-ACC-05 | P0 | D11 | AT + INSP | 02_glossary.md, 08_acceptance_tests.md | — |
