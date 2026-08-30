@@ -69,7 +69,7 @@
 | REQ-DET-04c | P0 | D2 | UT + AT（三経路） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-DET-04d | P0 | D0〜 | INSP（clippy disallowed_types / disallowed_methods） | 07_determinism_model.md | — |
 | REQ-DET-05 | P0 | D1 | UT（golden） | 0002-prng-xoshiro256ss.md, 02_glossary.md, 03_domain_model.md, 05_contract.md, 06_numeric_model.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
-| REQ-DET-06 | P0 | D8 | AT（schema）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
+| REQ-DET-06 | P0 | D8 | AT（schema）+ UT | 02_glossary.md, 03_domain_model.md, 04_state_machines.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md, DD-D8-persistence.md | — |
 | REQ-DET-07 | P0 | D12 | AT | 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md, 10_persistence.md, 11_ui_flow.md | — |
 | REQ-DET-08 | P0 | D12 | AT + USER | 08_acceptance_tests.md, 11_ui_flow.md | — |
 | REQ-DET-09 | P0 | D11 | AT（reference_scenarios の model_version 照合） | 02_glossary.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, DD-D8-persistence.md | — |
@@ -117,7 +117,7 @@
 | REQ-NFR-03 | P2 | D7 | MEAS | 09_performance_budget.md | — |
 | REQ-NFR-04 | P0 | D12 | AT（manifest 権限） | 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-NFR-05 | P0 | D12 | INSP | — | — |
-| REQ-NFR-06 | P0 | D8〜 | AT（旧 save 読込） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md | — |
+| REQ-NFR-06 | P0 | D8〜 | AT（旧 save 読込） | 02_glossary.md, 03_domain_model.md, 05_contract.md, 08_acceptance_tests.md, 10_persistence.md, DD-D8-persistence.md | — |
 | REQ-NFR-07 | P0 | 全段階 | AT（REQ-SIM-05/06, GEN-04）+ INSP（文言） | 02_glossary.md, 08_acceptance_tests.md, 09_performance_budget.md | — |
 | REQ-NFR-08 | P0 | 配布 | INSP（禁止語リント） | 02_glossary.md, 09_performance_budget.md | — |
 | REQ-ACC-01 | P0 | 配布 | USER | — | — |
