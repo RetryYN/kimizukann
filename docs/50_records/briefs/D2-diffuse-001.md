@@ -21,7 +21,7 @@
 `crates/sim-core/**`, `crates/sim-cli/**`, `crates/sim-types/src/lib.rs`（型の拡張のみ）, `Cargo.lock`。`docs/**`・`clippy.toml`・golden は触らない。
 
 ## 論点 D2-Q1（claude 判定済み・採用）
-diffuse の台帳エントリ量が常駐メモリ 32 MB を超えるため、DD §2 のとおり「tick 終了ごとに region へオンライン集約しセル単位は保持しない」で**確定**。正本は BD-01 r4 §5 の二段モデル（発生時 LedgerEntry = cell_index 粒度 / digest・LedgerSave = region 集約 LedgerRecord、キー tick→region_id→lineage→reason→from→to、amount = 和、集約は tick 終了時に決定的順序）。なお region の機械定義（何の連結成分か・採番順・16 超過時）は論点 D3-Q1 で claude 判定中。判定まで region_id の採番部分は実装せず、集約 API の境界だけ用意すること。
+diffuse の台帳エントリ量が常駐メモリ 32 MB を超えるため、DD §2 のとおり「tick 終了ごとに region へオンライン集約しセル単位は保持しない」で**確定**。正本は BD-01 r4 §5 の二段モデル（発生時 LedgerEntry = cell_index 粒度 / digest・LedgerSave = region 集約 LedgerRecord、キー tick→region_id→lineage→reason→from→to、amount = 和、集約は tick 終了時に決定的順序）。region_id は **静的 4×4 タイル** `ID = (row/16)*4 + (col/16)`（16×16 セル、row-major 0..=15）で確定済み（論点 D3-Q1 判定 r2。スタンプの動的 4 連結成分とは別層で、台帳には静的タイルのみ使う）。
 
 ## 提出
 `cargo test --workspace` と `cargo run -p kimizukann-sim-cli -- verify --suite D2` の出力要約を添えて `[D2-diffuse-001][result] status=pass commit=<hash> tests=<n> verify=<pass|fail>` を post。レビュー観点（kimi=契約 / Claude=チェックリスト）: 決定性（走査順・2 パス・PRNG 非消費）・保存則・DD 逸脱のみ。

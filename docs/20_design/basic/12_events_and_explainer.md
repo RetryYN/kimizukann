@@ -9,7 +9,7 @@
 
 | 層 | 内容 | 保存 | 参照 |
 |---|---|---|---|
-| フロー台帳 | `LedgerEntry { tick, cell_index, lineage, from_pool, to_pool, amount, reason }`、reason は ReasonCode 7 種（Intake/Maintenance/Starvation/Death/Reproduction/Emission/Diffusion。BD-03 が正本） | region 単位に集約して LedgerSave へ。セル単位の全 tick 履歴は保存しない | REQ-SIM-05, REQ-EVT-04 |
+| フロー台帳 | `LedgerEntry { tick, cell_index, lineage, from_pool, to_pool, amount, reason }`、reason は ReasonCode 7 種（Intake/Maintenance/Starvation/Death/Reproduction/Emission/Diffusion。BD-03 が正本） | **静的 4×4 タイル**（16×16 セル、row-major で 0..=15）単位に集約して LedgerSave へ。セル単位の全 tick 履歴は保存しない | REQ-SIM-05, REQ-EVT-04 |
 | 転換点 | §3 のスコアで検出する注目イベント（§2 の種別）。`event_id / tick / kind / region_ids / score / evidence_refs` を持つ | 保存 32 件上限（REQ-EVT-02） | REQ-EVT-01〜05 |
 | スタンプ | 転換点のうち皿上にピン表示するもの（3 件）。UI からの `explain` クエリの対象 | LedgerSave のスタンプ列 | REQ-EVT-02, REQ-UI-07 |
 
@@ -17,7 +17,7 @@
 
 ## 2. 転換点の種別（REQ-EVT-03。確定）
 
-急増／急減／資源枯渇／初死骸利用／逆転／絶滅／固定候補の 7 種（捕食・分岐は対象外、REQ-OUT-01）。region は 4 連結成分・最大 16（REQ-EVT-04）。各種別の検出トリガ:
+急増／急減／資源枯渇／初死骸利用／逆転／絶滅／固定候補の 7 種（捕食・分岐は対象外、REQ-OUT-01）。region は二層（D3-Q1、claude 判定 r2 で確定）: **(A) 台帳の region_id** = 静的 4×4 タイル（64×64 を 16×16 セルのタイル 16 枚、row-major で 0..=15。tick をまたいで安定。BD-01 r4 §5）、**(B) スタンプの region_ids** = イベント tick の占有マスク（Σbiomass > 0）の 4 連結成分を row-major 初出順に採番（最大 16、超過は 15 に併合。REQ-EVT-04）。説明器側で派生計算し、保存は stamp 内のみ（派生 ID を LedgerRecord に書かない）。各種別の検出トリガ:
 
 | 種別 | トリガ（台帳・時系列からの機械定義） |
 |---|---|

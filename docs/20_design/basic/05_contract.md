@@ -26,7 +26,7 @@ inflow の適用位置: `InflowEvent` は tick 先頭（diffuse 直前）に該�
 
 エネルギー台帳の補則: intake の energy 加算は 1.0（Fixed では 10^6）で飽和し、溢出分は熱散逸としてエネルギー台帳に記録する。熱散逸は物質を減らさない。確定。参照: REQ-SIM-08
 
-**台帳ダイジェスト**（state hash 外だが三経路 AT で比較。BD-01 r4 §5 と一致）: `SHA-256(集約後 LedgerRecord を tick, region_id, lineage, reason, from, to, amount の順に LE 直列化 → スタンプを tick, kind, region_ids の順 → z 窓を pool, 系統, 値の順)`（発生時 `LedgerEntry` は cell_index 粒度。ダイジェスト/LedgerSave は tick 終了時に region へ集約した `LedgerRecord { tick: u32, region_id: u8 (0..=15, スタンプの region_ids と同幅), lineage: u8, reason, from_pool, to_pool, amount: 和 }` を tick→region_id→lineage→reason→from→to の順にソートしたもの）。確定。参照: REQ-DET-02, REQ-EVT-04
+**台帳ダイジェスト**（state hash 外だが三経路 AT で比較。BD-01 r4 §5 と一致）: `SHA-256(集約後 LedgerRecord を tick, region_id, lineage, reason, from, to, amount の順に LE 直列化 → スタンプを tick, kind, region_ids の順 → z 窓を pool, 系統, 値の順)`（発生時 `LedgerEntry` は cell_index 粒度。ダイジェスト/LedgerSave は tick 終了時に region へ集約した `LedgerRecord { tick: u32, region_id: u8 (0..=15。**region = 静的 4×4 タイル**、64×64 を 16×16 セルのタイル 16 枚、row-major で ID = (row/16)*4 + (col/16)。tick をまたいで安定。スタンプの region_ids＝動的 4 連結成分とは幅のみ同じで意味は別。派生 ID は LedgerRecord に書かない。D3-Q1 判定 r2 / BD-12 §2), lineage: u8, reason, from_pool, to_pool, amount: 和 }` を tick→region_id→lineage→reason→from→to の順にソートしたもの）。確定。参照: REQ-DET-02, REQ-EVT-04
 
 保存（LedgerSave）には region 単位に集約したレコード・スタンプ列・z 窓のみを含め、セル単位の全 tick 履歴は保存しない。これにより転換点の region_ids（REQ-EVT-04）と保存 ≤ 5 MB（REQ-NFR-02）を両立する。確定。参照: REQ-EVT-04, REQ-NFR-02
 
@@ -109,7 +109,7 @@ inflow の適用位置: `InflowEvent` は tick 先頭（diffuse 直前）に該�
 | `Thresholds`（フィールドは下表に分離） | struct | REQ-END-02, REQ-END-03, REQ-END-04a, REQ-SIM-02, REQ-SIM-03 |
 | `SaveEnvelope { schema_version, model_version, config_hash, config, seed, prng_state, state_hash, ledger_hash, generation, state, ledger, checksum }` | struct（必須 12 フィールド。構造の正本は BD-10 §2） | REQ-DET-06 |
 | `MassCoefficients { intake_to_biomass, intake_to_waste, starvation_to_carcass, death_to_carcass }` | struct | REQ-SIM-05 |
-| `LedgerEntry { tick: u32, cell_index: u32, lineage: u8, from_pool, to_pool, amount, reason }` | struct（発生時粒度。ダイジェストは region 集約後の LedgerRecord、BD-01 r4。sim-types への反映は D2 実装タスク） | REQ-SIM-05, REQ-EVT-04 |
+| `LedgerEntry { tick: u32, cell_index: u32, lineage: u8, from_pool, to_pool, amount, reason }` | struct（発生時粒度。ダイジェストは region 集約後の LedgerRecord。region_id は静的 4×4 タイル、スタンプ region_ids は動的 4 連結。幅のみ同じ。BD-01 r4 / BD-12 §2。sim-types への反映は D2 実装タスク） | REQ-SIM-05, REQ-EVT-04 |
 | `MassLedger { entries }` / `EnergyLedger { entries }` | struct | REQ-SIM-05, REQ-SCOPE-04 |
 | `InvariantReport { mass_ok, energy_ok, non_negative, message }` | struct | REQ-SIM-06, REQ-OPS-01 |
 | `RoundingMode { TowardZero }` | enum | REQ-CON-02 |

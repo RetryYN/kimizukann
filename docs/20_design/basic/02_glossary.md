@@ -155,7 +155,7 @@
 |---|---|---|---|---|---|
 | 転換点 | `turning_point` / `event` | 時系列z-scoreやドメイン事象から自動検出される生態系の重大変化（急増・急減・枯渇・逆転・絶滅等） | `TransitionEvent` / `event` | イベントオブジェクト | REQ-EVT-01, REQ-EVT-03 |
 | スタンプ | `stamp` / `evidence_refs` | 転換点の発生時刻、スコア、影響領域ID（region_ids）、観測事実をまとめた証拠参照オブジェクト | `Stamp` / `evidence_refs` | スコア ≥ 1.2 | REQ-EVT-02, REQ-ACC-05 |
-| 領域識別子 | `region_ids` | 転換点の影響を受けた格子の4連結成分領域インデックス（最大16） | `Vec<u8>` | 0..=15 の配列 | REQ-EVT-04 |
+| 領域識別子 | `region_ids` | 二層（D3-Q1 判定 r2）: (A) 台帳 LedgerRecord の region_id = 静的 4×4 タイル（16×16 セル、row-major 0..=15、tick をまたぎ安定）。(B) スタンプの region_ids = イベント tick の占有マスク（Σbiomass>0）の 4 連結成分を row-major 初出順に採番（最大16、超過は15に併合）。説明器が派生計算し保存は stamp 内のみ | `Vec<u8>` / `u8` | 0..=15 | REQ-EVT-04, BD-01 r4 §5, BD-12 §2 |
 | 理由コード（説明器） | `reason_code` / `contributor_reason` | 台帳やイベント履歴から導出される生態系変化の直接的要因識別コード | 列挙 / コード文字列 | 資源偏在/繁殖過多/ニッチ不適合/分散不足 等 | REQ-EXP-03, REQ-EXP-04 |
 | もしもレバー | `what_if_lever` | 終了時に最も影響を与えた理由コードに基づき、次回再実験で変更を推薦する1つの操作レバー | `enum WhatIfLever` | 配置 / 個体数 / 適応方針 / ばらつき | REQ-EXP-04, REQ-UI-01 |
 | 生命史カード | `life_history_card` | 一巡の培養結果（4系統推移、終了ラベル、主要転換点、有力原因、次回変更案）を記録するカード | `struct LifeHistoryCard` | 記録オブジェクト | REQ-UI-07, REQ-SCOPE-07 |
