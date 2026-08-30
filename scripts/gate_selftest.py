@@ -6,9 +6,11 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from mutate import MUTATIONS, SOURCE
+from review_gate import patch_id_equivalent
 
 
 ROOT = SOURCE.parents[3]
@@ -29,6 +31,60 @@ def report(result: subprocess.CompletedProcess[str]) -> dict[str, object] | None
         if isinstance(value, dict) and "status" in value:
             return value
     return None
+
+
+def patch_id_cases() -> list[str]:
+    """Check that a main-only merge preserves, but a code edit invalidates, a ticket."""
+    failures: list[str] = []
+    try:
+        with tempfile.TemporaryDirectory(prefix="gate-patch-id-") as raw:
+            repo = Path(raw)
+
+            def git(*arguments: str) -> str:
+                result = subprocess.run(
+                    ["git", *arguments],
+                    cwd=repo,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                )
+                if result.returncode:
+                    detail = result.stderr.strip() or result.stdout.strip() or "git failed"
+                    raise RuntimeError(detail)
+                return result.stdout.strip()
+
+            git("init", "-b", "main")
+            git("config", "user.name", "gate-selftest")
+            git("config", "user.email", "gate-selftest@example.invalid")
+            (repo / "base.txt").write_text("base\n", encoding="utf-8")
+            git("add", ".")
+            git("commit", "-m", "base")
+            git("checkout", "-b", "feature")
+            (repo / "feature.txt").write_text("feature\n", encoding="utf-8")
+            git("add", ".")
+            git("commit", "-m", "feature")
+            ticket_sha = git("rev-parse", "HEAD")
+            git("checkout", "main")
+            (repo / "main.txt").write_text("main\n", encoding="utf-8")
+            git("add", ".")
+            git("commit", "-m", "unrelated main change")
+            main_sha = git("rev-parse", "HEAD")
+            git("update-ref", "refs/remotes/origin/main", main_sha)
+            git("checkout", "feature")
+            git("merge", "--no-ff", "main", "-m", "merge main")
+            merged_sha = git("rev-parse", "HEAD")
+            if not patch_id_equivalent(ticket_sha, merged_sha, cwd=repo):
+                failures.append("patch-id merge case: ticket was not preserved")
+
+            (repo / "feature.txt").write_text("feature changed\n", encoding="utf-8")
+            git("add", ".")
+            git("commit", "-m", "change PR content")
+            changed_sha = git("rev-parse", "HEAD")
+            if patch_id_equivalent(ticket_sha, changed_sha, cwd=repo):
+                failures.append("patch-id edit case: changed ticket was accepted")
+    except (OSError, RuntimeError) as exc:
+        failures.append(f"patch-id cases: {exc}")
+    return failures
 
 
 def main() -> int:
@@ -56,12 +112,13 @@ def main() -> int:
                 failures.append(f"{name}: verify JSON status is not fail")
         finally:
             SOURCE.write_text(pristine, encoding="utf-8")
+    failures.extend(patch_id_cases())
     if failures:
         print("gate-selftest: FAIL")
         for failure in failures:
             print(f"- {failure}")
         return 1
-    print("gate-selftest: PASS (4 mutations rejected)")
+    print("gate-selftest: PASS (4 mutations rejected; patch-id inheritance checked)")
     return 0
 
 
