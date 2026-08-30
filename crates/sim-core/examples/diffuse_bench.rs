@@ -1,11 +1,10 @@
-//! Release timing for REQ-NFR-01 (diffuse-only 2,000 tick on 64×64).
+//! Load path for REQ-NFR-01 (diffuse-only 2,000 tick on 64×64).
 //! `cargo run -p kimizukann-sim-core --example diffuse_bench --release`
-//! Instant はベンチ計測専用。シム本体の決定性規則（BD-07 §4.2）は維持。
-#![allow(clippy::disallowed_methods)]
+//! Wall clock is forbidden (REQ-CON-05 / REQ-DET-04a / BD-07 §4.2).
+//! This example only exercises the 2,000-tick path; timing is a later CI job.
 
 use kimizukann_sim_core::SimCore;
 use kimizukann_sim_types::{CellState, TickPhase, FIXED_SCALE};
-use std::time::Instant;
 
 fn main() {
     let mut cells = vec![
@@ -22,9 +21,8 @@ fn main() {
     cells[0].nutrient = FIXED_SCALE;
     let mut s = SimCore::try_grid(64, 64, 1, cells, vec![]).unwrap();
     s.apply_phase(TickPhase::Diffuse).unwrap();
-    let start = Instant::now();
     for _ in 0..2_000 {
         s.apply_phase(TickPhase::Diffuse).unwrap();
     }
-    println!("diffuse_2000_64x64 {} ms", start.elapsed().as_millis());
+    println!("diffuse_2000_64x64 ticks=2000");
 }
