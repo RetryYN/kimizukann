@@ -107,7 +107,7 @@
 | REQ-OPS-01 | P0 | D1〜 | AT | 02_glossary.md, 03_domain_model.md, 05_contract.md, 07_determinism_model.md, 08_acceptance_tests.md | — |
 | REQ-OPS-02a | P0 | D6 | AT | 08_acceptance_tests.md | — |
 | REQ-OPS-02b | P0 | D7 | AT | 08_acceptance_tests.md, DD-D7-calibration.md | — |
-| REQ-OPS-03 | P0 | D7 | INSP（較正ログ） | — | — |
+| REQ-OPS-03 | P0 | D7 | INSP（較正ログ） | DD-D7-calibration.md | — |
 | REQ-OPS-04 | P0 | — | INSP（カンバン） | — | — |
 | REQ-OPS-05 | P0 | 配布 | INSP + AT（権限リスト） | 0004-rust-flutter-android.md, 01_context_map.md, 08_acceptance_tests.md | — |
 | REQ-OPS-06 | P0 | 配布 | INSP | — | — |
