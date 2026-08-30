@@ -94,14 +94,19 @@ def touched_stat(body: str) -> tuple[int, int, int, set[str]] | None:
     files_match = re.search(r"(\d+)\s+files?\s+changed", text, re.I)
     ins_match = re.search(r"(\d+)\s+insertions?\(\+\)", text, re.I)
     del_match = re.search(r"(\d+)\s+deletions?\(-\)", text, re.I)
-    if not (files_match and ins_match and del_match):
+    if not files_match:
         return None
     listed: set[str] = set()
     for line in text.splitlines():
         match = re.match(r"\s*(?:`([^`]+)`|([^|\s]+))\s*\|", line)
         if match:
             listed.add((match.group(1) or match.group(2)).replace("\\", "/"))
-    return int(files_match.group(1)), int(ins_match.group(1)), int(del_match.group(1)), listed
+    # git diff --stat omits a zero side (for example
+    # ``1 file changed, 1 insertion(+)``).  Treat an omitted side as zero so
+    # docs-only additions/deletions remain lintable.
+    additions = int(ins_match.group(1)) if ins_match else 0
+    deletions = int(del_match.group(1)) if del_match else 0
+    return int(files_match.group(1)), additions, deletions, listed
 
 
 def is_test_path(path: str) -> bool:
